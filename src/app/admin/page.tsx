@@ -1,22 +1,9 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
-// Kontrola admin přístupu
-async function checkAdminAccess(searchParams: { key?: string }) {
-  const headersList = headers();
-  const headerKey = headersList.get("x-admin-key");
-  const queryKey = searchParams.key;
-
-  const adminKey = process.env.ADMIN_KEY;
-
-  if (!adminKey || (headerKey !== adminKey && queryKey !== adminKey)) {
-    return false;
-  }
-
-  return true;
-}
+import { isAuthenticated } from "@/lib/auth";
+import { logoutAction } from "./actions";
+import LogoutButton from "@/components/LogoutButton";
 
 async function getAdminData() {
   // Získej poslední listings
@@ -59,31 +46,10 @@ async function getAdminData() {
   return { listings: listingsWithMatches, requests: requestsWithMatches };
 }
 
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: { key?: string };
-}) {
-  const hasAccess = await checkAdminAccess(searchParams);
-
-  if (!hasAccess) {
-    return (
-      <div className="bg-zfp-bg-light py-12">
-        <div className="container max-w-2xl text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h1 className="text-2xl font-heading font-bold text-red-600 mb-4">
-              Přístup odepřen
-            </h1>
-            <p className="text-gray-600 mb-6">
-              Nemáte oprávnění pro přístup k admin sekci.
-            </p>
-            <p className="text-sm text-gray-500">
-              Pro přístup použijte: /admin?key=ADMIN_KEY
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+export default async function AdminPage() {
+  // Kontrola autentizace
+  if (!(await isAuthenticated())) {
+    redirect("/login");
   }
 
   const { listings, requests } = await getAdminData();
@@ -97,11 +63,14 @@ export default async function AdminPage({
   return (
     <div className="bg-zfp-bg-light py-12">
       <div className="container max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-gray-600">Přehled nabídek a poptávek</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600">Přehled nabídek a poptávek</p>
+          </div>
+          <LogoutButton />
         </div>
 
         {/* Statistiky */}
@@ -189,7 +158,7 @@ export default async function AdminPage({
                     </td>
                     <td className="py-3 px-2 text-sm text-right">
                       <Link
-                        href={`/admin/listings/${listing.id}?key=${searchParams.key}`}
+                        href={`/admin/listings/${listing.id}`}
                         className="text-brand-orange hover:text-brand-orange-hover font-semibold"
                       >
                         Detail →

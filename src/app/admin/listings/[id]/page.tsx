@@ -2,19 +2,8 @@ import { supabase } from "@/lib/supabase";
 import { Listing, MatchWithRequest } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
-import { headers } from "next/headers";
-
-async function checkAdminAccess(searchParams: { key?: string }) {
-  const headersList = headers();
-  const headerKey = headersList.get("x-admin-key");
-  const queryKey = searchParams.key;
-  const adminKey = process.env.ADMIN_KEY;
-
-  if (!adminKey || (headerKey !== adminKey && queryKey !== adminKey)) {
-    return false;
-  }
-  return true;
-}
+import { redirect } from "next/navigation";
+import { isAuthenticated } from "@/lib/auth";
 
 async function getListingWithMatches(id: string) {
   const { data: listing } = await supabase
@@ -41,28 +30,12 @@ async function getListingWithMatches(id: string) {
 
 export default async function AdminListingDetailPage({
   params,
-  searchParams,
 }: {
   params: { id: string };
-  searchParams: { key?: string };
 }) {
-  const hasAccess = await checkAdminAccess(searchParams);
-
-  if (!hasAccess) {
-    return (
-      <div className="bg-zfp-bg-light py-12">
-        <div className="container max-w-2xl text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h1 className="text-2xl font-heading font-bold text-red-600 mb-4">
-              Přístup odepřen
-            </h1>
-            <p className="text-gray-600">
-              Nemáte oprávnění pro přístup k admin sekci.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+  // Kontrola autentizace
+  if (!(await isAuthenticated())) {
+    redirect("/login");
   }
 
   const data = await getListingWithMatches(params.id);
@@ -76,7 +49,7 @@ export default async function AdminListingDetailPage({
               Nabídka nenalezena
             </h1>
             <Link
-              href={`/admin?key=${searchParams.key}`}
+              href="/admin"
               className="btn-primary inline-block"
             >
               Zpět na admin
@@ -101,7 +74,7 @@ export default async function AdminListingDetailPage({
         {/* Breadcrumbs */}
         <div className="mb-6">
           <Link
-            href={`/admin?key=${searchParams.key}`}
+            href="/admin"
             className="text-brand-orange hover:text-brand-orange-hover"
           >
             ← Zpět na admin
