@@ -70,7 +70,7 @@ export default async function LoginPage() {
         {/* Zpět na homepage */}
        <div className="text-center mt-6">
           
-            href="/"
+            <a href="/"
             className="text-sm text-brand-orange hover:text-brand-orange-hover"
           >
             ← Zpět na hlavní stránku
