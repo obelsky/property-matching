@@ -27,9 +27,7 @@ export default function Header() {
             >
               Dashboard
             </Link>
-            <div className="text-sm text-zfp-text">
-              Součást <strong>ZFP GROUP</strong>
-            </div>
+
           </div>
         </div>
       </div>
