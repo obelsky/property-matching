@@ -2,6 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
+  // Admin key z environment variable
+  const adminKey = process.env.ADMIN_KEY || "admin123";
+
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
@@ -16,8 +19,17 @@ export default function Header() {
               priority
             />
           </Link>
-          <div className="text-sm text-zfp-text">
-            Součást <strong>ZFP GROUP</strong>
+          
+          <div className="flex items-center gap-6">
+            <Link 
+              href={`/admin?key=${adminKey}`}
+              className="text-sm font-semibold text-brand-orange hover:text-brand-orange-hover transition-colors"
+            >
+              Dashboard
+            </Link>
+            <div className="text-sm text-zfp-text">
+              Součást <strong>ZFP GROUP</strong>
+            </div>
           </div>
         </div>
       </div>
