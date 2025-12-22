@@ -68,7 +68,7 @@ export default async function LoginPage() {
         </div>
 
         {/* Zpět na homepage */}
-        <div className="text-center mt-6">
+       <div className="text-center mt-6">
           
             href="/"
             className="text-sm text-brand-orange hover:text-brand-orange-hover"
