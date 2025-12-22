@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts - Bree Serif */
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
+
+@layer base {
+  body {
+    @apply bg-white text-zfp-text;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  /* Primární CTA tlačítko */
+  .btn-primary {
+    @apply bg-brand-orange hover:bg-brand-orange-hover text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 uppercase tracking-wide text-sm;
+  }
+
+  /* Sekundární CTA tlačítko */
+  .btn-secondary {
+    @apply bg-white border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 uppercase tracking-wide text-sm;
+  }
+
+  /* Input styly */
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent;
+  }
+
+  .label-field {
+    @apply block text-sm font-semibold text-zfp-text mb-2;
+  }
+
+  /* Container */
+  .container {
+    @apply max-w-6xl mx-auto px-4;
+  }
+}
