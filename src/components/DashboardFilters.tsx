@@ -10,14 +10,15 @@ export default function DashboardFilters() {
   const unassigned = searchParams.get("unassigned") === "true";
 
   const handleToggle = () => {
-    const params = new URLSearchParams(searchParams);
-    if (unassigned) {
-      params.delete("unassigned");
-    } else {
-      params.set("unassigned", "true");
-    }
-    router.push(`${pathname}?${params.toString()}`);
-  };
+  const params = new URLSearchParams(searchParams.toString());
+  if (unassigned) {
+    params.delete("unassigned");
+  } else {
+    params.set("unassigned", "true");
+  }
+  router.push(`${pathname}?${params.toString()}`);
+};
+
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-6">
