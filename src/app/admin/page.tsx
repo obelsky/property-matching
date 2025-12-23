@@ -20,7 +20,7 @@ async function getAdminData() {
     .order("created_at", { ascending: false })
     .limit(20);
 
-  // Spočítej celkové počty matches
+  // Spočítej celkové počty matches a najdi top score
   const listingsWithMatches = await Promise.all(
     (listings || []).map(async (listing) => {
       const { count } = await supabase
@@ -28,7 +28,20 @@ async function getAdminData() {
         .select("*", { count: "exact", head: true })
         .eq("listing_id", listing.id);
 
-      return { ...listing, matchCount: count || 0 };
+      // Získej nejvyšší score
+      const { data: topMatch } = await supabase
+        .from("matches")
+        .select("score")
+        .eq("listing_id", listing.id)
+        .order("score", { ascending: false })
+        .limit(1)
+        .single();
+
+      return { 
+        ...listing, 
+        matchCount: count || 0,
+        topScore: topMatch?.score || null
+      };
     })
   );
 
@@ -39,7 +52,20 @@ async function getAdminData() {
         .select("*", { count: "exact", head: true })
         .eq("request_id", request.id);
 
-      return { ...request, matchCount: count || 0 };
+      // Získej nejvyšší score
+      const { data: topMatch } = await supabase
+        .from("matches")
+        .select("score")
+        .eq("request_id", request.id)
+        .order("score", { ascending: false })
+        .limit(1)
+        .single();
+
+      return { 
+        ...request, 
+        matchCount: count || 0,
+        topScore: topMatch?.score || null
+      };
     })
   );
 
@@ -123,7 +149,10 @@ export default async function AdminPage() {
                     Kontakt
                   </th>
                   <th className="text-center py-3 px-2 font-semibold text-sm">
-                    Matche
+                    Matches
+                  </th>
+                  <th className="text-center py-3 px-2 font-semibold text-sm">
+                    Nejlepší shoda
                   </th>
                   <th className="text-right py-3 px-2 font-semibold text-sm">
                     Akce
@@ -155,6 +184,15 @@ export default async function AdminPage() {
                       <span className="bg-brand-orange text-white px-2 py-1 rounded-full text-xs font-semibold">
                         {listing.matchCount}
                       </span>
+                    </td>
+                    <td className="py-3 px-2 text-sm text-center">
+                      {listing.topScore !== null ? (
+                        <span className="text-brand-orange font-semibold">
+                          {listing.topScore}%
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="py-3 px-2 text-sm text-right">
                       <Link
@@ -195,6 +233,9 @@ export default async function AdminPage() {
                   <th className="text-center py-3 px-2 font-semibold text-sm">
                     Matches
                   </th>
+                  <th className="text-center py-3 px-2 font-semibold text-sm">
+                    Nejlepší shoda
+                  </th>
                   <th className="text-right py-3 px-2 font-semibold text-sm">
                     Akce
                   </th>
@@ -225,6 +266,15 @@ export default async function AdminPage() {
                       <span className="bg-brand-orange text-white px-2 py-1 rounded-full text-xs font-semibold">
                         {request.matchCount}
                       </span>
+                    </td>
+                    <td className="py-3 px-2 text-sm text-center">
+                      {request.topScore !== null ? (
+                        <span className="text-brand-orange font-semibold">
+                          {request.topScore}%
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="py-3 px-2 text-sm text-right">
                       <span className="text-gray-400 text-xs">TODO</span>

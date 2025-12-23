@@ -27,13 +27,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Upload fotek
-const photoFiles: File[] = [];
-    const formEntries = Array.from(formData.entries());
-    for (const [key, value] of formEntries) {
-  if (key.startsWith("photo_") && value instanceof File) {
-    photoFiles.push(value);
-  }
-}
+    const photoFiles: File[] = [];
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith("photo_") && value instanceof File) {
+        photoFiles.push(value);
+      }
+    }
 
     const photoUrls = photoFiles.length > 0 ? await uploadPhotos(photoFiles) : [];
 

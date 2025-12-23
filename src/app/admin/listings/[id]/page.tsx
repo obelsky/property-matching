@@ -5,6 +5,35 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 
+// Helper pro formátování důvodů shody
+function formatMatchReason(key: string, value: any): string {
+  switch (key) {
+    case "type":
+      return value ? "✓ Typ: shoda" : "✗ Typ: neshoda";
+    case "city":
+      return value ? "✓ Lokalita: shoda (město)" : "✗ Lokalita: mimo město";
+    case "district":
+      return value ? "✓ Lokalita: shoda (okres)" : "";
+    case "price":
+      if (value === "within_budget") return "✓ Cena: v rozpočtu";
+      if (value === "slightly_over") return "⚠ Cena: mírně nad";
+      if (value === "missing") return "⚠ Cena: chybí";
+      return "✗ Cena: mimo rozpočet";
+    case "area":
+      if (value === "sufficient") return "✓ Plocha: splňuje";
+      if (value === "close") return "⚠ Plocha: mírně pod";
+      if (value === "missing") return "⚠ Plocha: chybí";
+      return "✗ Plocha: mimo";
+    case "layout":
+      if (value === "match") return "✓ Dispozice: shoda";
+      if (value === "close") return "⚠ Dispozice: o 1 menší";
+      if (value === "n/a") return "— Dispozice: N/A";
+      return "✗ Dispozice: mimo";
+    default:
+      return "";
+  }
+}
+
 async function getListingWithMatches(id: string) {
   const { data: listing } = await supabase
     .from("listings")
@@ -253,13 +282,35 @@ export default async function AdminListingDetailPage({
                   </dl>
 
                   {match.reasons && (
-                    <div className="bg-zfp-bg-light rounded p-3">
-                      <p className="text-xs font-semibold text-gray-600 mb-2">
+                    <div className="bg-zfp-bg-light rounded p-4">
+                      <p className="text-sm font-semibold text-gray-700 mb-3">
                         Důvody shody:
                       </p>
-                      <pre className="text-xs text-gray-700 overflow-x-auto">
-                        {JSON.stringify(match.reasons, null, 2)}
-                      </pre>
+                      <ul className="space-y-1 text-sm">
+                        {Object.entries(match.reasons)
+                          .map(([key, value]) => formatMatchReason(key, value))
+                          .filter((text) => text !== "")
+                          .map((text, idx) => (
+                            <li key={idx} className={
+                              text.startsWith("✓") ? "text-green-700" :
+                              text.startsWith("⚠") ? "text-orange-600" :
+                              text.startsWith("✗") ? "text-red-600" :
+                              "text-gray-600"
+                            }>
+                              {text}
+                            </li>
+                          ))}
+                      </ul>
+                      
+                      {/* Technické detaily v rozbalovači */}
+                      <details className="mt-4">
+                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
+                          Technické detaily (JSON)
+                        </summary>
+                        <pre className="text-xs text-gray-700 overflow-x-auto mt-2 bg-white p-2 rounded">
+                          {JSON.stringify(match.reasons, null, 2)}
+                        </pre>
+                      </details>
                     </div>
                   )}
                 </div>

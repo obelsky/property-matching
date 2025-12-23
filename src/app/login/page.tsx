@@ -62,15 +62,15 @@ export default async function LoginPage() {
           {/* Info text */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
-              Heslo je "zfpreality"
+              Heslo je uloženo v environment variables
             </p>
           </div>
         </div>
 
         {/* Zpět na homepage */}
-       <div className="text-center mt-6">
-          
-            <a href="/"
+        <div className="text-center mt-6">
+          <a
+            href="/"
             className="text-sm text-brand-orange hover:text-brand-orange-hover"
           >
             ← Zpět na hlavní stránku
