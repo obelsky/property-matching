@@ -104,6 +104,22 @@ export default async function AdminPage({
     dum: "Dům",
     pozemek: "Pozemek",
   };
+  const listingStatusLabels = {
+  new: "Nová",
+  verified: "Ověřená",
+  active: "Aktivní",
+  reserved: "Rezervovaná",
+  closed: "Uzavřená",
+  archived: "Archivovaná",
+};
+
+const requestStatusLabels = {
+  new: "Nová",
+  active: "Aktivní",
+  paused: "Pozastavená",
+  resolved: "Vyřešená",
+  archived: "Archivovaná",
+};
 
   return (
     <div className="bg-zfp-bg-light py-12">
@@ -225,11 +241,11 @@ export default async function AdminPage({
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-                    <td className="py-3 px-2 text-sm">
-                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                        {listing.status}
-                      </span>
-                    </td>
+                   <td className="py-3 px-2 text-sm">
+  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+    {listingStatusLabels[listing.status as keyof typeof listingStatusLabels] || listing.status}
+  </span>
+</td>
                     <td className="py-3 px-2 text-sm">
                       {listing.agent ? (
                         <span className="text-gray-700">{listing.agent.name}</span>
@@ -325,11 +341,11 @@ export default async function AdminPage({
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-                    <td className="py-3 px-2 text-sm">
-                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                        {request.status}
-                      </span>
-                    </td>
+               <td className="py-3 px-2 text-sm">
+  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+    {requestStatusLabels[request.status as keyof typeof requestStatusLabels] || request.status}
+  </span>
+</td>
                     <td className="py-3 px-2 text-sm">
                       {request.agent ? (
                         <span className="text-gray-700">{request.agent.name}</span>
