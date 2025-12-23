@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { logoutAction } from "./actions";
 import LogoutButton from "@/components/LogoutButton";
+import AdminNav from "@/components/AdminNav";
 
 async function getAdminData() {
   // Získej poslední listings
@@ -98,6 +99,9 @@ export default async function AdminPage() {
           </div>
           <LogoutButton />
         </div>
+
+        {/* Navigace */}
+        <AdminNav />
 
         {/* Statistiky */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
