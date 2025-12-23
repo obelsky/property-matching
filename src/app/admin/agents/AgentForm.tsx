@@ -32,14 +32,19 @@ export default function AgentForm() {
       }
 
       // Reset formuláře a refresh
-      e.currentTarget.reset();
-      router.refresh();
+      const form = e.currentTarget;
+      setTimeout(() => {
+        if (form) {
+          form.reset();
+        }
+        router.refresh();
+      }, 100);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  };  // ← TADY MUSÍ BÝT UZAVÍRACÍ ZÁVORKA A STŘEDNÍK!
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -94,7 +99,7 @@ export default function AgentForm() {
         disabled={loading}
         className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? "Přidávání..." : "Přidat makléře"}
+        {loading ? "Přidávám..." : "Přidat makléře"}
       </button>
     </form>
   );
