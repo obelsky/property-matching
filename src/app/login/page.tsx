@@ -62,7 +62,7 @@ export default async function LoginPage() {
           {/* Info text */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
-              Heslo je uloženo v environment variables
+              Heslo je "zfpreality"
             </p>
           </div>
         </div>
