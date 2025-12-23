@@ -1,9 +1,10 @@
 import { supabase } from "@/lib/supabase";
-import { Listing, MatchWithRequest } from "@/lib/types";
+import { Listing, MatchWithRequest, Agent } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
+import ListingMetaForm from "./ListingMetaForm";
 
 // Helper pro formátování důvodů shody
 function formatMatchReason(key: string, value: any): string {
@@ -54,7 +55,13 @@ async function getListingWithMatches(id: string) {
     .eq("listing_id", id)
     .order("score", { ascending: false });
 
-  return { listing, matches: matches || [] };
+  // Načti všechny agenty pro select
+  const { data: agents } = await supabase
+    .from("agents")
+    .select("*")
+    .order("name");
+
+  return { listing, matches: matches || [], agents: agents || [] };
 }
 
 export default async function AdminListingDetailPage({
@@ -89,7 +96,7 @@ export default async function AdminListingDetailPage({
     );
   }
 
-  const { listing, matches } = data;
+  const { listing, matches, agents } = data;
 
   const propertyTypeLabels = {
     byt: "Byt",
@@ -217,6 +224,21 @@ export default async function AdminListingDetailPage({
                 </div>
               </dl>
             </div>
+          </div>
+        </div>
+
+        {/* Status a Makléř */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
+            Správa nabídky
+          </h2>
+          <div className="max-w-md">
+            <ListingMetaForm
+              listingId={listing.id}
+              currentStatus={listing.status}
+              currentAgentId={listing.agent_id}
+              agents={agents}
+            />
           </div>
         </div>
 

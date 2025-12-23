@@ -5,21 +5,34 @@ import { isAuthenticated } from "@/lib/auth";
 import { logoutAction } from "./actions";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
+import DashboardFilters from "@/components/DashboardFilters";
 
-async function getAdminData() {
-  // Získej poslední listings
-  const { data: listings } = await supabase
+async function getAdminData(onlyUnassigned: boolean = false) {
+  // Query pro listings - volitelně filtruj jen bez makléře
+  let listingsQuery = supabase
     .from("listings")
-    .select("*")
+    .select(`*, agent:agents(id, name)`)
     .order("created_at", { ascending: false })
     .limit(20);
 
-  // Získej poslední requests
-  const { data: requests } = await supabase
+  if (onlyUnassigned) {
+    listingsQuery = listingsQuery.is("agent_id", null);
+  }
+
+  const { data: listings } = await listingsQuery;
+
+  // Query pro requests - volitelně filtruj jen bez makléře
+  let requestsQuery = supabase
     .from("requests")
-    .select("*")
+    .select(`*, agent:agents(id, name)`)
     .order("created_at", { ascending: false })
     .limit(20);
+
+  if (onlyUnassigned) {
+    requestsQuery = requestsQuery.is("agent_id", null);
+  }
+
+  const { data: requests } = await requestsQuery;
 
   // Spočítej celkové počty matches a najdi top score
   const listingsWithMatches = await Promise.all(
@@ -73,13 +86,18 @@ async function getAdminData() {
   return { listings: listingsWithMatches, requests: requestsWithMatches };
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: { unassigned?: string };
+}) {
   // Kontrola autentizace
   if (!(await isAuthenticated())) {
     redirect("/login");
   }
 
-  const { listings, requests } = await getAdminData();
+  const onlyUnassigned = searchParams.unassigned === "true";
+  const { listings, requests } = await getAdminData(onlyUnassigned);
 
   const propertyTypeLabels = {
     byt: "Byt",
@@ -102,6 +120,9 @@ export default async function AdminPage() {
 
         {/* Navigace */}
         <AdminNav />
+
+        {/* Filtry */}
+        <DashboardFilters />
 
         {/* Statistiky */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -158,6 +179,12 @@ export default async function AdminPage() {
                   <th className="text-center py-3 px-2 font-semibold text-sm">
                     Nejlepší shoda
                   </th>
+                  <th className="text-left py-3 px-2 font-semibold text-sm">
+                    Stav
+                  </th>
+                  <th className="text-left py-3 px-2 font-semibold text-sm">
+                    Makléř
+                  </th>
                   <th className="text-right py-3 px-2 font-semibold text-sm">
                     Akce
                   </th>
@@ -194,6 +221,18 @@ export default async function AdminPage() {
                         <span className="text-brand-orange font-semibold">
                           {listing.topScore}%
                         </span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-2 text-sm">
+                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                        {listing.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-2 text-sm">
+                      {listing.agent ? (
+                        <span className="text-gray-700">{listing.agent.name}</span>
                       ) : (
                         <span className="text-gray-400">—</span>
                       )}
@@ -240,6 +279,12 @@ export default async function AdminPage() {
                   <th className="text-center py-3 px-2 font-semibold text-sm">
                     Nejlepší shoda
                   </th>
+                  <th className="text-left py-3 px-2 font-semibold text-sm">
+                    Stav
+                  </th>
+                  <th className="text-left py-3 px-2 font-semibold text-sm">
+                    Makléř
+                  </th>
                   <th className="text-right py-3 px-2 font-semibold text-sm">
                     Akce
                   </th>
@@ -276,6 +321,18 @@ export default async function AdminPage() {
                         <span className="text-brand-orange font-semibold">
                           {request.topScore}%
                         </span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-2 text-sm">
+                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                        {request.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-2 text-sm">
+                      {request.agent ? (
+                        <span className="text-gray-700">{request.agent.name}</span>
                       ) : (
                         <span className="text-gray-400">—</span>
                       )}

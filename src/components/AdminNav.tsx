@@ -9,6 +9,7 @@ export default function AdminNav() {
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: "📊" },
     { href: "/admin/matching", label: "Párování", icon: "🔗" },
+    { href: "/admin/agents", label: "Makléři", icon: "👥" },
   ];
 
   return (

@@ -13,7 +13,8 @@ export interface Listing {
   contact_email: string;
   contact_phone: string | null;
   photos: string[];
-  status: string;
+  status: ListingStatus;
+  agent_id: string | null;
   created_at: string;
 }
 
@@ -28,7 +29,8 @@ export interface Request {
   area_min_m2: number | null;
   contact_email: string;
   contact_phone: string | null;
-  status: string;
+  status: RequestStatus;
+  agent_id: string | null;
   created_at: string;
 }
 
@@ -41,7 +43,18 @@ export interface Match {
   created_at: string;
 }
 
+export interface Agent {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  created_at: string;
+}
+
 export type PropertyType = "byt" | "dum" | "pozemek";
+
+export type ListingStatus = "new" | "verified" | "active" | "reserved" | "closed" | "archived";
+export type RequestStatus = "new" | "active" | "paused" | "resolved" | "archived";
 
 export interface MatchReasons {
   type?: boolean;
