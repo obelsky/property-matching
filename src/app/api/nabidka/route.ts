@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase, uploadPhotos } from "@/lib/supabase";
 import { findTopMatchesForListing } from "@/lib/matching";
 import { Request } from "@/lib/types";
+import { generatePublicToken } from "@/lib/publicToken";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,15 +28,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Upload fotek
-const photoFiles: File[] = [];
-const formEntries = Array.from(formData.entries());
-for (const [key, value] of formEntries) {
-  if (key.startsWith("photo_") && value instanceof File) {
-    photoFiles.push(value);
-  }
-}
+    const photoFiles: File[] = [];
+    const formEntries = Array.from(formData.entries());
+    for (const [key, value] of formEntries) {
+      if (key.startsWith("photo_") && value instanceof File) {
+        photoFiles.push(value);
+      }
+    }
 
     const photoUrls = photoFiles.length > 0 ? await uploadPhotos(photoFiles) : [];
+
+    // Vygeneruj public token pro self-service přístup
+    const publicToken = generatePublicToken();
 
     // Vytvoř listing
     const { data: listing, error: listingError } = await supabase
@@ -51,6 +55,7 @@ for (const [key, value] of formEntries) {
         contact_email,
         contact_phone: contact_phone || null,
         photos: photoUrls,
+        public_token: publicToken,
       })
       .select()
       .single();
@@ -71,7 +76,10 @@ for (const [key, value] of formEntries) {
     if (requestsError) {
       console.error("Requests error:", requestsError);
       // Pokračuj i bez matches
-      return NextResponse.json({ listingId: listing.id });
+      return NextResponse.json({ 
+        listingId: listing.id,
+        publicToken: listing.public_token 
+      });
     }
 
     // Spočítej top 10 matches
@@ -95,7 +103,10 @@ for (const [key, value] of formEntries) {
       }
     }
 
-    return NextResponse.json({ listingId: listing.id });
+    return NextResponse.json({ 
+      listingId: listing.id,
+      publicToken: listing.public_token 
+    });
   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json(

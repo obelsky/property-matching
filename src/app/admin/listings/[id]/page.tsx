@@ -255,6 +255,28 @@ export default async function AdminListingDetailPage({
           </div>
         </div>
 
+        {/* Poznámky od zadavatele */}
+        {listing.public_note && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">📝</span>
+              <div className="flex-1">
+                <h3 className="font-semibold text-yellow-900 mb-2">
+                  Změny od zadavatele
+                </h3>
+                <div className="bg-white rounded p-4 text-sm">
+                  <pre className="whitespace-pre-wrap font-mono text-xs">
+                    {listing.public_note}
+                  </pre>
+                </div>
+                <p className="text-xs text-yellow-800 mt-2">
+                  💡 Zadavatel upřesnil údaje přes veřejný odkaz
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Status a Makléř */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">

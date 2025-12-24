@@ -1,0 +1,52 @@
+import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+import { verifyListingToken } from "@/lib/publicToken";
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, token, price, area, location, note } = body;
+
+    // Ověř token
+    const isValid = await verifyListingToken(id, token);
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "Neplatný token" },
+        { status: 403 }
+      );
+    }
+
+    // Sestavit public_note jako JSON
+    const publicNote = {
+      price: price ? parseFloat(price) : null,
+      area: area ? parseFloat(area) : null,
+      location: location || null,
+      note: note || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Ulož do public_note
+    const { error } = await supabase
+      .from("listings")
+      .update({ 
+        public_note: JSON.stringify(publicNote) 
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating listing:", error);
+      return NextResponse.json(
+        { error: "Nepodařilo se uložit změny" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("API error:", error);
+    return NextResponse.json(
+      { error: "Interní chyba serveru" },
+      { status: 500 }
+    );
+  }
+}

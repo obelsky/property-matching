@@ -2,9 +2,10 @@ import { supabase } from "@/lib/supabase";
 import { Listing, MatchWithRequest } from "@/lib/types";
 import MatchCard from "@/components/MatchCard";
 import Link from "next/link";
+import CopyLink from "@/components/CopyLink";
 
 async function getListingWithMatches(id: string) {
-  // Získej listing
+  // Získej listing (včetně public_token)
   const { data: listing, error: listingError } = await supabase
     .from("listings")
     .select("*")
@@ -102,6 +103,16 @@ export default async function DekujemeNabidkaPage({
             </p>
           </div>
         </div>
+
+        {/* Soukromý odkaz */}
+        {listing.public_token && (
+          <div className="mb-8">
+            <CopyLink
+              url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://property-matching-omega.vercel.app"}/moje/nabidka/${listing.id}?token=${listing.public_token}`}
+              label="📎 Váš soukromý odkaz"
+            />
+          </div>
+        )}
 
         {/* Matches */}
         <div className="bg-white rounded-xl shadow-lg p-8">

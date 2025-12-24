@@ -2,9 +2,10 @@ import { supabase } from "@/lib/supabase";
 import { Request, MatchWithListing } from "@/lib/types";
 import MatchCard from "@/components/MatchCard";
 import Link from "next/link";
+import CopyLink from "@/components/CopyLink";
 
 async function getRequestWithMatches(id: string) {
-  // Získej request
+  // Získej request (včetně public_token)
   const { data: request, error: requestError } = await supabase
     .from("requests")
     .select("*")
@@ -102,6 +103,16 @@ export default async function DekujemePoptavkaPage({
             </p>
           </div>
         </div>
+
+        {/* Soukromý odkaz */}
+        {request.public_token && (
+          <div className="mb-8">
+            <CopyLink
+              url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://property-matching-omega.vercel.app"}/moje/poptavka/${request.id}?token=${request.public_token}`}
+              label="📎 Váš soukromý odkaz"
+            />
+          </div>
+        )}
 
         {/* Matches */}
         <div className="bg-white rounded-xl shadow-lg p-8">

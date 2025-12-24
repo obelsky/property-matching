@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { findTopMatchesForRequest } from "@/lib/matching";
 import { Listing } from "@/lib/types";
+import { generatePublicToken } from "@/lib/publicToken";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,6 +27,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Vygeneruj public token pro self-service přístup
+    const publicToken = generatePublicToken();
+
     // Vytvoř request
     const { data: req, error: reqError } = await supabase
       .from("requests")
@@ -39,6 +43,7 @@ export async function POST(request: NextRequest) {
         area_min_m2: areaStr ? parseFloat(areaStr) : null,
         contact_email,
         contact_phone: contact_phone || null,
+        public_token: publicToken,
       })
       .select()
       .single();
@@ -59,7 +64,10 @@ export async function POST(request: NextRequest) {
     if (listingsError) {
       console.error("Listings error:", listingsError);
       // Pokračuj i bez matches
-      return NextResponse.json({ requestId: req.id });
+      return NextResponse.json({ 
+        requestId: req.id,
+        publicToken: req.public_token 
+      });
     }
 
     // Spočítej top 10 matches
@@ -83,7 +91,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ requestId: req.id });
+    return NextResponse.json({ 
+      requestId: req.id,
+      publicToken: req.public_token 
+    });
   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json(
