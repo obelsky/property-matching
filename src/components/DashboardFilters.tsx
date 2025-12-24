@@ -10,7 +10,7 @@ export default function DashboardFilters() {
   const unassigned = searchParams.get("unassigned") === "true";
 
   const handleToggle = () => {
-const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams.toString());
     if (unassigned) {
       params.delete("unassigned");
     } else {
