@@ -7,13 +7,17 @@ export async function loginAction(formData: FormData) {
   const password = formData.get("password") as string;
 
   if (!password) {
-    redirect("/login?error=missing");
+    return { error: "Zadejte heslo" };
   }
 
+  // Ověř heslo
   if (!verifyAdminPassword(password)) {
-    redirect("/login?error=invalid");
+    return { error: "Nesprávné heslo" };
   }
 
+  // Vytvoř session
   await createSession();
+
+  // Přesměruj na admin
   redirect("/admin");
 }

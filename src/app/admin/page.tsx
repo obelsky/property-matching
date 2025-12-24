@@ -6,6 +6,7 @@ import { logoutAction } from "./actions";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
 import DashboardFilters from "@/components/DashboardFilters";
+import AlertBox from "@/components/AlertBox";
 
 async function getAdminData(onlyUnassigned: boolean = false) {
   // Query pro listings - volitelně filtruj jen bez makléře
@@ -83,7 +84,65 @@ async function getAdminData(onlyUnassigned: boolean = false) {
     })
   );
 
-  return { listings: listingsWithMatches, requests: requestsWithMatches };
+  // METRIKY PRO ALERT BOXY
+  
+  // 1. Počet nabídek bez makléře
+  const { count: unassignedListingsCount } = await supabase
+    .from("listings")
+    .select("*", { count: "exact", head: true })
+    .is("agent_id", null);
+
+  // 2. Počet poptávek bez shody nad 60%
+  // Musíme načíst všechny poptávky a jejich top score
+  const { data: allRequests } = await supabase
+    .from("requests")
+    .select("id");
+  
+  let weakRequestsCount = 0;
+  if (allRequests) {
+    for (const req of allRequests) {
+      const { data: topMatch } = await supabase
+        .from("matches")
+        .select("score")
+        .eq("request_id", req.id)
+        .order("score", { ascending: false })
+        .limit(1)
+        .single();
+      
+      if (!topMatch || topMatch.score < 60) {
+        weakRequestsCount++;
+      }
+    }
+  }
+
+  // 3. Nové nabídky za 24h
+  const oneDayAgo = new Date();
+  oneDayAgo.setHours(oneDayAgo.getHours() - 24);
+  
+  const { count: newListings24h } = await supabase
+    .from("listings")
+    .select("*", { count: "exact", head: true })
+    .gte("created_at", oneDayAgo.toISOString());
+
+  // 4. Shody starší 3 dní (bez řešení)
+  const threeDaysAgo = new Date();
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+  
+  const { count: oldMatches } = await supabase
+    .from("matches")
+    .select("*", { count: "exact", head: true })
+    .lt("created_at", threeDaysAgo.toISOString());
+
+  return { 
+    listings: listingsWithMatches, 
+    requests: requestsWithMatches,
+    alerts: {
+      unassignedListings: unassignedListingsCount || 0,
+      weakRequests: weakRequestsCount,
+      newListings24h: newListings24h || 0,
+      oldMatches: oldMatches || 0,
+    }
+  };
 }
 
 export default async function AdminPage({
@@ -97,29 +156,13 @@ export default async function AdminPage({
   }
 
   const onlyUnassigned = searchParams.unassigned === "true";
-  const { listings, requests } = await getAdminData(onlyUnassigned);
+  const { listings, requests, alerts } = await getAdminData(onlyUnassigned);
 
   const propertyTypeLabels = {
     byt: "Byt",
     dum: "Dům",
     pozemek: "Pozemek",
   };
-  const listingStatusLabels = {
-  new: "Nová",
-  verified: "Ověřená",
-  active: "Aktivní",
-  reserved: "Rezervovaná",
-  closed: "Uzavřená",
-  archived: "Archivovaná",
-};
-
-const requestStatusLabels = {
-  new: "Nová",
-  active: "Aktivní",
-  paused: "Pozastavená",
-  resolved: "Vyřešená",
-  archived: "Archivovaná",
-};
 
   return (
     <div className="bg-zfp-bg-light py-12">
@@ -165,6 +208,43 @@ const requestStatusLabels = {
             <p className="text-3xl font-bold text-brand-orange">
               {listings.reduce((sum, l) => sum + l.matchCount, 0)}
             </p>
+          </div>
+        </div>
+
+        {/* Alert boxy - Co hoří */}
+        <div className="mb-8">
+          <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
+            ⚠️ Vyžaduje pozornost
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <AlertBox
+              count={alerts.unassignedListings}
+              label="Bez makléře"
+              description="Nabídky čekají na přiřazení"
+              href="/admin?unassigned=true"
+              color="red"
+            />
+            <AlertBox
+              count={alerts.weakRequests}
+              label="Slabé shody"
+              description="Poptávky bez shody nad 60%"
+              href="/admin/matching?minScore=0&attention=weak"
+              color="red"
+            />
+            <AlertBox
+              count={alerts.newListings24h}
+              label="Nové za 24h"
+              description="Nabídky za poslední den"
+              href="/admin#new24h"
+              color="red"
+            />
+            <AlertBox
+              count={alerts.oldMatches}
+              label="Staré shody"
+              description="Bez řešení 3+ dní"
+              href="/admin/matching?olderThanDays=3"
+              color="orange"
+            />
           </div>
         </div>
 
@@ -222,9 +302,29 @@ const requestStatusLabels = {
                       {listing.district && `, ${listing.district}`}
                     </td>
                     <td className="py-3 px-2 text-sm">
-                      {listing.price
-                        ? `${listing.price.toLocaleString("cs-CZ")} Kč`
-                        : "—"}
+                      <div className="flex items-center gap-2">
+                        <span>
+                          {listing.price
+                            ? `${listing.price.toLocaleString("cs-CZ")} Kč`
+                            : "—"}
+                        </span>
+                        {/* Quality badges */}
+                        {!listing.price && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí cena
+                          </span>
+                        )}
+                        {!listing.area_m2 && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí plocha
+                          </span>
+                        )}
+                        {(!listing.city || listing.city.trim() === "") && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí lokalita
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-2 text-sm">{listing.contact_email}</td>
                     <td className="py-3 px-2 text-sm text-center">
@@ -241,11 +341,11 @@ const requestStatusLabels = {
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-                   <td className="py-3 px-2 text-sm">
-  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-    {listingStatusLabels[listing.status as keyof typeof listingStatusLabels] || listing.status}
-  </span>
-</td>
+                    <td className="py-3 px-2 text-sm">
+                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                        {listing.status}
+                      </span>
+                    </td>
                     <td className="py-3 px-2 text-sm">
                       {listing.agent ? (
                         <span className="text-gray-700">{listing.agent.name}</span>
@@ -322,9 +422,29 @@ const requestStatusLabels = {
                       {request.district && `, ${request.district}`}
                     </td>
                     <td className="py-3 px-2 text-sm">
-                      {request.budget_max
-                        ? `${request.budget_max.toLocaleString("cs-CZ")} Kč`
-                        : "—"}
+                      <div className="flex items-center gap-2">
+                        <span>
+                          {request.budget_max
+                            ? `${request.budget_max.toLocaleString("cs-CZ")} Kč`
+                            : "—"}
+                        </span>
+                        {/* Quality badges */}
+                        {!request.budget_max && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí rozpočet
+                          </span>
+                        )}
+                        {!request.area_min_m2 && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí plocha
+                          </span>
+                        )}
+                        {(!request.city || request.city.trim() === "") && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            chybí lokalita
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-2 text-sm">{request.contact_email}</td>
                     <td className="py-3 px-2 text-sm text-center">
@@ -341,11 +461,11 @@ const requestStatusLabels = {
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-               <td className="py-3 px-2 text-sm">
-  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-    {requestStatusLabels[request.status as keyof typeof requestStatusLabels] || request.status}
-  </span>
-</td>
+                    <td className="py-3 px-2 text-sm">
+                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                        {request.status}
+                      </span>
+                    </td>
                     <td className="py-3 px-2 text-sm">
                       {request.agent ? (
                         <span className="text-gray-700">{request.agent.name}</span>
@@ -354,7 +474,12 @@ const requestStatusLabels = {
                       )}
                     </td>
                     <td className="py-3 px-2 text-sm text-right">
-                      <span className="text-gray-400 text-xs">TODO</span>
+                      <Link
+                        href={`/admin/requests/${request.id}`}
+                        className="text-brand-orange hover:text-brand-orange-hover font-semibold"
+                      >
+                        Detail →
+                      </Link>
                     </td>
                   </tr>
                 ))}

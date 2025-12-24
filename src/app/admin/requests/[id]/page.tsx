@@ -1,12 +1,11 @@
 import { supabase } from "@/lib/supabase";
-import { Listing, MatchWithRequest, Agent } from "@/lib/types";
+import { Request, Agent } from "@/lib/types";
 import Link from "next/link";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
-import ListingMetaForm from "./ListingMetaForm";
+import RequestMetaForm from "./RequestMetaForm";
 
-// Helper pro formátování důvodů shody
+// Helper pro formátování důvodů shody (stejný jako u nabídky)
 function formatMatchReason(key: string, value: any): string {
   switch (key) {
     case "type":
@@ -35,24 +34,24 @@ function formatMatchReason(key: string, value: any): string {
   }
 }
 
-async function getListingWithMatches(id: string) {
-  const { data: listing } = await supabase
-    .from("listings")
+async function getRequestWithMatches(id: string) {
+  const { data: request } = await supabase
+    .from("requests")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (!listing) return null;
+  if (!request) return null;
 
   const { data: matches } = await supabase
     .from("matches")
     .select(
       `
       *,
-      request:requests(*)
+      listing:listings(*)
     `
     )
-    .eq("listing_id", id)
+    .eq("request_id", id)
     .order("score", { ascending: false });
 
   // Načti všechny agenty pro select
@@ -61,19 +60,19 @@ async function getListingWithMatches(id: string) {
     .select("*")
     .order("name");
 
-  return { listing, matches: matches || [], agents: agents || [] };
+  return { request, matches: matches || [], agents: agents || [] };
 }
 
 // Helper pro kontrolu chybějících dat
-function getMissingFields(listing: Listing): string[] {
+function getMissingFields(request: Request): string[] {
   const missing: string[] = [];
-  if (!listing.price) missing.push("cena");
-  if (!listing.area_m2) missing.push("plocha");
-  if (!listing.city || listing.city.trim() === "") missing.push("lokalita");
+  if (!request.budget_max) missing.push("max. rozpočet");
+  if (!request.area_min_m2) missing.push("minimální plocha");
+  if (!request.city || request.city.trim() === "") missing.push("lokalita");
   return missing;
 }
 
-export default async function AdminListingDetailPage({
+export default async function AdminRequestDetailPage({
   params,
 }: {
   params: { id: string };
@@ -83,7 +82,7 @@ export default async function AdminListingDetailPage({
     redirect("/login");
   }
 
-  const data = await getListingWithMatches(params.id);
+  const data = await getRequestWithMatches(params.id);
 
   if (!data) {
     return (
@@ -91,7 +90,7 @@ export default async function AdminListingDetailPage({
         <div className="container max-w-2xl text-center">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h1 className="text-2xl font-heading font-bold text-zfp-text mb-4">
-              Nabídka nenalezena
+              Poptávka nenalezena
             </h1>
             <Link
               href="/admin"
@@ -105,7 +104,7 @@ export default async function AdminListingDetailPage({
     );
   }
 
-  const { listing, matches, agents } = data;
+  const { request, matches, agents } = data;
 
   const propertyTypeLabels = {
     byt: "Byt",
@@ -113,7 +112,7 @@ export default async function AdminListingDetailPage({
     pozemek: "Pozemek",
   };
 
-  const missingFields = getMissingFields(listing);
+  const missingFields = getMissingFields(request);
 
   return (
     <div className="bg-zfp-bg-light py-12">
@@ -145,50 +144,30 @@ export default async function AdminListingDetailPage({
           </div>
         )}
 
-        {/* Detail nabídky */}
+        {/* Detail poptávky */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
                 {
                   propertyTypeLabels[
-                    listing.type as keyof typeof propertyTypeLabels
+                    request.type as keyof typeof propertyTypeLabels
                   ]
                 }
-                {listing.layout && ` ${listing.layout}`}
+                {request.layout_min && ` ${request.layout_min}+`}
               </h1>
               <p className="text-gray-600">
-                {listing.city}
-                {listing.district && `, ${listing.district}`}
+                {request.city}
+                {request.district && `, ${request.district}`}
               </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500">ID</p>
-              <p className="text-xs text-gray-400 font-mono">{listing.id}</p>
+              <p className="text-xs text-gray-400 font-mono">{request.id}</p>
             </div>
           </div>
 
-          {/* Fotky */}
-          {listing.photos && listing.photos.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-semibold text-lg mb-3">Fotografie</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {listing.photos.map((photo: string, idx: number) => (
-                  <div key={idx} className="relative h-48 bg-gray-100 rounded-lg overflow-hidden">
-                    <Image
-                      src={photo}
-                      alt={`Foto ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Detaily */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-lg mb-3">Parametry</h3>
               <dl className="space-y-2">
@@ -197,35 +176,36 @@ export default async function AdminListingDetailPage({
                   <dd className="font-semibold">
                     {
                       propertyTypeLabels[
-                        listing.type as keyof typeof propertyTypeLabels
+                        request.type as keyof typeof propertyTypeLabels
                       ]
                     }
                   </dd>
                 </div>
-                {listing.layout && (
+                {request.layout_min && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Dispozice:</dt>
-                    <dd className="font-semibold">{listing.layout}</dd>
+                    <dt className="text-gray-600">Min. dispozice:</dt>
+                    <dd className="font-semibold">{request.layout_min}</dd>
                   </div>
                 )}
-                {listing.area_m2 && (
+                <div className="flex justify-between">
+                  <dt className="text-gray-600">Lokalita:</dt>
+                  <dd className="font-semibold">
+                    {request.city}
+                    {request.district && ` (${request.district})`}
+                  </dd>
+                </div>
+                {request.budget_max && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Plocha:</dt>
-                    <dd className="font-semibold">{listing.area_m2} m²</dd>
-                  </div>
-                )}
-                {listing.price && (
-                  <div className="flex justify-between">
-                    <dt className="text-gray-600">Cena:</dt>
+                    <dt className="text-gray-600">Max. rozpočet:</dt>
                     <dd className="font-semibold">
-                      {listing.price.toLocaleString("cs-CZ")} Kč
+                      {request.budget_max.toLocaleString("cs-CZ")} Kč
                     </dd>
                   </div>
                 )}
-                {listing.zipcode && (
+                {request.area_min_m2 && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">PSČ:</dt>
-                    <dd className="font-semibold">{listing.zipcode}</dd>
+                    <dt className="text-gray-600">Min. plocha:</dt>
+                    <dd className="font-semibold">{request.area_min_m2} m²</dd>
                   </div>
                 )}
               </dl>
@@ -236,18 +216,18 @@ export default async function AdminListingDetailPage({
               <dl className="space-y-2">
                 <div className="flex justify-between">
                   <dt className="text-gray-600">E-mail:</dt>
-                  <dd className="font-semibold">{listing.contact_email}</dd>
+                  <dd className="font-semibold">{request.contact_email}</dd>
                 </div>
-                {listing.contact_phone && (
+                {request.contact_phone && (
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Telefon:</dt>
-                    <dd className="font-semibold">{listing.contact_phone}</dd>
+                    <dd className="font-semibold">{request.contact_phone}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <dt className="text-gray-600">Vytvořeno:</dt>
                   <dd className="font-semibold">
-                    {new Date(listing.created_at).toLocaleDateString("cs-CZ")}
+                    {new Date(request.created_at).toLocaleDateString("cs-CZ")}
                   </dd>
                 </div>
               </dl>
@@ -258,13 +238,13 @@ export default async function AdminListingDetailPage({
         {/* Status a Makléř */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
-            Správa nabídky
+            Správa poptávky
           </h2>
           <div className="max-w-md">
-            <ListingMetaForm
-              listingId={listing.id}
-              currentStatus={listing.status}
-              currentAgentId={listing.agent_id}
+            <RequestMetaForm
+              requestId={request.id}
+              currentStatus={request.status}
+              currentAgentId={request.agent_id}
               agents={agents}
             />
           </div>
@@ -286,19 +266,24 @@ export default async function AdminListingDetailPage({
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h4 className="font-semibold text-lg">
-                        {
-                          propertyTypeLabels[
-                            match.request
-                              .type as keyof typeof propertyTypeLabels
-                          ]
-                        }
-                        {match.request.layout_min &&
-                          ` ${match.request.layout_min}+`}
+                        <Link
+                          href={`/admin/listings/${match.listing.id}`}
+                          className="text-brand-orange hover:text-brand-orange-hover"
+                        >
+                          {
+                            propertyTypeLabels[
+                              match.listing
+                                .type as keyof typeof propertyTypeLabels
+                            ]
+                          }
+                          {match.listing.layout &&
+                            ` ${match.listing.layout}`}
+                        </Link>
                       </h4>
                       <p className="text-sm text-gray-600">
-                        {match.request.city}
-                        {match.request.district &&
-                          `, ${match.request.district}`}
+                        {match.listing.city}
+                        {match.listing.district &&
+                          `, ${match.listing.district}`}
                       </p>
                     </div>
                     <div className="bg-brand-orange text-white px-4 py-2 rounded-full font-semibold">
@@ -307,26 +292,26 @@ export default async function AdminListingDetailPage({
                   </div>
 
                   <dl className="grid grid-cols-2 gap-4 text-sm mb-3">
-                    {match.request.budget_max && (
+                    {match.listing.price && (
                       <div>
-                        <dt className="text-gray-500">Max. rozpočet:</dt>
+                        <dt className="text-gray-500">Cena:</dt>
                         <dd className="font-semibold">
-                          {match.request.budget_max.toLocaleString("cs-CZ")} Kč
+                          {match.listing.price.toLocaleString("cs-CZ")} Kč
                         </dd>
                       </div>
                     )}
-                    {match.request.area_min_m2 && (
+                    {match.listing.area_m2 && (
                       <div>
-                        <dt className="text-gray-500">Min. plocha:</dt>
+                        <dt className="text-gray-500">Plocha:</dt>
                         <dd className="font-semibold">
-                          {match.request.area_min_m2} m²
+                          {match.listing.area_m2} m²
                         </dd>
                       </div>
                     )}
                     <div>
                       <dt className="text-gray-500">Kontakt:</dt>
                       <dd className="font-semibold">
-                        {match.request.contact_email}
+                        {match.listing.contact_email}
                       </dd>
                     </div>
                   </dl>
