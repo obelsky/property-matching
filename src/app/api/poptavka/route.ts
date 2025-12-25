@@ -31,9 +31,10 @@ export async function POST(request: NextRequest) {
     // Vygeneruj public token pro self-service přístup
     const publicToken = generatePublicToken();
 
-    // Geocoding - získej lat/lon pro matching
-    // Pro poptávky NEpotřebujeme zipcode (není v DB)
-    const geoLocation = await geocodeAddress(city, null, district);
+    // Geocoding - DOČASNĚ VYPNUTO (network disabled)
+    // TODO: Zapnout až bude network enabled
+    // const geoLocation = await geocodeAddress(city, null, district);
+    const geoLocation = null; // Fallback: matching použije city/district
 
     // Vytvoř request
     const { data: req, error: reqError } = await supabase
