@@ -3,6 +3,7 @@ import { supabase, uploadPhotos } from "@/lib/supabase";
 import { findTopMatchesForListing } from "@/lib/matching";
 import { Request } from "@/lib/types";
 import { generatePublicToken } from "@/lib/publicToken";
+import { geocodeAddress } from "@/lib/geocoding";
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,6 +42,9 @@ export async function POST(request: NextRequest) {
     // Vygeneruj public token pro self-service přístup
     const publicToken = generatePublicToken();
 
+    // Geocoding - získej lat/lon pro matching
+    const geoLocation = await geocodeAddress(city, zipcode, district);
+
     // Vytvoř listing
     const { data: listing, error: listingError } = await supabase
       .from("listings")
@@ -56,6 +60,8 @@ export async function POST(request: NextRequest) {
         contact_phone: contact_phone || null,
         photos: photoUrls,
         public_token: publicToken,
+        latitude: geoLocation?.latitude || null,
+        longitude: geoLocation?.longitude || null,
       })
       .select()
       .single();

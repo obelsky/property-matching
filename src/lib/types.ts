@@ -6,8 +6,8 @@ export interface Listing {
   city: string;
   zipcode: string | null;
   district: string | null;
-  lat: number | null;
-  lon: number | null;
+  latitude: number | null;
+  longitude: number | null;
   price: number | null;
   area_m2: number | null;
   contact_email: string;
@@ -15,6 +15,8 @@ export interface Listing {
   photos: string[];
   status: ListingStatus;
   agent_id: string | null;
+  public_token: string | null;
+  public_note: string | null;
   created_at: string;
 }
 
@@ -27,10 +29,14 @@ export interface Request {
   radius_km: number;
   budget_max: number | null;
   area_min_m2: number | null;
+  latitude: number | null;
+  longitude: number | null;
   contact_email: string;
   contact_phone: string | null;
   status: RequestStatus;
   agent_id: string | null;
+  public_token: string | null;
+  public_note: string | null;
   created_at: string;
 }
 
@@ -60,9 +66,15 @@ export interface MatchReasons {
   type?: boolean;
   city?: boolean;
   district?: boolean;
-  price?: "within_budget" | "slightly_over" | "missing";
-  area?: "sufficient" | "close" | "missing";
-  layout?: "match" | "close" | "n/a";
+  price?: "within_budget" | "slightly_over" | "over_budget" | "missing";
+  area?: "sufficient" | "close" | "insufficient" | "missing";
+  layout?: "match" | "close" | "insufficient" | "n/a";
+  // Geo/distance fieldy
+  geo?: string; // "within_radius" | "outside_radius" | "missing_fallback_city" atd.
+  distance_km?: number | null;
+  radius_km?: number;
+  distance_score?: number;
+  gate_failed?: string; // Který gate selhal (pokud score=0)
 }
 
 // Form data types

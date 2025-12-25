@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { findTopMatchesForRequest } from "@/lib/matching";
 import { Listing } from "@/lib/types";
 import { generatePublicToken } from "@/lib/publicToken";
+import { geocodeAddress } from "@/lib/geocoding";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,6 +31,10 @@ export async function POST(request: NextRequest) {
     // Vygeneruj public token pro self-service přístup
     const publicToken = generatePublicToken();
 
+    // Geocoding - získej lat/lon pro matching
+    // Pro poptávky NEpotřebujeme zipcode (není v DB)
+    const geoLocation = await geocodeAddress(city, null, district);
+
     // Vytvoř request
     const { data: req, error: reqError } = await supabase
       .from("requests")
@@ -44,6 +49,8 @@ export async function POST(request: NextRequest) {
         contact_email,
         contact_phone: contact_phone || null,
         public_token: publicToken,
+        latitude: geoLocation?.latitude || null,
+        longitude: geoLocation?.longitude || null,
       })
       .select()
       .single();
