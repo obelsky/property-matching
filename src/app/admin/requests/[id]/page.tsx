@@ -37,6 +37,18 @@ function formatMatchReason(key: string, value: any): string {
   }
 }
 
+// Helper pro překlad časového horizontu
+function formatTimeframe(value: string): string {
+  const timeframeLabels: Record<string, string> = {
+    'asap': 'Co nejdříve',
+    '3months': 'Do 3 měsíců',
+    '6months': 'Do 6 měsíců',
+    '1year': 'Do 1 roku',
+    'flexible': 'Nemám časový limit',
+  };
+  return timeframeLabels[value] || value;
+}
+
 async function getRequestWithMatches(id: string) {
   const { data: request } = await supabase
     .from("requests")
@@ -152,12 +164,22 @@ export default async function AdminRequestDetailPage({
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
-                {
-                  propertyTypeLabels[
-                    request.type as keyof typeof propertyTypeLabels
-                  ]
-                }
-                {request.layout_min && ` ${request.layout_min}+`}
+                {/* Typ nemovitosti - správné formátování podle typu */}
+                {request.type === "byt" && request.layout_min && (
+                  <>
+                    {propertyTypeLabels[request.type as keyof typeof propertyTypeLabels]}{" "}
+                    {request.layout_min}+
+                  </>
+                )}
+                {request.type === "dum" && (
+                  <>
+                    {propertyTypeLabels[request.type as keyof typeof propertyTypeLabels]}
+                    {request.layout_min && ` ${request.layout_min}`}
+                  </>
+                )}
+                {request.type !== "byt" && request.type !== "dum" && (
+                  propertyTypeLabels[request.type as keyof typeof propertyTypeLabels]
+                )}
               </h1>
               <p className="text-gray-600">
                 {request.city}
@@ -333,7 +355,7 @@ export default async function AdminRequestDetailPage({
               {(request.details as any).timeframe && (
                 <div>
                   <h3 className="font-semibold text-sm text-gray-700 mb-2">Časový horizont:</h3>
-                  <p className="text-gray-900">{(request.details as any).timeframe}</p>
+                  <p className="text-gray-900">{formatTimeframe((request.details as any).timeframe)}</p>
                 </div>
               )}
 
