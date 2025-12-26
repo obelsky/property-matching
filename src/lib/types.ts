@@ -22,22 +22,28 @@ export interface Listing {
 
 export interface Request {
   id: string;
+  request_kind: string | null; // buy/rent - NOVÉ
   type: PropertyType;
   layout_min: string | null;
   city: string;
   district: string | null;
   radius_km: number;
+  budget_min: number | null; // NOVÉ
   budget_max: number | null;
   area_min_m2: number | null;
+  area_max_m2: number | null; // NOVÉ
   latitude: number | null;
   longitude: number | null;
+  contact_name: string | null; // NOVÉ
   contact_email: string;
   contact_phone: string | null;
   status: RequestStatus;
   agent_id: string | null;
   public_token: string | null;
   public_note: string | null;
+  details: any; // JSONB - NOVÉ
   created_at: string;
+}
 }
 
 export interface Match {
