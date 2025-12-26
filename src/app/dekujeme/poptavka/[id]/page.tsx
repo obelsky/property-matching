@@ -4,6 +4,9 @@ import MatchCard from "@/components/MatchCard";
 import Link from "next/link";
 import CopyLink from "@/components/CopyLink";
 
+// Force dynamic rendering (depends on DB)
+export const dynamic = 'force-dynamic';
+
 async function getRequestWithMatches(id: string) {
   // Získej request (včetně public_token)
   const { data: request, error: requestError } = await supabase

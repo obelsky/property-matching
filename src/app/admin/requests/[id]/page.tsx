@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import RequestMetaForm from "./RequestMetaForm";
 
+// Force dynamic rendering (depends on DB + auth)
+export const dynamic = 'force-dynamic';
+
 // Helper pro formátování důvodů shody (stejný jako u nabídky)
 function formatMatchReason(key: string, value: any): string {
   switch (key) {

@@ -4,7 +4,17 @@ import { findTopMatchesForRequest } from "@/lib/matching";
 import { Listing } from "@/lib/types";
 import { generatePublicToken } from "@/lib/publicToken";
 import { geocodeAddress } from "@/lib/geocoding";
-import { exportToGoogleSheets } from "@/lib/googleSheets";
+
+// Force dynamic rendering (API route)
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+export async function GET() {
+  return NextResponse.json(
+    { error: "Method not allowed" },
+    { status: 405 }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,7 +51,8 @@ export async function POST(request: NextRequest) {
     const publicToken = generatePublicToken();
 
     // Geocoding - DOČASNĚ VYPNUTO (network disabled)
-    const geoLocation = null;
+    // TODO: Zapnout až bude network enabled
+    // const geoLocation = await geocodeAddress(preferred_location, null, null);
 
     // Layout_min: první kategorie (pro matching)
     const layout_min = category && category.length > 0 ? category[0] : null;
@@ -64,8 +75,8 @@ export async function POST(request: NextRequest) {
         contact_email,
         contact_phone,
         public_token: publicToken,
-        latitude: geoLocation?.latitude || null,
-        longitude: geoLocation?.longitude || null,
+        latitude: null, // Geocoding disabled
+        longitude: null, // Geocoding disabled
         details: formData, // Celý formulář jako JSON
       })
       .select()
@@ -79,12 +90,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Google Sheets Export (ne-blokující)
+    // Google Sheets Export (ne-blokující) - lazy import
     if (req && !early_submit) {
-      exportToGoogleSheets(req, formData).catch((error) => {
-        console.error("Google Sheets export failed:", error);
-        // Neblokuj user experience
-      });
+      try {
+        const { exportToGoogleSheets } = await import("@/lib/googleSheets");
+        exportToGoogleSheets(req, formData).catch((error) => {
+          console.error("Google Sheets export failed:", error);
+        });
+      } catch (importError) {
+        console.error("Failed to import Google Sheets module:", importError);
+      }
     }
 
     // Najdi matching listings
@@ -122,56 +137,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-      return NextResponse.json(
-        { error: "Chyba při ukládání poptávky" },
-        { status: 500 }
-      );
-    }
 
-    // Najdi všechny listings pro matching
-    const { data: listings, error: listingsError } = await supabase
-      .from("listings")
-      .select("*");
-
-    if (listingsError) {
-      console.error("Listings error:", listingsError);
-      // Pokračuj i bez matches
-      return NextResponse.json({ 
-        requestId: req.id,
-        publicToken: req.public_token 
-      });
-    }
-
-    // Spočítej top 10 matches
-    const matches = findTopMatchesForRequest(req, listings || [], 10);
-
-    // Ulož matches do DB
-    if (matches.length > 0) {
-      const matchRecords = matches.map((match) => ({
-        listing_id: match.listing.id,
-        request_id: req.id,
-        score: match.score,
-        reasons: match.reasons,
-      }));
-
-      const { error: matchesError } = await supabase
-        .from("matches")
-        .insert(matchRecords);
-
-      if (matchesError) {
-        console.error("Matches error:", matchesError);
-      }
-    }
-
-    return NextResponse.json({ 
-      requestId: req.id,
-      publicToken: req.public_token 
-    });
-  } catch (error) {
-    console.error("API error:", error);
-    return NextResponse.json(
-      { error: "Interní chyba serveru" },
-      { status: 500 }
-    );
-  }
-}

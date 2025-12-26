@@ -8,6 +8,9 @@ import AdminNav from "@/components/AdminNav";
 import DashboardFilters from "@/components/DashboardFilters";
 import AlertBox from "@/components/AlertBox";
 
+// Force dynamic rendering (depends on DB + auth)
+export const dynamic = 'force-dynamic';
+
 async function getAdminData(onlyUnassigned: boolean = false) {
   // Query pro listings - volitelně filtruj jen bez makléře
   let listingsQuery = supabase

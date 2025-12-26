@@ -3,6 +3,9 @@ import { verifyRequestToken } from "@/lib/publicToken";
 import Link from "next/link";
 import PublicUpdateForm from "@/components/PublicUpdateForm";
 
+// Force dynamic rendering (depends on DB + token)
+export const dynamic = 'force-dynamic';
+
 async function getRequestData(id: string, token: string) {
   // Ověř token
   const isValid = await verifyRequestToken(id, token);

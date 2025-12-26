@@ -5,6 +5,9 @@ import AdminNav from "@/components/AdminNav";
 import LogoutButton from "@/components/LogoutButton";
 import MatchingFilters from "./MatchingFilters";
 
+// Force dynamic rendering (depends on DB + auth)
+export const dynamic = 'force-dynamic';
+
 // Interface pro match s oběma entitami
 interface MatchWithBoth {
   id: string;

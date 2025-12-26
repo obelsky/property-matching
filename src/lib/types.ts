@@ -44,7 +44,6 @@ export interface Request {
   details: any; // JSONB - NOVÉ
   created_at: string;
 }
-}
 
 export interface Match {
   id: string;

@@ -6,6 +6,9 @@ import LogoutButton from "@/components/LogoutButton";
 import AgentForm from "./AgentForm";
 import { Agent } from "@/lib/types";
 
+// Force dynamic rendering (depends on DB + auth)
+export const dynamic = 'force-dynamic';
+
 async function getAgents() {
   const { data: agents, error } = await supabase
     .from("agents")

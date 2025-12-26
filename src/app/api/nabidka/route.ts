@@ -5,6 +5,17 @@ import { Request } from "@/lib/types";
 import { generatePublicToken } from "@/lib/publicToken";
 import { geocodeAddress } from "@/lib/geocoding";
 
+// Force dynamic rendering (API route)
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+export async function GET() {
+  return NextResponse.json(
+    { error: "Method not allowed" },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -45,8 +56,7 @@ export async function POST(request: NextRequest) {
     // Geocoding - DOČASNĚ VYPNUTO (network disabled)
     // TODO: Zapnout až bude network enabled
     // const geoLocation = await geocodeAddress(city, zipcode, district);
-    const geoLocation = null; // Fallback: matching použije city/district
-
+    
     // Vytvoř listing
     const { data: listing, error: listingError } = await supabase
       .from("listings")
@@ -62,8 +72,8 @@ export async function POST(request: NextRequest) {
         contact_phone: contact_phone || null,
         photos: photoUrls,
         public_token: publicToken,
-        latitude: geoLocation?.latitude || null,
-        longitude: geoLocation?.longitude || null,
+        latitude: null, // Geocoding disabled
+        longitude: null, // Geocoding disabled
       })
       .select()
       .single();
