@@ -238,6 +238,153 @@ export default async function AdminRequestDetailPage({
           </div>
         </div>
 
+        {/* Detailní informace z formuláře */}
+        {request.details && typeof request.details === 'object' && Object.keys(request.details).length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
+              Detailní informace z formuláře
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Kategorie */}
+              {(request.details as any).category && Array.isArray((request.details as any).category) && (request.details as any).category.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Kategorie:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).category.map((cat: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Floor preference (pro byty) */}
+              {(request.details as any).floor_preference && Array.isArray((request.details as any).floor_preference) && (request.details as any).floor_preference.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preference patra:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).floor_preference.map((floor: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                        {floor}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferred state */}
+              {(request.details as any).preferred_state && Array.isArray((request.details as any).preferred_state) && (request.details as any).preferred_state.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferovaný stav:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).preferred_state.map((state: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                        {state}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferred construction */}
+              {(request.details as any).preferred_construction && Array.isArray((request.details as any).preferred_construction) && (request.details as any).preferred_construction.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferovaná konstrukce:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).preferred_construction.map((constr: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
+                        {constr}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferred comfort */}
+              {(request.details as any).preferred_comfort && Array.isArray((request.details as any).preferred_comfort) && (request.details as any).preferred_comfort.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferované vybavení:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).preferred_comfort.map((comfort: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                        {comfort}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Financing methods */}
+              {(request.details as any).financing_methods && Array.isArray((request.details as any).financing_methods) && (request.details as any).financing_methods.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Způsob financování:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(request.details as any).financing_methods.map((method: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Timeframe */}
+              {(request.details as any).timeframe && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Časový horizont:</h3>
+                  <p className="text-gray-900">{(request.details as any).timeframe}</p>
+                </div>
+              )}
+
+              {/* Budget range (z details) */}
+              {((request.details as any).budget_min || (request.details as any).budget_max) && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Rozpočet:</h3>
+                  <p className="text-gray-900">
+                    {(request.details as any).budget_min && `Od ${Number((request.details as any).budget_min).toLocaleString("cs-CZ")} Kč`}
+                    {(request.details as any).budget_min && (request.details as any).budget_max && " - "}
+                    {(request.details as any).budget_max && `Do ${Number((request.details as any).budget_max).toLocaleString("cs-CZ")} Kč`}
+                  </p>
+                </div>
+              )}
+
+              {/* Area range (z details) */}
+              {((request.details as any).area_min_m2 || (request.details as any).area_max_m2) && (
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Plocha:</h3>
+                  <p className="text-gray-900">
+                    {(request.details as any).area_min_m2 && `Od ${(request.details as any).area_min_m2} m²`}
+                    {(request.details as any).area_min_m2 && (request.details as any).area_max_m2 && " - "}
+                    {(request.details as any).area_max_m2 && `Do ${(request.details as any).area_max_m2} m²`}
+                  </p>
+                </div>
+              )}
+
+              {/* Early submit flag */}
+              {(request.details as any).early_submit && (
+                <div className="md:col-span-2">
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <p className="text-sm text-amber-800">
+                      ⚡ <strong>Rychlé odeslání:</strong> Klient odeslal formulář před dokončením všech kroků
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Note */}
+              {(request.details as any).note && (
+                <div className="md:col-span-2">
+                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Poznámka od klienta:</h3>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">
+                    {(request.details as any).note}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Status a Makléř */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
