@@ -1,73 +1,149 @@
+import { supabase } from "@/lib/supabase";
+import MatchCard from "@/components/MatchCard";
 import Link from "next/link";
-import { CheckCircleIcon, MailIcon, CheckIcon } from "@/components/Icons";
+import CopyLink from "@/components/CopyLink";
+import { CheckCircleIcon, HouseIcon } from "@/components/Icons";
 
-export default function DekujemeNabidkaPage({
+// Force dynamic rendering (depends on DB)
+export const dynamic = 'force-dynamic';
+
+async function getListingWithMatches(id: string) {
+  // Získej listing (včetně public_token)
+  const { data: listing, error: listingError } = await supabase
+    .from("listings")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (listingError || !listing) {
+    return null;
+  }
+
+  // Získej top 3 matches s request daty
+  const { data: matches, error: matchesError } = await supabase
+    .from("matches")
+    .select(
+      `
+      *,
+      request:requests(*)
+    `
+    )
+    .eq("listing_id", id)
+    .order("score", { ascending: false })
+    .limit(3);
+
+  if (matchesError) {
+    console.error("Matches error:", matchesError);
+    return { listing, matches: [] };
+  }
+
+  return { listing, matches: matches || [] };
+}
+
+export default async function DekujemeNabidkaPage({
   params,
 }: {
   params: { id: string };
 }) {
+  const data = await getListingWithMatches(params.id);
+
+  if (!data) {
+    return (
+      <div className="bg-zfp-bg-light py-12">
+        <div className="container max-w-2xl text-center">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h1 className="text-2xl font-heading font-bold text-zfp-text mb-4">
+              Nabídka nenalezena
+            </h1>
+            <Link href="/" className="btn-primary inline-block">
+              Zpět na hlavní stránku
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { listing, matches } = data;
+
+  const propertyTypeLabels = {
+    byt: "Byt",
+    dum: "Dům",
+    pozemek: "Pozemek",
+    komercni: "Komerční",
+    ostatni: "Ostatní",
+  };
+
   return (
-    <div className="bg-zfp-bg-light min-h-screen py-12">
-      <div className="container max-w-2xl">
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          {/* Success icon */}
+    <div className="bg-zfp-bg-light py-12">
+      <div className="container max-w-5xl">
+        {/* Poděkování */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
           <CheckCircleIcon className="w-16 h-16 mx-auto text-green-500 mb-4" />
-
-          {/* Heading */}
-          <h1 className="text-3xl font-heading font-bold text-zfp-text mb-4">
-            Děkujeme za nabídku!
+          <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
+            Děkujeme za vaši nabídku!
           </h1>
+          <p className="text-gray-600 mb-4">
+            Vaše nabídka byla úspěšně zaregistrována. Hledáme vhodné zájemce.
+          </p>
+          <div className="bg-zfp-bg-light rounded-lg p-4 inline-block">
+            <p className="text-sm text-gray-700">
+              <strong>Vaše nabídka:</strong>{" "}
+              {propertyTypeLabels[listing.type as keyof typeof propertyTypeLabels]}
+              {listing.layout && ` ${listing.layout}`}, {listing.city}
+            </p>
+          </div>
+        </div>
 
-          <p className="text-gray-600 mb-8">
-            Vaše nabídka byla úspěšně odeslána. Brzy vás budeme kontaktovat s vhodnými zájemci.
+        {/* Soukromý odkaz */}
+        {listing.public_token && (
+          <div className="mb-8">
+            <CopyLink
+              url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://property-matching-omega.vercel.app"}/moje/nabidka/${listing.id}?token=${listing.public_token}`}
+              label="📎 Váš soukromý odkaz"
+            />
+          </div>
+        )}
+
+        {/* Matches */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-heading font-bold text-zfp-text mb-2">
+            {matches.length > 0
+              ? "Našli jsme potenciální zájemce"
+              : "Zatím jsme nenašli přesné shody"}
+          </h2>
+          <p className="text-gray-600 mb-6">
+            {matches.length > 0
+              ? "Zde jsou nejlepší shody s poptávkami v naší databázi:"
+              : "Jakmile se objeví vhodná poptávka, dáme vám vědět."}
           </p>
 
-          {/* Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-            <h2 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
-              <MailIcon className="w-5 h-5" />
-              Co se stane dál?
-            </h2>
-            <ul className="text-sm text-blue-800 space-y-2">
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Zaslali jsme vám potvrzovací email</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Email obsahuje soukromý odkaz pro správu nabídky</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Automaticky párujeme vaši nabídku s poptávkami</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Pokud najdeme shodu, ozveme se vám</span>
-              </li>
-            </ul>
-          </div>
+          {matches.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {matches.map((match: any) => (
+                <MatchCard
+                  key={match.id}
+                  item={match.request}
+                  score={match.score}
+                  reasons={match.reasons}
+                  type="request"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <HouseIcon className="mx-auto w-16 h-16 text-gray-400 mb-4" />
+              <p className="text-gray-600">
+                Zatím nemáme v databázi poptávky, které by odpovídaly vaší nabídce.
+              </p>
+            </div>
+          )}
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-8 text-center">
             <Link href="/" className="btn-primary">
               Zpět na hlavní stránku
             </Link>
-            <Link
-              href="/nabidka/form"
-              className="px-6 py-3 border-2 border-brand-orange text-brand-orange rounded-lg hover:bg-orange-50 font-semibold transition-colors"
-            >
-              Přidat další nabídku
-            </Link>
           </div>
-
-          {/* Note */}
-          <p className="text-xs text-gray-500 mt-8">
-            Máte problém? Kontaktujte nás na{" "}
-            <a href="mailto:info@zfpgroup.cz" className="text-brand-orange hover:underline">
-              info@zfpgroup.cz
-            </a>
-          </p>
         </div>
       </div>
     </div>

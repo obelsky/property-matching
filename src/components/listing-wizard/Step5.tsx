@@ -117,7 +117,18 @@ export default function Step5({
             required
           />
           <span className="text-sm text-gray-700">
-            Souhlasím se zpracováním osobních údajů za účelem zprostředkování prodeje/pronájmu nemovitosti. *
+            <strong className="text-gray-900">Souhlasím se zpracováním osobních údajů *</strong>
+            <br />
+            Beru na vědomí, že mé osobní údaje budou zpracovány pro účely vyhledání vhodné
+            nemovitosti. Jsem oprávněn kdykoliv svůj souhlas odvolat. Více informací v{" "}
+            <a
+              href="/zasady-ochrany-osobnich-udaju"
+              target="_blank"
+              className="text-brand-orange hover:underline"
+            >
+              zásadách ochrany osobních údajů
+            </a>
+            .
           </span>
         </label>
       </div>
