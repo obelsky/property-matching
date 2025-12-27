@@ -1,216 +1,136 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import FormProgressBar from "@/components/listing-wizard/FormProgressBar";
+import Step1 from "@/components/listing-wizard/Step1";
+import Step2 from "@/components/listing-wizard/Step2";
+import Step3 from "@/components/listing-wizard/Step3";
+import Step4 from "@/components/listing-wizard/Step4";
+import Step5 from "@/components/listing-wizard/Step5";
 
-export default function NabidkaPage() {
+export default function NabidkaFormPage() {
   const router = useRouter();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<any>({
+    request_kind: "buy", // prodej je výchozí
+    category: [],
+    gdpr: false,
+    photos: [], // NEW - pole pro fotky
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [photos, setPhotos] = useState<File[]>([]);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const handleNext = () => {
+    if (currentStep < 5) { // 5 kroků místo 6
+      setCurrentStep(currentStep + 1);
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleEarlySubmit = async () => {
+    const confirmed = confirm(
+      "Odeslat nabídku teď s aktuálními údaji?\n\nMůžete doplnit detaily později přes soukromý odkaz, který vám zašleme."
+    );
+    if (!confirmed) return;
+
+    await submitForm({ ...formData, early_submit: true });
+  };
+
+  const handleFinalSubmit = async () => {
+    await submitForm(formData);
+  };
+
+  const submitForm = async (data: any) => {
     setIsSubmitting(true);
-    setError(null);
-
-    const formData = new FormData(e.currentTarget);
-
-    // Přidej fotky do FormData
-    photos.forEach((photo, index) => {
-      formData.append(`photo_${index}`, photo);
-    });
 
     try {
       const response = await fetch("/api/nabidka", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Něco se pokazilo");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Submit failed");
       }
 
-      // Přesměruj na děkovací stránku s ID
-      router.push(`/dekujeme/nabidka/${data.listingId}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Chyba při odesílání");
+      const result = await response.json();
+      router.push(`/dekujeme/nabidka/${result.listingId}`);
+    } catch (error) {
+      console.error("Submit error:", error);
+      alert(
+        "Chyba při odesílání nabídky. Zkuste to prosím znovu.\n\n" +
+          (error instanceof Error ? error.message : "")
+      );
+    } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files) {
-      const newPhotos = Array.from(e.target.files).slice(0, 5);
-      setPhotos(newPhotos);
-    }
-  }
+  const updateFormData = (updates: any) => {
+    setFormData({ ...formData, ...updates });
+  };
 
   return (
-    <div className="bg-zfp-bg-light py-12">
-      <div className="container max-w-2xl">
+    <div className="bg-zfp-bg-light min-h-screen py-12">
+      <div className="container max-w-3xl">
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
-            Nabídnout nemovitost
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Vyplňte údaje o vaší nemovitosti a my najdeme vhodné zájemce
-          </p>
+          <FormProgressBar currentStep={currentStep} totalSteps={5} />
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-              {error}
-            </div>
+          {currentStep === 1 && (
+            <Step1 data={formData} onUpdate={updateFormData} onNext={handleNext} />
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Typ nemovitosti */}
-            <div>
-              <label className="label-field">Typ nemovitosti *</label>
-              <select name="type" required className="input-field">
-                <option value="">Vyberte typ</option>
-                <option value="byt">Byt</option>
-                <option value="dum">Dům</option>
-                <option value="pozemek">Pozemek</option>
-              </select>
-            </div>
+          {currentStep === 2 && (
+            <Step2
+              data={formData}
+              onUpdate={updateFormData}
+              onNext={handleNext}
+              onBack={handleBack}
+              onEarlySubmit={handleEarlySubmit}
+            />
+          )}
 
-            {/* Dispozice */}
-            <div>
-              <label className="label-field">Dispozice</label>
-              <input
-                type="text"
-                name="layout"
-                placeholder="např. 2+kk, 3+1"
-                className="input-field"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Nevyplňujte pro pozemky
-              </p>
-            </div>
+          {currentStep === 3 && (
+            <Step3
+              data={formData}
+              onUpdate={updateFormData}
+              onNext={handleNext}
+              onBack={handleBack}
+              onEarlySubmit={handleEarlySubmit}
+            />
+          )}
 
-            {/* Lokalita */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="label-field">Město *</label>
-                <input
-                  type="text"
-                  name="city"
-                  required
-                  placeholder="např. Brno"
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="label-field">Městská část</label>
-                <input
-                  type="text"
-                  name="district"
-                  placeholder="např. Brno-střed"
-                  className="input-field"
-                />
-              </div>
-            </div>
+          {currentStep === 4 && (
+            <Step4
+              data={formData}
+              onUpdate={updateFormData}
+              onNext={handleNext}
+              onBack={handleBack}
+              onEarlySubmit={handleEarlySubmit}
+            />
+          )}
 
-            {/* PSČ */}
-            <div>
-              <label className="label-field">PSČ</label>
-              <input
-                type="text"
-                name="zipcode"
-                placeholder="např. 602 00"
-                className="input-field"
-              />
-            </div>
-
-            {/* Cena a plocha */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="label-field">Cena (Kč)</label>
-                <input
-                  type="number"
-                  name="price"
-                  placeholder="např. 5000000"
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="label-field">Plocha (m²)</label>
-                <input
-                  type="number"
-                  name="area_m2"
-                  placeholder="např. 75"
-                  className="input-field"
-                />
-              </div>
-            </div>
-
-            {/* Fotky */}
-            <div>
-              <label className="label-field">Fotografie (max. 5)</label>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handlePhotoChange}
-                className="input-field"
-              />
-              {photos.length > 0 && (
-                <p className="text-sm text-gray-600 mt-2">
-                  Vybrané fotky: {photos.length}
-                </p>
-              )}
-            </div>
-
-            {/* Kontakt */}
-            <div className="border-t pt-6">
-              <h3 className="font-heading font-semibold text-lg mb-4">
-                Kontaktní údaje
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="label-field">E-mail *</label>
-                  <input
-                    type="email"
-                    name="contact_email"
-                    required
-                    placeholder="vas@email.cz"
-                    className="input-field"
-                  />
-                </div>
-                <div>
-                  <label className="label-field">Telefon</label>
-                  <input
-                    type="tel"
-                    name="contact_phone"
-                    placeholder="+420 123 456 789"
-                    className="input-field"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Submit */}
-            <div className="flex gap-4 pt-4">
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="btn-secondary flex-1"
-                disabled={isSubmitting}
-              >
-                Zpět
-              </button>
-              <button
-                type="submit"
-                className="btn-primary flex-1"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Odesílám..." : "Odeslat nabídku"}
-              </button>
-            </div>
-          </form>
+          {currentStep === 5 && (
+            <Step5
+              data={formData}
+              onUpdate={updateFormData}
+              onSubmit={handleFinalSubmit}
+              onBack={handleBack}
+              isSubmitting={isSubmitting}
+            />
+          )}
         </div>
       </div>
     </div>

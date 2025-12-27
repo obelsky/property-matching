@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CheckCircleIcon, MailIcon, CheckIcon } from "@/components/Icons";
 
 export default function DekujemeNabidkaPage({
   params,
@@ -10,7 +11,7 @@ export default function DekujemeNabidkaPage({
       <div className="container max-w-2xl">
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           {/* Success icon */}
-          <div className="text-6xl mb-4">✅</div>
+          <CheckCircleIcon className="w-16 h-16 mx-auto text-green-500 mb-4" />
 
           {/* Heading */}
           <h1 className="text-3xl font-heading font-bold text-zfp-text mb-4">
@@ -23,12 +24,27 @@ export default function DekujemeNabidkaPage({
 
           {/* Info */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-            <h2 className="font-semibold text-blue-900 mb-3">📧 Co se stane dál?</h2>
+            <h2 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+              <MailIcon className="w-5 h-5" />
+              Co se stane dál?
+            </h2>
             <ul className="text-sm text-blue-800 space-y-2">
-              <li>✓ Zaslali jsme vám potvrzovací email</li>
-              <li>✓ Email obsahuje soukromý odkaz pro správu nabídky</li>
-              <li>✓ Automaticky párujeme vaši nabídku s poptávkami</li>
-              <li>✓ Pokud najdeme shodu, ozveme se vám</li>
+              <li className="flex items-start gap-2">
+                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Zaslali jsme vám potvrzovací email</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Email obsahuje soukromý odkaz pro správu nabídky</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Automaticky párujeme vaši nabídku s poptávkami</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Pokud najdeme shodu, ozveme se vám</span>
+              </li>
             </ul>
           </div>
 

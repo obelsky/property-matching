@@ -2,6 +2,7 @@
 
 import { useState, useRef, ChangeEvent } from "react";
 import Image from "next/image";
+import { CameraIcon, LightbulbIcon, CheckIcon } from "@/components/Icons";
 
 interface PhotoUploadProps {
   photos: File[];
@@ -119,7 +120,7 @@ export default function PhotoUpload({
         />
 
         <div className="space-y-2">
-          <div className="text-4xl">📸</div>
+          <CameraIcon className="w-16 h-16 mx-auto text-gray-400" />
           <p className="text-lg font-semibold text-gray-700">
             Nahrajte fotografie
           </p>
@@ -198,13 +199,31 @@ export default function PhotoUpload({
 
       {/* Helpful tips */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 mb-2">💡 Tipy pro fotky:</h4>
+        <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+          <LightbulbIcon className="w-5 h-5" />
+          Tipy pro fotky:
+        </h4>
         <ul className="text-sm text-blue-800 space-y-1">
-          <li>✓ První fotka bude hlavní (použije se v náhledu)</li>
-          <li>✓ Foťte v dobrém světle, nejlépe přes den</li>
-          <li>✓ Ukažte všechny místnosti a zajímavé detaily</li>
-          <li>✓ Exteriér, výhled, okolí zvyšují zájem</li>
-          <li>✓ Ideálně 5-10 kvalitních fotografií</li>
+          <li className="flex items-start gap-2">
+            <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>První fotka bude hlavní (použije se v náhledu)</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Foťte v dobrém světle, nejlépe přes den</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Ukažte všechny místnosti a zajímavé detaily</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Exteriér, výhled, okolí zvyšují zájem</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Ideálně 5-10 kvalitních fotografií</span>
+          </li>
         </ul>
       </div>
     </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { ApartmentIcon, HouseIcon, LandIcon, CommercialIcon, OtherIcon } from "@/components/Icons";
+
 interface Step1Props {
   data: any;
   onUpdate: (updates: any) => void;
@@ -12,11 +14,11 @@ const REQUEST_KIND_OPTIONS = [
 ];
 
 const PROPERTY_TYPE_OPTIONS = [
-  { value: 'byt', label: 'Byt', icon: '🏢' },
-  { value: 'dum', label: 'Dům', icon: '🏡' },
-  { value: 'pozemek', label: 'Pozemek', icon: '🌳' },
-  { value: 'komercni', label: 'Komerční', icon: '🏪' },
-  { value: 'ostatni', label: 'Ostatní', icon: '🅿️' },
+  { value: 'byt', label: 'Byt', Icon: ApartmentIcon },
+  { value: 'dum', label: 'Dům', Icon: HouseIcon },
+  { value: 'pozemek', label: 'Pozemek', Icon: LandIcon },
+  { value: 'komercni', label: 'Komerční', Icon: CommercialIcon },
+  { value: 'ostatni', label: 'Ostatní', Icon: OtherIcon },
 ];
 
 export default function Step1({ data, onUpdate, onNext }: Step1Props) {
@@ -68,30 +70,33 @@ export default function Step1({ data, onUpdate, onNext }: Step1Props) {
       <div>
         <label className="label-field">Typ nemovitosti *</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
-          {PROPERTY_TYPE_OPTIONS.map((option) => (
-            <label
-              key={option.value}
-              className={`
-                flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-colors
-                ${
-                  data.property_type === option.value
-                    ? "border-brand-orange bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
-                }
-              `}
-            >
-              <input
-                type="radio"
-                name="property_type"
-                value={option.value}
-                checked={data.property_type === option.value}
-                onChange={(e) => onUpdate({ property_type: e.target.value })}
-                className="sr-only"
-              />
-              <span className="text-3xl mb-2">{option.icon}</span>
-              <span className="font-semibold text-sm">{option.label}</span>
-            </label>
-          ))}
+          {PROPERTY_TYPE_OPTIONS.map((option) => {
+            const IconComponent = option.Icon;
+            return (
+              <label
+                key={option.value}
+                className={`
+                  flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-colors
+                  ${
+                    data.property_type === option.value
+                      ? "border-brand-orange bg-orange-50 text-brand-orange"
+                      : "border-gray-300 hover:border-gray-400 text-gray-600"
+                  }
+                `}
+              >
+                <input
+                  type="radio"
+                  name="property_type"
+                  value={option.value}
+                  checked={data.property_type === option.value}
+                  onChange={(e) => onUpdate({ property_type: e.target.value })}
+                  className="sr-only"
+                />
+                <IconComponent className="w-8 h-8 mb-2" />
+                <span className="font-semibold text-sm">{option.label}</span>
+              </label>
+            );
+          })}
         </div>
       </div>
 

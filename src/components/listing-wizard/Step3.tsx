@@ -1,5 +1,7 @@
 "use client";
 
+import { LightbulbIcon, FlashIcon } from "@/components/Icons";
+
 interface Step3Props {
   data: any;
   onUpdate: (updates: any) => void;
@@ -32,9 +34,10 @@ export default function Step3({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900">
-          💡 <strong>Tip:</strong> Čím přesnější budete, tím lepší kupce/nájemce najdeme.
-          Cena a plocha jsou klíčové pro párování s poptávkami.
+        <p className="text-sm text-blue-900 flex items-start gap-2">
+          <LightbulbIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <span><strong>Tip:</strong> Čím přesnější budete, tím lepší kupce/nájemce najdeme.
+          Cena a plocha jsou klíčové pro párování s poptávkami.</span>
         </p>
       </div>
 
@@ -123,9 +126,10 @@ export default function Step3({
           <button
             type="button"
             onClick={onEarlySubmit}
-            className="px-4 py-2 text-sm text-brand-orange hover:text-brand-orange-hover"
+            className="px-4 py-2 text-sm text-brand-orange hover:text-brand-orange-hover inline-flex items-center gap-1"
           >
-            ⚡ Odeslat hned
+            <FlashIcon className="w-4 h-4" />
+            Odeslat hned
           </button>
           <button type="submit" className="btn-primary">
             Pokračovat →

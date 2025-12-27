@@ -1,5 +1,7 @@
 "use client";
 
+import { LockIcon, RocketIcon } from "@/components/Icons";
+
 interface Step5Props {
   data: any;
   onUpdate: (updates: any) => void;
@@ -35,8 +37,9 @@ export default function Step5({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900">
-          🔒 <strong>Soukromí:</strong> Vaše kontaktní údaje budou sdíleny pouze se zájemci, které budeme párovat s vaší nabídkou.
+        <p className="text-sm text-blue-900 flex items-start gap-2">
+          <LockIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <span><strong>Soukromí:</strong> Vaše kontaktní údaje budou sdíleny pouze se zájemci, které budeme párovat s vaší nabídkou.</span>
         </p>
       </div>
 
@@ -132,10 +135,15 @@ export default function Step5({
 
         <button
           type="submit"
-          className="btn-primary"
+          className="btn-primary inline-flex items-center gap-2"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Odesílám..." : "Odeslat nabídku 🚀"}
+          {isSubmitting ? "Odesílám..." : (
+            <>
+              Odeslat nabídku
+              <RocketIcon className="w-5 h-5" />
+            </>
+          )}
         </button>
       </div>
     </form>

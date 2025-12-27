@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PhotoUpload from "@/components/PhotoUpload";
+import { LightbulbIcon, FlashIcon } from "@/components/Icons";
 
 const PROPERTY_STATES = [
   "Novostavba",
@@ -253,9 +254,10 @@ export default function Step4({
           <button
             type="button"
             onClick={onEarlySubmit}
-            className="px-4 py-2 text-sm text-brand-orange hover:text-brand-orange-hover"
+            className="px-4 py-2 text-sm text-brand-orange hover:text-brand-orange-hover inline-flex items-center gap-1"
           >
-            ⚡ Odeslat hned
+            <FlashIcon className="w-4 h-4" />
+            Odeslat hned
           </button>
           <button type="submit" className="btn-primary">
             Pokračovat →
