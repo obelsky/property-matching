@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LockIcon, UserIcon } from "@/components/Icons";
 
 export default function PoptavkaLandingPage() {
   return (
@@ -112,7 +113,7 @@ export default function PoptavkaLandingPage() {
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <div className="text-3xl mb-3">🔒</div>
+            <LockIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Soukromý přístup</h3>
             <p className="text-gray-600 text-sm">
               Sledujte stav poptávky kdykoliv přes váš osobní odkaz
@@ -120,7 +121,7 @@ export default function PoptavkaLandingPage() {
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <div className="text-3xl mb-3">👨‍💼</div>
+            <UserIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Profesionální servis</h3>
             <p className="text-gray-600 text-sm">
               Zkušení makléři ZFP Reality vás provedou celým procesem

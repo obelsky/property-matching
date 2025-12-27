@@ -1,6 +1,7 @@
 "use client";
 
 import { RequestFormData } from "@/lib/formTypes";
+import { CheckIcon } from "@/components/Icons";
 
 interface Step6Props {
   data: Partial<RequestFormData>;
@@ -52,9 +53,10 @@ export default function Step6({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-green-900">
-          ✓ <strong>Poslední krok!</strong> Vyplňte kontaktní údaje a my vás budeme
-          informovat o vhodných nabídkách.
+        <p className="text-sm text-green-900 flex items-start gap-2">
+          <CheckIcon className="w-5 h-5 flex-shrink-0 mt-0.5 text-green-700" />
+          <span><strong>Poslední krok!</strong> Vyplňte kontaktní údaje a my vás budeme
+          informovat o vhodných nabídkách.</span>
         </p>
       </div>
 
@@ -192,7 +194,10 @@ export default function Step6({
               Odesílám...
             </>
           ) : (
-            "Odeslat poptávku ✓"
+            <>
+              Odeslat poptávku
+              <CheckIcon className="w-5 h-5 ml-1" />
+            </>
           )}
         </button>
       </div>

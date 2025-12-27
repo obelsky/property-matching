@@ -99,3 +99,10 @@ export const FlashIcon: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
+
+export const UserIcon: React.FC<IconProps> = ({ className = "w-8 h-8" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);

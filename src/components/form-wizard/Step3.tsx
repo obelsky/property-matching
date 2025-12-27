@@ -1,6 +1,7 @@
 "use client";
 
 import { RequestFormData } from "@/lib/formTypes";
+import { LightbulbIcon } from "@/components/Icons";
 
 interface Step3Props {
   data: Partial<RequestFormData>;
@@ -39,9 +40,10 @@ export default function Step3({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900">
-          💡 <strong>Tip:</strong> Čím přesnější budete, tím lepší shody najdeme.
-          Rozmezí ceny a plochy nám pomůže najít nejvhodnější nabídky.
+        <p className="text-sm text-blue-900 flex items-start gap-2">
+          <LightbulbIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <span><strong>Tip:</strong> Čím přesnější budete, tím lepší shody najdeme.
+          Rozmezí ceny a plochy nám pomůže najít nejvhodnější nabídky.</span>
         </p>
       </div>
 
