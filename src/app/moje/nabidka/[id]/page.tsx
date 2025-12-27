@@ -2,6 +2,8 @@ import { supabase } from "@/lib/supabase";
 import { verifyListingToken } from "@/lib/publicToken";
 import Link from "next/link";
 import PublicUpdateForm from "@/components/PublicUpdateForm";
+import { EditIcon } from "@/components/Icons";
+import Image from "next/image";
 
 // Force dynamic rendering (depends on DB + token)
 export const dynamic = 'force-dynamic';
@@ -58,13 +60,15 @@ export default async function MojeNabidkaPage({
 
   const { listing, matches } = data;
 
-  const propertyTypeLabels = {
+  const propertyTypeLabels: Record<string, string> = {
     byt: "Byt",
     dum: "Dům",
     pozemek: "Pozemek",
+    komercni: "Komerční",
+    ostatni: "Ostatní",
   };
 
-  const statusLabels = {
+  const statusLabels: Record<string, string> = {
     new: "Nová",
     verified: "Ověřená",
     active: "Aktivní",
@@ -73,61 +77,239 @@ export default async function MojeNabidkaPage({
     archived: "Archivovaná",
   };
 
+  // Parse details from JSONB
+  const details = listing.details || {};
+
   return (
     <div className="bg-zfp-bg-light py-12">
       <div className="container max-w-4xl">
+        {/* Back link */}
+        <Link 
+          href="/admin" 
+          className="inline-flex items-center text-brand-orange hover:text-brand-orange-hover mb-6"
+        >
+          ← Zpět na admin
+        </Link>
+
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
-            Vaše nabídka
-          </h1>
-          <p className="text-gray-600">
-            Zde můžete sledovat stav vaší nabídky a nalezené shody
-          </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
+                {propertyTypeLabels[listing.type as keyof typeof propertyTypeLabels]}
+                {details.category?.[0] && ` ${details.category[0]}`}
+              </h1>
+              <p className="text-gray-600">{listing.city || details.preferred_location}</p>
+            </div>
+            <div className="text-right text-sm text-gray-500">
+              <div>ID</div>
+              <div className="font-mono">{listing.id}</div>
+            </div>
+          </div>
         </div>
 
-        {/* Váš záznam */}
+        {/* Parametry */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
-            {propertyTypeLabels[listing.type as keyof typeof propertyTypeLabels]}
-            {listing.layout && ` ${listing.layout}`}
+            Parametry
           </h2>
-          
-          <div className="grid md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-gray-600">Lokalita:</span>
-              <span className="ml-2 font-semibold">{listing.city}</span>
+
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-sm mb-4">
+            {/* Levý sloupec */}
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Typ:</span>
+                <span className="font-semibold text-right">
+                  {propertyTypeLabels[listing.type]}
+                </span>
+              </div>
+              {details.category?.[0] && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Dispozice:</span>
+                  <span className="font-semibold text-right">{details.category[0]}</span>
+                </div>
+              )}
+              {details.preferred_location && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Lokalita:</span>
+                  <span className="font-semibold text-right">{details.preferred_location}</span>
+                </div>
+              )}
+              {(listing.price || details.budget_max) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Cena:</span>
+                  <span className="font-semibold text-right">
+                    {(listing.price || details.budget_max).toLocaleString("cs-CZ")} Kč
+                  </span>
+                </div>
+              )}
+              {(listing.area_m2 || details.area_min_m2) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Plocha:</span>
+                  <span className="font-semibold text-right">
+                    {listing.area_m2 || details.area_min_m2} m²
+                  </span>
+                </div>
+              )}
             </div>
-            {listing.price && (
-              <div>
-                <span className="text-gray-600">Cena:</span>
-                <span className="ml-2 font-semibold">{listing.price.toLocaleString("cs-CZ")} Kč</span>
+
+            {/* Pravý sloupec - Kontakt */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-zfp-text mb-2">Kontakt</h3>
+              {(listing.contact_name || details.contact_name) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Jméno:</span>
+                  <span className="font-semibold text-right">
+                    {listing.contact_name || details.contact_name}
+                  </span>
+                </div>
+              )}
+              {(listing.contact_email || details.contact_email) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">E-mail:</span>
+                  <span className="font-semibold text-right">
+                    {listing.contact_email || details.contact_email}
+                  </span>
+                </div>
+              )}
+              {(listing.contact_phone || details.contact_phone) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Telefon:</span>
+                  <span className="font-semibold text-right">
+                    {listing.contact_phone || details.contact_phone}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-gray-600">Vytvořeno:</span>
+                <span className="font-semibold text-right">
+                  {new Date(listing.created_at).toLocaleDateString("cs-CZ")}
+                </span>
               </div>
-            )}
-            {listing.area_m2 && (
-              <div>
-                <span className="text-gray-600">Plocha:</span>
-                <span className="ml-2 font-semibold">{listing.area_m2} m²</span>
-              </div>
-            )}
+            </div>
           </div>
 
           {/* Status */}
-          <div className="mt-4 p-4 bg-zfp-bg-light rounded-lg">
-            <div className="text-sm">
-              <span className="font-semibold">Stav:</span>
-              <span className="ml-2">{statusLabels[listing.status as keyof typeof statusLabels]}</span>
-            </div>
-            <div className="text-sm mt-2 text-gray-600">
-              {listing.agent 
-                ? `Aktuálně řeší makléř ${listing.agent.name}`
-                : "Zatím čeká na přiřazení"}
+          <div className="mt-6 p-4 bg-zfp-bg-light rounded-lg">
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="font-semibold">Stav: </span>
+                <span className="text-gray-700">
+                  {statusLabels[listing.status as keyof typeof statusLabels]}
+                </span>
+              </div>
+              {listing.agent && (
+                <div className="text-sm text-gray-600">
+                  Aktuálně řeší makléř {listing.agent.name}
+                </div>
+              )}
+              {!listing.agent && (
+                <div className="text-sm text-gray-600">
+                  Zatím čeká na přiřazení
+                </div>
+              )}
             </div>
           </div>
         </div>
 
+        {/* Fotografie */}
+        {listing.photos && listing.photos.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
+              Fotografie ({listing.photos.length})
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {listing.photos.map((photo: string, index: number) => (
+                <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
+                  <Image
+                    src={photo}
+                    alt={`Fotka ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Detailní informace z formuláře */}
+        {details && Object.keys(details).length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
+              Detailní informace z formuláře
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Kategorie */}
+              {details.category && details.category.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Kategorie:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {details.category.map((cat: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferovaný stav */}
+              {details.property_state && details.property_state.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Preferovaný stav:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {details.property_state.map((state: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                        {state}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferovaná konstrukce */}
+              {details.construction_type && details.construction_type.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Preferovaná konstrukce:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {details.construction_type.map((type: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
+                        {type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preferované vybavení */}
+              {details.comfort_features && details.comfort_features.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Preferované vybavení:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {details.comfort_features.map((feature: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Poznámka */}
+            {details.note && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-2">Poznámka od klienta:</h3>
+                <p className="text-gray-700 whitespace-pre-wrap">{details.note}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Nalezené shody */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             Našli jsme {matches.length} možných protějšků
           </h2>
@@ -166,30 +348,24 @@ export default async function MojeNabidkaPage({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">
-              Zatím jsme nenašli žádné vhodné poptávky.
+            <p className="text-center text-gray-600 py-8">
+              Zatím nejsou žádné shody.
             </p>
           )}
         </div>
 
-        {/* Formulář pro upřesnění */}
-        <PublicUpdateForm
-          type="listing"
-          id={params.id}
-          token={searchParams.token}
-          currentData={{
-            price: listing.price,
-            area: listing.area_m2,
-            location: listing.district || "",
-          }}
-        />
-
-        {/* Footer info */}
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Tento odkaz je soukromý. Nesdílejte ho s nikým dalším.</p>
-          <Link href="/" className="text-brand-orange hover:underline mt-2 inline-block">
-            ← Zpět na hlavní stránku
-          </Link>
+        {/* Upravit údaje */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
+            Chcete upřesnit údaje?
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Můžete doplnit nebo upřesnit informace o vaší nabídce.
+          </p>
+          <button className="btn-primary inline-flex items-center gap-2">
+            <EditIcon className="w-5 h-5" />
+            CHCI UPŘESNIT ÚDAJE
+          </button>
         </div>
       </div>
     </div>
