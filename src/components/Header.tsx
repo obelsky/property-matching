@@ -18,18 +18,22 @@ export default function Header() {
           </Link>
           
           <div className="flex items-center gap-6">
-            <Link 
-              href="/poptavka/form"
+            <a 
+              href="https://property-matching-omega.vercel.app/poptavka"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm font-semibold text-gray-700 hover:text-brand-orange transition-colors"
             >
               Hledám nemovitost
-            </Link>
-            <Link 
-              href="/nabidka/form"
+            </a>
+            <a 
+              href="https://property-matching-omega.vercel.app/nabidka"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm font-semibold text-gray-700 hover:text-brand-orange transition-colors"
             >
               Nabízím nemovitost
-            </Link>
+            </a>
             <Link 
               href="/hypotecni-kalkulacka"
               className="text-sm font-semibold text-gray-700 hover:text-brand-orange transition-colors"

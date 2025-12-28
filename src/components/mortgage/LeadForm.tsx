@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { PhoneCallIcon } from "./MortgageIcons";
-import Link from "next/link";
 
 interface CalculatorData {
   propertyPrice: number;
@@ -32,19 +31,44 @@ export default function LeadForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  // Načíst data z localStorage
+  // Načíst data z localStorage a sledovat změny
   useEffect(() => {
-    const stored = localStorage.getItem('mortgageCalculatorData');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.hasChanges) {
-          setCalculatorData(parsed);
+    const loadCalculatorData = () => {
+      const stored = localStorage.getItem('mortgageCalculatorData');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.hasChanges) {
+            setCalculatorData(parsed);
+          } else {
+            setCalculatorData(null);
+          }
+        } catch (err) {
+          console.error('Failed to parse calculator data:', err);
+          setCalculatorData(null);
         }
-      } catch (err) {
-        console.error('Failed to parse calculator data:', err);
+      } else {
+        setCalculatorData(null);
       }
-    }
+    };
+
+    // Načíst data při mountu
+    loadCalculatorData();
+
+    // Sledovat změny v localStorage (když uživatel mění kalkulačku)
+    const handleStorageChange = () => {
+      loadCalculatorData();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Polling pro změny v stejném okně (storage event nefunguje v same-window)
+    const interval = setInterval(loadCalculatorData, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   const formatCurrency = (amount: number) => {
@@ -175,8 +199,39 @@ export default function LeadForm() {
           />
         </div>
 
-        {/* HYPOTEČNÍ KALKULAČKA SEKCE */}
-        {calculatorData ? (
+        {/* DYNAMICKÁ SEKCE - Blue info box NEBO Purple checkbox */}
+        {!calculatorData ? (
+          // BLUE INFO BOX - když uživatel NEpoužil kalkulačku
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div className="flex-1">
+                <p className="font-semibold text-blue-900 mb-1">
+                  Vyzkoušeli jste naši hypoteční kalkulačku?
+                </p>
+                <p className="text-sm text-blue-800 mb-3">
+                  Nastavte si osobní preference v kalkulačce výše a pomozte nám lépe porozumět vašim finančním možnostem.
+                </p>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                  Přejít na kalkulačku nahoře
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // PURPLE CHECKBOX - když uživatel POUŽIL kalkulačku
           <div className="bg-gradient-to-br from-purple-50 to-white border-2 border-purple-300 rounded-xl p-6">
             <label className="flex items-start gap-3 cursor-pointer mb-4">
               <input
@@ -250,35 +305,6 @@ export default function LeadForm() {
                 )}
               </div>
             )}
-          </div>
-        ) : (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div className="flex-1">
-                <p className="font-semibold text-blue-900 mb-1">
-                  Vyzkoušeli jste naši hypoteční kalkulačku?
-                </p>
-                <p className="text-sm text-blue-800 mb-3">
-                  Nastavte si osobní preference v kalkulačce výše a pomozte nám lépe porozumět vašim finančním možnostem.
-                </p>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                  </svg>
-                  Přejít na kalkulačku nahoře
-                </a>
-              </div>
-            </div>
           </div>
         )}
 
