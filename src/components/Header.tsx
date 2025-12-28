@@ -19,6 +19,12 @@ export default function Header() {
           
           <div className="flex items-center gap-6">
             <Link 
+              href="/hypotecni-kalkulacka"
+              className="text-sm font-semibold text-gray-700 hover:text-brand-orange transition-colors"
+            >
+              Hypoteční kalkulačka
+            </Link>
+            <Link 
               href="/login"
               className="text-sm font-semibold text-brand-orange hover:text-brand-orange-hover transition-colors"
             >
