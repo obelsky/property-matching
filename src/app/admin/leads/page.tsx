@@ -1,0 +1,205 @@
+import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { LeadIcon } from "@/components/mortgage/MortgageIcons";
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+export default async function LeadsPage() {
+  // Načti všechny leady
+  const { data: leads, error } = await supabase
+    .from("leads")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error loading leads:", error);
+  }
+
+  const statusLabels: Record<string, string> = {
+    new: "Nový",
+    contacted: "Kontaktován",
+    qualified: "Kvalifikovaný",
+    converted: "Konvertovaný",
+    rejected: "Odmítnutý",
+  };
+
+  const statusColors: Record<string, string> = {
+    new: "bg-blue-100 text-blue-800",
+    contacted: "bg-yellow-100 text-yellow-800",
+    qualified: "bg-green-100 text-green-800",
+    converted: "bg-purple-100 text-purple-800",
+    rejected: "bg-gray-100 text-gray-800",
+  };
+
+  const sourceLabels: Record<string, string> = {
+    "hypotecni-kalkulacka": "Hypoteční kalkulačka",
+    "kontakt-formular": "Kontaktní formulář",
+    "unknown": "Neznámý",
+  };
+
+  return (
+    <div className="bg-zfp-bg-light min-h-screen py-8">
+      <div className="container max-w-7xl">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-zfp-text">
+              Leads
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Kontakty ze všech zdrojů
+            </p>
+          </div>
+          <Link
+            href="/admin"
+            className="px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            ← Zpět na dashboard
+          </Link>
+        </div>
+
+        {/* Stats */}
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <LeadIcon className="w-6 h-6 text-blue-600" />
+              <span className="text-sm text-gray-600">Celkem leadů</span>
+            </div>
+            <p className="text-3xl font-bold text-zfp-text">
+              {leads?.length || 0}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <LeadIcon className="w-6 h-6 text-yellow-600" />
+              <span className="text-sm text-gray-600">Nové</span>
+            </div>
+            <p className="text-3xl font-bold text-zfp-text">
+              {leads?.filter((l) => l.status === "new").length || 0}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <LeadIcon className="w-6 h-6 text-green-600" />
+              <span className="text-sm text-gray-600">Kvalifikované</span>
+            </div>
+            <p className="text-3xl font-bold text-zfp-text">
+              {leads?.filter((l) => l.status === "qualified").length || 0}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <LeadIcon className="w-6 h-6 text-purple-600" />
+              <span className="text-sm text-gray-600">Konvertované</span>
+            </div>
+            <p className="text-3xl font-bold text-zfp-text">
+              {leads?.filter((l) => l.status === "converted").length || 0}
+            </p>
+          </div>
+        </div>
+
+        {/* Tabulka leadů */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Jméno
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Telefon
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Zdroj
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Stav
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Datum
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {leads && leads.length > 0 ? (
+                  leads.map((lead) => (
+                    <tr key={lead.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="font-medium text-gray-900">
+                          {lead.name}
+                        </div>
+                        {lead.message && (
+                          <div className="text-xs text-gray-500 mt-1 max-w-xs truncate">
+                            {lead.message}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <a
+                          href={`mailto:${lead.email}`}
+                          className="text-brand-orange hover:underline"
+                        >
+                          {lead.email}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {lead.phone ? (
+                          <a
+                            href={`tel:${lead.phone}`}
+                            className="text-brand-orange hover:underline"
+                          >
+                            {lead.phone}
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">—</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                          {sourceLabels[lead.source] || lead.source}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            statusColors[lead.status] || "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {statusLabels[lead.status] || lead.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(lead.created_at).toLocaleDateString("cs-CZ", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                      Zatím žádné leady
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChartBarIcon, LinkIcon, UsersIcon } from "@/components/Icons";
+import { LeadIcon } from "@/components/mortgage/MortgageIcons";
 
 export default function AdminNav() {
   const pathname = usePathname();
@@ -11,6 +12,7 @@ export default function AdminNav() {
     { href: "/admin", label: "Dashboard", Icon: ChartBarIcon },
     { href: "/admin/matching", label: "Párování", Icon: LinkIcon },
     { href: "/admin/agents", label: "Makléři", Icon: UsersIcon },
+    { href: "/admin/leads", label: "Leads", Icon: LeadIcon },
   ];
 
   return (
