@@ -208,7 +208,7 @@ export default function LeadDetailPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-heading font-bold text-gray-900">
-                  📊 Data z hypoteční kalkulačky
+                  Data z hypoteční kalkulačky
                 </h2>
                 <p className="text-sm text-gray-600 mt-1">
                   Klient nastavil osobní preference v kalkulačce
@@ -216,9 +216,9 @@ export default function LeadDetailPage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               {/* Hlavní výsledek - Měsíční splátka */}
-              <div className="md:col-span-3 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white shadow-lg">
+              <div className="lg:col-span-2 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white shadow-lg">
                 <p className="text-sm opacity-90 mb-1">Měsíční splátka</p>
                 <p className="text-4xl font-bold">
                   {Number(lead.calculator_data.monthlyPayment).toLocaleString("cs-CZ", {
@@ -280,7 +280,7 @@ export default function LeadDetailPage() {
               </div>
 
               {/* Celkový úrok */}
-              <div className="md:col-span-2 bg-white rounded-lg border border-orange-200 p-4">
+              <div className="lg:col-span-2 bg-white rounded-lg border border-orange-200 p-4">
                 <p className="text-sm text-gray-600 mb-1">Celkový úrok (náklad)</p>
                 <p className="text-xl font-bold text-orange-600">
                   {Number(lead.calculator_data.totalInterest).toLocaleString("cs-CZ")} Kč
@@ -289,7 +289,7 @@ export default function LeadDetailPage() {
 
               {/* Zpětná hypotéka badge */}
               {lead.calculator_data.isReverseMortgage && (
-                <div className="md:col-span-3 bg-purple-100 border border-purple-300 rounded-lg p-4">
+                <div className="lg:col-span-2 bg-purple-100 border border-purple-300 rounded-lg p-4">
                   <div className="flex items-center gap-2">
                     <svg className="w-5 h-5 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -302,7 +302,7 @@ export default function LeadDetailPage() {
               )}
 
               {/* Timestamp */}
-              <div className="md:col-span-3 text-center pt-4 border-t border-purple-200">
+              <div className="lg:col-span-2 text-center pt-4 border-t border-purple-200">
                 <p className="text-xs text-gray-500">
                   Kalkulačka použita: {new Date(lead.calculator_data.timestamp).toLocaleString("cs-CZ", {
                     year: "numeric",

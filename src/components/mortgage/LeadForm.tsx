@@ -257,7 +257,7 @@ export default function LeadForm() {
 
             {includeCalculator && (
               <div className="bg-white rounded-lg border border-purple-200 p-4 mt-4 space-y-2">
-                <h4 className="font-semibold text-sm text-gray-900 mb-3">📊 Vaše nastavení kalkulačky:</h4>
+                <h4 className="font-semibold text-sm text-gray-900 mb-3">Vaše nastavení kalkulačky:</h4>
                 
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
