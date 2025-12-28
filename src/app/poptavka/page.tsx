@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LockIcon, UserIcon } from "@/components/Icons";
+import { LockIcon, UserIcon, TargetIcon, BoltIcon } from "@/components/Icons";
 
 export default function PoptavkaLandingPage() {
   return (
@@ -97,7 +97,7 @@ export default function PoptavkaLandingPage() {
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <div className="text-3xl mb-3">🎯</div>
+            <TargetIcon className="w-12 h-12 mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Přesné vyhledávání</h3>
             <p className="text-gray-600 text-sm">
               Náš inteligentní systém najde nemovitosti podle vašich skutečných potřeb
@@ -105,7 +105,7 @@ export default function PoptavkaLandingPage() {
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <div className="text-3xl mb-3">⚡</div>
+            <BoltIcon className="w-12 h-12 mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Rychlá reakce</h3>
             <p className="text-gray-600 text-sm">
               Makléř vás kontaktuje do 24 hodin s konkrétními nabídkami
@@ -113,7 +113,7 @@ export default function PoptavkaLandingPage() {
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <LockIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
+            <LockIcon className="w-12 h-12 mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Soukromý přístup</h3>
             <p className="text-gray-600 text-sm">
               Sledujte stav poptávky kdykoliv přes váš osobní odkaz
@@ -121,7 +121,7 @@ export default function PoptavkaLandingPage() {
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-md">
-            <UserIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
+            <UserIcon className="w-12 h-12 mb-3 text-brand-orange" />
             <h3 className="font-bold mb-2">Profesionální servis</h3>
             <p className="text-gray-600 text-sm">
               Zkušení makléři ZFP Reality vás provedou celým procesem

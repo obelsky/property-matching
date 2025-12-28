@@ -7,6 +7,7 @@ import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
 import DashboardFilters from "@/components/DashboardFilters";
 import AlertBox from "@/components/AlertBox";
+import { AlertTriangleIcon } from "@/components/Icons";
 
 // Force dynamic rendering (depends on DB + auth)
 export const dynamic = 'force-dynamic';
@@ -233,8 +234,9 @@ export default async function AdminPage({
 
         {/* Alert boxy - Co hoří */}
         <div className="mb-8">
-          <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
-            ⚠️ Vyžaduje pozornost
+          <h2 className="text-xl font-heading font-bold text-zfp-text mb-4 flex items-center gap-2">
+            <AlertTriangleIcon className="w-6 h-6 text-yellow-600" />
+            Vyžaduje pozornost
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <AlertBox
