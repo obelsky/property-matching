@@ -100,7 +100,6 @@ export default async function DekujemeNabidkaPage({
           <div className="mb-8">
             <CopyLink
               url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://property-matching-omega.vercel.app"}/moje/nabidka/${listing.id}?token=${listing.public_token}`}
-              label="📎 Váš soukromý odkaz"
             />
           </div>
         )}

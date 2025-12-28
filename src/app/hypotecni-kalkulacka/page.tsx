@@ -54,9 +54,9 @@ export default function HypotecniKalkulackaPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl p-6 border border-indigo-100">
-              <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                <MoneyIcon className="w-6 h-6 text-indigo-600" />
+            <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl p-6 border border-purple-100">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                <MoneyIcon className="w-6 h-6 text-purple-600" />
               </div>
               <h3 className="text-xl font-bold text-zfp-text mb-2">
                 Čistý příjem

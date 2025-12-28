@@ -11,7 +11,7 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
   // Základní parametry
   const [loanAmount, setLoanAmount] = useState(5000000); // Výše hypotéky
   const [years, setYears] = useState(30); // Doba splácení
-  const [interestRate, setInterestRate] = useState(4.09); // Úroková sazba
+  const [interestRate, setInterestRate] = useState(4.07); // Úroková sazba
 
   // Vypočtené hodnoty
   const [monthlyPayment, setMonthlyPayment] = useState(0);
@@ -149,21 +149,21 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
         {/* Pravá strana - Výsledky */}
         <div className="space-y-4">
           {/* Měsíční splátka - hlavní výsledek */}
-          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-xl p-6 text-white">
+          <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-6 text-white shadow-lg">
             <p className="text-sm opacity-90 mb-2">Měsíční splátka</p>
             <p className="text-4xl font-bold mb-4">
               {formatCurrency(monthlyPayment)} Kč
             </p>
             <button
               onClick={onContactRequest}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md"
             >
               Chci nezávaznou nabídku
             </button>
           </div>
 
           {/* Další detaily */}
-          <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+          <div className="bg-gray-50 rounded-xl p-6 space-y-4 border border-gray-200">
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <span className="text-sm text-gray-600">Úrok</span>
               <span className="font-semibold text-zfp-text">
@@ -185,11 +185,16 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
           </div>
 
           {/* Info box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-xs text-blue-800">
-              💡 Toto je orientační výpočet. Skutečná výše splátky se může lišit 
-              v závislosti na konkrétních podmínkách banky.
-            </p>
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <div className="flex items-start gap-2">
+              <svg className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-xs text-purple-800">
+                Toto je orientační výpočet. Skutečná výše splátky se může lišit 
+                v závislosti na konkrétních podmínkách banky.
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -112,11 +112,7 @@ export default async function DekujemePoptavkaPage({
           <div className="mb-8">
             <CopyLink
               url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://property-matching-omega.vercel.app"}/moje/poptavka/${request.id}?token=${request.public_token}`}
-              label="📎 Váš soukromý odkaz"
             />
-            <p className="text-xs text-center text-gray-500 mt-2">
-              Uložte si tento odkaz - můžete na něm sledovat stav poptávky a případně upřesnit údaje.
-            </p>
           </div>
         )}
 
@@ -124,37 +120,37 @@ export default async function DekujemePoptavkaPage({
         {request.details?.financing_methods && 
          (request.details.financing_methods.includes("Hypotéka") || 
           request.details.financing_methods.includes("Kombinované")) && (
-          <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow-lg p-8 mb-8 border border-indigo-100">
+          <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 rounded-2xl shadow-xl p-8 mb-8 border border-purple-200">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                   </svg>
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-zfp-text mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
                   S financováním vám rádi pomůžeme
                 </h3>
-                <p className="text-gray-700 mb-4">
+                <p className="text-gray-700 mb-4 leading-relaxed">
                   Vidíme, že plánujete financování hypotékou. Náš hypoteční specialista pro vás během jednoho hovoru připraví nezávaznou nabídku na míru. Srovnáme podmínky napříč bankami a najdeme tu nejvýhodnější variantu.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
                     href="/hypotecni-kalkulacka"
-                    className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     Vyzkoušet hypoteční kalkulačku
                   </a>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 bg-white px-4 py-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm text-gray-700 bg-white px-4 py-3 rounded-lg border border-gray-200">
                     <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Zdarma a bez závazků</span>
+                    <span className="font-medium">Zdarma a bez závazků</span>
                   </div>
                 </div>
               </div>

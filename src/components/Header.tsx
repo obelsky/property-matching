@@ -51,9 +51,6 @@ export default function Header() {
                 />
               </svg>
             </a>
-            <div className="text-sm text-zfp-text">
-              Součást <strong>ZFP GROUP</strong>
-            </div>
           </div>
         </div>
       </div>
