@@ -407,6 +407,126 @@ export default async function AdminRequestDetailPage({
           </div>
         )}
 
+        {/* Hypoteční kalkulačka data */}
+        {request.details && (request.details as any).calculator_data && (
+          <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg border-2 border-purple-300 p-8 mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg">
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-heading font-bold text-gray-900">
+                  📊 Data z hypoteční kalkulačky
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Klient nastavil osobní preference v kalkulačce
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Hlavní výsledek - Měsíční splátka */}
+              <div className="md:col-span-3 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white shadow-lg">
+                <p className="text-sm opacity-90 mb-1">Měsíční splátka</p>
+                <p className="text-4xl font-bold">
+                  {Number((request.details as any).calculator_data.monthlyPayment).toLocaleString("cs-CZ", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })} Kč
+                </p>
+              </div>
+
+              {/* Cena nemovitosti */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Cena nemovitosti</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {Number((request.details as any).calculator_data.propertyPrice).toLocaleString("cs-CZ")} Kč
+                </p>
+              </div>
+
+              {/* Vlastní zdroje */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Vlastní zdroje</p>
+                <p className="text-xl font-bold text-purple-700">
+                  {(request.details as any).calculator_data.downPaymentPercent}%
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({Number((request.details as any).calculator_data.propertyPrice * (request.details as any).calculator_data.downPaymentPercent / 100).toLocaleString("cs-CZ")} Kč)
+                  </span>
+                </p>
+              </div>
+
+              {/* Výše hypotéky */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Výše hypotéky</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {Number((request.details as any).calculator_data.loanAmount).toLocaleString("cs-CZ")} Kč
+                </p>
+              </div>
+
+              {/* LTV */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">LTV ratio</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {Number((request.details as any).calculator_data.ltv).toFixed(0)}%
+                </p>
+              </div>
+
+              {/* Doba splácení */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Doba splácení</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {(request.details as any).calculator_data.years} let
+                </p>
+              </div>
+
+              {/* Úroková sazba */}
+              <div className="bg-white rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Úroková sazba</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {Number((request.details as any).calculator_data.interestRate).toFixed(2)}%
+                </p>
+              </div>
+
+              {/* Celkový úrok */}
+              <div className="md:col-span-2 bg-white rounded-lg border border-orange-200 p-4">
+                <p className="text-sm text-gray-600 mb-1">Celkový úrok (náklad)</p>
+                <p className="text-xl font-bold text-orange-600">
+                  {Number((request.details as any).calculator_data.totalInterest).toLocaleString("cs-CZ")} Kč
+                </p>
+              </div>
+
+              {/* Zpětná hypotéka badge */}
+              {(request.details as any).calculator_data.isReverseMortgage && (
+                <div className="md:col-span-3 bg-purple-100 border border-purple-300 rounded-lg p-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-sm font-semibold text-purple-900">
+                      Zpětná hypotéka (0% vlastních zdrojů)
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Timestamp */}
+              <div className="md:col-span-3 text-center pt-4 border-t border-purple-200">
+                <p className="text-xs text-gray-500">
+                  Kalkulačka použita: {new Date((request.details as any).calculator_data.timestamp).toLocaleString("cs-CZ", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Status a Makléř */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">

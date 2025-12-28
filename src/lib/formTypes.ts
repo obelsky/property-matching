@@ -37,6 +37,21 @@ export interface RequestFormData {
   note?: string;
   gdpr: boolean;
 
+  // Hypoteční kalkulačka (volitelné)
+  calculator_data?: {
+    propertyPrice: number;
+    downPaymentPercent: number;
+    loanAmount: number;
+    years: number;
+    interestRate: number;
+    monthlyPayment: number;
+    totalInterest: number;
+    ltv: number;
+    isReverseMortgage: boolean;
+    hasChanges: boolean;
+    timestamp: string;
+  };
+
   // Meta
   early_submit?: boolean;
   current_step?: number;

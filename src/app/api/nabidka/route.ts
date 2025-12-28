@@ -17,6 +17,8 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
+    
+    console.log("[API] Received nabidka data:", JSON.stringify(data, null, 2));
 
     // Získej data z JSON
     const type = data.property_type as string;
@@ -29,9 +31,23 @@ export async function POST(request: NextRequest) {
     const contact_phone = data.contact_phone as string | null;
 
     // Validace
-    if (!type || !city || !contact_email) {
+    if (!contact_email) {
       return NextResponse.json(
-        { error: "Povinná pole nejsou vyplněna" },
+        { error: "Email je povinný" },
+        { status: 400 }
+      );
+    }
+
+    if (!type) {
+      return NextResponse.json(
+        { error: "Typ nemovitosti je povinný" },
+        { status: 400 }
+      );
+    }
+
+    if (!city) {
+      return NextResponse.json(
+        { error: "Lokalita je povinná" },
         { status: 400 }
       );
     }
@@ -40,20 +56,25 @@ export async function POST(request: NextRequest) {
     const photoUrls: string[] = [];
     
     if (data.photos && Array.isArray(data.photos) && data.photos.length > 0) {
+      console.log("[API] Uploading", data.photos.length, "photos");
+      
       for (let i = 0; i < data.photos.length; i++) {
         const base64Photo = data.photos[i];
         
-        if (!base64Photo || typeof base64Photo !== 'string') continue;
+        if (!base64Photo || typeof base64Photo !== 'string') {
+          console.log("[API] Skipping invalid photo", i);
+          continue;
+        }
         
         try {
-          // Extract base64 data (remove data:image/jpeg;base64, prefix)
+          // Extract base64 data
           const matches = base64Photo.match(/^data:image\/(\w+);base64,(.+)$/);
           if (!matches) {
-            console.error("Invalid base64 format for photo", i);
+            console.error("[API] Invalid base64 format for photo", i);
             continue;
           }
           
-          const imageType = matches[1]; // jpeg, png, webp
+          const imageType = matches[1];
           const base64Data = matches[2];
           
           // Convert base64 to buffer
@@ -64,6 +85,8 @@ export async function POST(request: NextRequest) {
           const randomStr = Math.random().toString(36).substring(2, 8);
           const filename = `${timestamp}-${randomStr}.${imageType}`;
           const filepath = `listings/${filename}`;
+          
+          console.log("[API] Uploading photo", i, "as", filepath);
           
           // Upload to Supabase Storage
           const { data: uploadData, error: uploadError } = await supabase
@@ -76,8 +99,8 @@ export async function POST(request: NextRequest) {
             });
           
           if (uploadError) {
-            console.error(`Photo upload error for photo ${i}:`, uploadError);
-            continue; // Skip this photo but continue with others
+            console.error("[API] Photo upload error:", uploadError);
+            continue;
           }
           
           // Get public URL
@@ -87,69 +110,85 @@ export async function POST(request: NextRequest) {
             .getPublicUrl(filepath);
           
           photoUrls.push(publicUrl);
-          console.log(`Photo ${i} uploaded successfully:`, publicUrl);
+          console.log("[API] Photo", i, "uploaded:", publicUrl);
           
         } catch (error) {
-          console.error(`Error processing photo ${i}:`, error);
-          // Continue with other photos
+          console.error("[API] Error processing photo", i, ":", error);
         }
       }
       
-      console.log(`Successfully uploaded ${photoUrls.length} out of ${data.photos.length} photos`);
+      console.log("[API] Successfully uploaded", photoUrls.length, "photos");
     }
 
-    // Vygeneruj public token pro self-service přístup
+    // Vygeneruj public token
     const publicToken = generatePublicToken();
+
+    // Připrav data pro insert
+    const insertData = {
+      type,
+      layout: layout || null,
+      city,
+      district: null,
+      price: priceStr ? parseFloat(priceStr.toString()) : null,
+      area_m2: areaStr ? parseFloat(areaStr.toString()) : null,
+      contact_name: contact_name || null,
+      contact_email,
+      contact_phone: contact_phone || null,
+      photos: photoUrls,
+      public_token: publicToken,
+      latitude: null,
+      longitude: null,
+      details: data,
+    };
+
+    console.log("[API] Insert data:", JSON.stringify(insertData, null, 2));
 
     // Vytvoř listing
     const { data: listing, error: listingError } = await supabase
       .from("listings")
-      .insert({
-        type,
-        layout: layout || null,
-        city,
-        district: null,
-        price: priceStr ? parseFloat(priceStr.toString()) : null,
-        area_m2: areaStr ? parseFloat(areaStr.toString()) : null,
-        contact_name,
-        contact_email,
-        contact_phone: contact_phone || null,
-        photos: photoUrls,
-        public_token: publicToken,
-        latitude: null,
-        longitude: null,
-        details: data, // Ulož celý formulář jako JSON
-      })
+      .insert(insertData)
       .select()
       .single();
 
-    if (listingError || !listing) {
-      console.error("Listing error:", listingError);
+    if (listingError) {
+      console.error("[API] Supabase error:", listingError);
       return NextResponse.json(
-        { error: "Chyba při ukládání nabídky" },
+        { 
+          error: "Chyba při ukládání nabídky",
+          details: listingError.message 
+        },
         { status: 500 }
       );
     }
 
-    // Najdi všechny requests pro matching
+    if (!listing) {
+      console.error("[API] No listing returned from insert");
+      return NextResponse.json(
+        { error: "Nepodařilo se vytvořit nabídku" },
+        { status: 500 }
+      );
+    }
+
+    console.log("[API] Listing created:", listing.id);
+
+    // Najdi matching requests
     const { data: requests, error: requestsError } = await supabase
       .from("requests")
       .select("*");
 
     if (requestsError) {
-      console.error("Requests error:", requestsError);
+      console.error("[API] Requests error:", requestsError);
       // Pokračuj i bez matches
       return NextResponse.json({ 
         success: true,
         listingId: listing.id,
-        public_token: listing.public_token 
+        publicToken 
       });
     }
 
-    // Spočítej top 10 matches
+    // Spočítej top matches
     const matches = findTopMatchesForListing(listing, requests || [], 10);
 
-    // Ulož matches do DB
     if (matches.length > 0) {
       const matchRecords = matches.map((match) => ({
         listing_id: listing.id,
@@ -163,19 +202,26 @@ export async function POST(request: NextRequest) {
         .insert(matchRecords);
 
       if (matchesError) {
-        console.error("Matches error:", matchesError);
+        console.error("[API] Match insert error:", matchesError);
+      } else {
+        console.log("[API] Created", matches.length, "matches");
       }
     }
+
+    console.log("[API] Success! Listing ID:", listing.id);
 
     return NextResponse.json({ 
       success: true,
       listingId: listing.id,
-      public_token: listing.public_token 
+      publicToken 
     });
   } catch (error) {
-    console.error("API error:", error);
+    console.error("[API] Unhandled error:", error);
     return NextResponse.json(
-      { error: "Interní chyba serveru" },
+      { 
+        error: "Interní chyba serveru",
+        details: error instanceof Error ? error.message : "Unknown error"
+      },
       { status: 500 }
     );
   }

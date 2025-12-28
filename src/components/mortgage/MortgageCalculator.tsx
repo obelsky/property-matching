@@ -7,26 +7,73 @@ interface MortgageCalculatorProps {
   onContactRequest?: () => void;
 }
 
+// Defaults pro detekci změn
+const DEFAULT_VALUES = {
+  propertyPrice: 6000000,
+  downPaymentPercent: 20,
+  years: 30,
+  interestRate: 4.07,
+  isReverseMortgage: false
+};
+
 export default function MortgageCalculator({ onContactRequest }: MortgageCalculatorProps) {
-  // Základní parametry
-  const [propertyPrice, setPropertyPrice] = useState(6000000); // Cena nemovitosti
-  const [downPaymentPercent, setDownPaymentPercent] = useState(20); // Vlastní zdroje v %
-  const [years, setYears] = useState(30); // Doba splácení
-  const [interestRate, setInterestRate] = useState(4.07); // Úroková sazba
-  const [isReverseMortgage, setIsReverseMortgage] = useState(false); // Zpětná hypotéka
+  // State
+  const [propertyPrice, setPropertyPrice] = useState(DEFAULT_VALUES.propertyPrice);
+  const [downPaymentPercent, setDownPaymentPercent] = useState(DEFAULT_VALUES.downPaymentPercent);
+  const [years, setYears] = useState(DEFAULT_VALUES.years);
+  const [interestRate, setInterestRate] = useState(DEFAULT_VALUES.interestRate);
+  const [isReverseMortgage, setIsReverseMortgage] = useState(DEFAULT_VALUES.isReverseMortgage);
 
   // Vypočtené hodnoty
-  const [loanAmount, setLoanAmount] = useState(0); // Výše hypotéky
-  const [downPaymentAmount, setDownPaymentAmount] = useState(0); // Vlastní zdroje v Kč
+  const [loanAmount, setLoanAmount] = useState(0);
+  const [downPaymentAmount, setDownPaymentAmount] = useState(0);
   const [monthlyPayment, setMonthlyPayment] = useState(0);
   const [totalInterest, setTotalInterest] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [ltv, setLtv] = useState(0); // Loan-to-Value ratio
+  const [ltv, setLtv] = useState(0);
 
   // Výpočet hypotéky při změně vstupů
   useEffect(() => {
     calculateMortgage();
   }, [propertyPrice, downPaymentPercent, years, interestRate]);
+
+  // Detekce změn a ukládání do localStorage
+  useEffect(() => {
+    const hasChanges = 
+      propertyPrice !== DEFAULT_VALUES.propertyPrice ||
+      downPaymentPercent !== DEFAULT_VALUES.downPaymentPercent ||
+      years !== DEFAULT_VALUES.years ||
+      interestRate !== DEFAULT_VALUES.interestRate ||
+      isReverseMortgage !== DEFAULT_VALUES.isReverseMortgage;
+
+    if (hasChanges) {
+      // Uložit data do localStorage
+      const calculatorData = {
+        // Vstupy
+        propertyPrice,
+        downPaymentPercent,
+        years,
+        interestRate,
+        isReverseMortgage,
+        // Vypočítané hodnoty
+        loanAmount,
+        downPaymentAmount,
+        monthlyPayment,
+        totalInterest,
+        totalAmount,
+        ltv,
+        // Metadata
+        hasChanges: true,
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem('mortgageCalculatorData', JSON.stringify(calculatorData));
+    } else {
+      // Smazat data pokud jsou default hodnoty
+      localStorage.removeItem('mortgageCalculatorData');
+    }
+  }, [propertyPrice, downPaymentPercent, years, interestRate, isReverseMortgage, 
+      loanAmount, downPaymentAmount, monthlyPayment, totalInterest, totalAmount, ltv]);
 
   const calculateMortgage = () => {
     // Výpočet vlastních zdrojů a výše hypotéky
@@ -43,7 +90,6 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
     const numberOfPayments = years * 12;
 
     if (monthlyRate === 0) {
-      // Pokud je úrok 0%, jednoduché dělení
       const payment = loan / numberOfPayments;
       setMonthlyPayment(payment);
       setTotalInterest(0);
@@ -71,8 +117,11 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
     }).format(amount);
   };
 
+  const handlePropertyPriceChange = (value: number) => {
+    setPropertyPrice(value);
+  };
+
   const handleDownPaymentChange = (value: number) => {
-    // Pokud není zpětná hypotéka, minimálně 10%
     if (!isReverseMortgage && value < 10) {
       setDownPaymentPercent(10);
     } else {
@@ -84,11 +133,9 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
     const newValue = !isReverseMortgage;
     setIsReverseMortgage(newValue);
     
-    // Pokud vypneme zpětnou hypotéku a máme méně než 10%, nastavit na 10%
     if (!newValue && downPaymentPercent < 10) {
       setDownPaymentPercent(10);
     }
-    // Pokud zapneme zpětnou hypotéku, můžeme nastavit na 0%
     if (newValue) {
       setDownPaymentPercent(0);
     }
@@ -124,7 +171,7 @@ export default function MortgageCalculator({ onContactRequest }: MortgageCalcula
               max="20000000"
               step="100000"
               value={propertyPrice}
-              onChange={(e) => setPropertyPrice(parseInt(e.target.value))}
+              onChange={(e) => handlePropertyPriceChange(parseInt(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-500"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
