@@ -211,12 +211,13 @@ export default async function AdminListingDetailPage({
                     <dd className="font-semibold">{listing.layout}</dd>
                   </div>
                 )}
-                {listing.area_m2 && (
-                  <div className="flex justify-between">
-                    <dt className="text-gray-600">Plocha:</dt>
-                    <dd className="font-semibold">{listing.area_m2} m²</dd>
-                  </div>
-                )}
+                <div className="flex justify-between">
+                  <dt className="text-gray-600">Lokalita:</dt>
+                  <dd className="font-semibold">
+                    {listing.city}
+                    {listing.district && `, ${listing.district}`}
+                  </dd>
+                </div>
                 {listing.price && (
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Cena:</dt>
@@ -225,10 +226,10 @@ export default async function AdminListingDetailPage({
                     </dd>
                   </div>
                 )}
-                {listing.zipcode && (
+                {listing.area_m2 && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">PSČ:</dt>
-                    <dd className="font-semibold">{listing.zipcode}</dd>
+                    <dt className="text-gray-600">Plocha:</dt>
+                    <dd className="font-semibold">{listing.area_m2} m²</dd>
                   </div>
                 )}
               </dl>
@@ -237,6 +238,12 @@ export default async function AdminListingDetailPage({
             <div>
               <h3 className="font-semibold text-lg mb-3">Kontakt</h3>
               <dl className="space-y-2">
+                {listing.contact_name && (
+                  <div className="flex justify-between">
+                    <dt className="text-gray-600">Jméno:</dt>
+                    <dd className="font-semibold">{listing.contact_name}</dd>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <dt className="text-gray-600">E-mail:</dt>
                   <dd className="font-semibold">{listing.contact_email}</dd>

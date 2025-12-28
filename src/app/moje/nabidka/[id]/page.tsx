@@ -376,10 +376,13 @@ export default async function MojeNabidkaPage({
           <p className="text-gray-600 mb-4">
             Můžete doplnit nebo upřesnit informace o vaší nabídce.
           </p>
-          <button className="btn-primary inline-flex items-center gap-2">
+          <Link 
+            href={`/moje/nabidka/${params.id}/edit?token=${searchParams.token}`}
+            className="btn-primary inline-flex items-center gap-2"
+          >
             <EditIcon className="w-5 h-5" />
             CHCI UPŘESNIT ÚDAJE
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,136 +1,132 @@
-"use client";
+import Link from "next/link";
+import { LockIcon, UserIcon } from "@/components/Icons";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import FormProgressBar from "@/components/listing-wizard/FormProgressBar";
-import Step1 from "@/components/listing-wizard/Step1";
-import Step2 from "@/components/listing-wizard/Step2";
-import Step3 from "@/components/listing-wizard/Step3";
-import Step4 from "@/components/listing-wizard/Step4";
-import Step5 from "@/components/listing-wizard/Step5";
-
-export default function NabidkaFormPage() {
-  const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<any>({
-    request_kind: "buy", // prodej je výchozí
-    category: [],
-    gdpr: false,
-    photos: [], // NEW - pole pro fotky
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleNext = () => {
-    if (currentStep < 5) { // 5 kroků místo 6
-      setCurrentStep(currentStep + 1);
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const handleEarlySubmit = async () => {
-    const confirmed = confirm(
-      "Odeslat nabídku teď s aktuálními údaji?\n\nMůžete doplnit detaily později přes soukromý odkaz, který vám zašleme."
-    );
-    if (!confirmed) return;
-
-    await submitForm({ ...formData, early_submit: true });
-  };
-
-  const handleFinalSubmit = async () => {
-    await submitForm(formData);
-  };
-
-  const submitForm = async (data: any) => {
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/nabidka", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Submit failed");
-      }
-
-      const result = await response.json();
-      router.push(`/dekujeme/nabidka/${result.listingId}`);
-    } catch (error) {
-      console.error("Submit error:", error);
-      alert(
-        "Chyba při odesílání nabídky. Zkuste to prosím znovu.\n\n" +
-          (error instanceof Error ? error.message : "")
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const updateFormData = (updates: any) => {
-    setFormData({ ...formData, ...updates });
-  };
-
+export default function NabidkaLandingPage() {
   return (
-    <div className="bg-zfp-bg-light min-h-screen py-12">
-      <div className="container max-w-3xl">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <FormProgressBar currentStep={currentStep} totalSteps={5} />
+    <div className="bg-zfp-bg-light min-h-screen">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-white to-zfp-bg-light py-16">
+        <div className="container max-w-4xl text-center">
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-zfp-text mb-4">
+            Prodejte nemovitost se ZFP Reality
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Začněte pár otázkami. Detaily doplníte jen pokud chcete.
+          </p>
+          
+          {/* 3 Steps */}
+          <div className="grid md:grid-cols-3 gap-8 my-12">
+            <div className="bg-white rounded-xl p-6 shadow-md">
+              <div className="w-16 h-16 mx-auto bg-brand-orange rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                1
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2">
+                Vyplníte
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Jednoduché otázky o vaší nemovitosti
+              </p>
+            </div>
 
-          {currentStep === 1 && (
-            <Step1 data={formData} onUpdate={updateFormData} onNext={handleNext} />
-          )}
+            <div className="bg-white rounded-xl p-6 shadow-md">
+              <div className="w-16 h-16 mx-auto bg-brand-orange rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                2
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2">
+                Najdeme zájemce
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Náš systém propojí vaši nabídku s vhodnými poptávkami
+              </p>
+            </div>
 
-          {currentStep === 2 && (
-            <Step2
-              data={formData}
-              onUpdate={updateFormData}
-              onNext={handleNext}
-              onBack={handleBack}
-              onEarlySubmit={handleEarlySubmit}
-            />
-          )}
+            <div className="bg-white rounded-xl p-6 shadow-md">
+              <div className="w-16 h-16 mx-auto bg-brand-orange rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                3
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2">
+                Spojíme vás
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Makléř vás kontaktuje s kvalifikovanými kupci
+              </p>
+            </div>
+          </div>
 
-          {currentStep === 3 && (
-            <Step3
-              data={formData}
-              onUpdate={updateFormData}
-              onNext={handleNext}
-              onBack={handleBack}
-              onEarlySubmit={handleEarlySubmit}
-            />
-          )}
+          {/* Trust Badge */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-flex items-center gap-3 mb-8">
+            <svg
+              className="w-6 h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+            <div className="text-left">
+              <p className="text-sm font-semibold text-blue-900">
+                Data bezpečně zpracuje interní oddělení ZFP Reality, a.s.
+              </p>
+            </div>
+          </div>
 
-          {currentStep === 4 && (
-            <Step4
-              data={formData}
-              onUpdate={updateFormData}
-              onNext={handleNext}
-              onBack={handleBack}
-              onEarlySubmit={handleEarlySubmit}
-            />
-          )}
+          {/* CTA */}
+          <div>
+            <Link
+              href="/nabidka/form"
+              className="inline-block bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-lg px-12 py-4 rounded-lg transition-colors shadow-lg"
+            >
+              Začít nabídku →
+            </Link>
+            <p className="text-sm text-gray-500 mt-3">
+              ⏱️ Zabere cca 3 minuty
+            </p>
+          </div>
+        </div>
+      </div>
 
-          {currentStep === 5 && (
-            <Step5
-              data={formData}
-              onUpdate={updateFormData}
-              onSubmit={handleFinalSubmit}
-              onBack={handleBack}
-              isSubmitting={isSubmitting}
-            />
-          )}
+      {/* Benefits Section */}
+      <div className="container max-w-4xl py-16">
+        <h2 className="text-2xl font-heading font-bold text-center mb-8">
+          Proč prodávat s námi?
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg p-6 shadow-md">
+            <div className="text-3xl mb-3">🎯</div>
+            <h3 className="font-bold mb-2">Cílení na správné kupce</h3>
+            <p className="text-gray-600 text-sm">
+              Náš inteligentní systém najde kupce, kteří skutečně hledají vaši nemovitost
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg p-6 shadow-md">
+            <div className="text-3xl mb-3">⚡</div>
+            <h3 className="font-bold mb-2">Rychlý prodej</h3>
+            <p className="text-gray-600 text-sm">
+              Propojení s aktivními poptávkami zkracuje dobu prodeje
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg p-6 shadow-md">
+            <LockIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
+            <h3 className="font-bold mb-2">Soukromý přístup</h3>
+            <p className="text-gray-600 text-sm">
+              Sledujte stav nabídky a zájemce kdykoliv přes váš osobní odkaz
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg p-6 shadow-md">
+            <UserIcon className="w-12 h-12 mx-auto mb-3 text-brand-orange" />
+            <h3 className="font-bold mb-2">Profesionální servis</h3>
+            <p className="text-gray-600 text-sm">
+              Zkušení makléři ZFP Reality vás provedou celým procesem prodeje
+            </p>
+          </div>
         </div>
       </div>
     </div>
