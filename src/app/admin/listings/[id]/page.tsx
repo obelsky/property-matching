@@ -258,6 +258,97 @@ export default async function AdminListingDetailPage({
           </div>
         </div>
 
+        {/* Detailní informace z formuláře */}
+        {listing.details && Object.keys(listing.details).length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
+              Detailní informace z formuláře
+            </h2>
+
+            <div className="space-y-6">
+              {/* Kategorie (dispozice) */}
+              {listing.details.category && listing.details.category.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Kategorie / Dispozice:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {listing.details.category.map((cat: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Umístění v domě (jen pro byty) */}
+              {listing.type === 'byt' && listing.details.floor_preference && listing.details.floor_preference.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Umístění v domě:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {listing.details.floor_preference.map((floor: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1.5 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                        {floor}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stav nemovitosti */}
+              {listing.details.preferred_state && listing.details.preferred_state.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Stav nemovitosti:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {listing.details.preferred_state.map((state: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1.5 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                        {state}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Typ konstrukce */}
+              {listing.details.preferred_construction && listing.details.preferred_construction.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Typ konstrukce:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {listing.details.preferred_construction.map((type: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
+                        {type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Vybavení */}
+              {listing.details.preferred_comfort && listing.details.preferred_comfort.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Vybavení:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {listing.details.preferred_comfort.map((feature: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1.5 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Poznámka */}
+              {listing.details.note && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Poznámka od klienta:</h3>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-gray-700 whitespace-pre-wrap">{listing.details.note}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Poznámky od zadavatele */}
         {listing.public_note && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">

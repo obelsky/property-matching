@@ -255,12 +255,26 @@ export default async function MojeNabidkaPage({
                 </div>
               )}
 
-              {/* Preferovaný stav */}
-              {details.property_state && details.property_state.length > 0 && (
+              {/* Umístění v domě (jen pro byty) */}
+              {listing.type === 'byt' && details.floor_preference && details.floor_preference.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Preferovaný stav:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Umístění v domě:</h3>
                   <div className="flex flex-wrap gap-2">
-                    {details.property_state.map((state: string, idx: number) => (
+                    {details.floor_preference.map((floor: string, idx: number) => (
+                      <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                        {floor}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stav nemovitosti */}
+              {(details.property_state || details.preferred_state) && (details.property_state?.length > 0 || details.preferred_state?.length > 0) && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Stav nemovitosti:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(details.property_state || details.preferred_state).map((state: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
                         {state}
                       </span>
@@ -269,12 +283,12 @@ export default async function MojeNabidkaPage({
                 </div>
               )}
 
-              {/* Preferovaná konstrukce */}
-              {details.construction_type && details.construction_type.length > 0 && (
+              {/* Typ konstrukce */}
+              {(details.construction_type || details.preferred_construction) && (details.construction_type?.length > 0 || details.preferred_construction?.length > 0) && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Preferovaná konstrukce:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Typ konstrukce:</h3>
                   <div className="flex flex-wrap gap-2">
-                    {details.construction_type.map((type: string, idx: number) => (
+                    {(details.construction_type || details.preferred_construction).map((type: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
                         {type}
                       </span>
@@ -283,12 +297,12 @@ export default async function MojeNabidkaPage({
                 </div>
               )}
 
-              {/* Preferované vybavení */}
-              {details.comfort_features && details.comfort_features.length > 0 && (
+              {/* Vybavení */}
+              {(details.comfort_features || details.preferred_comfort) && (details.comfort_features?.length > 0 || details.preferred_comfort?.length > 0) && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Preferované vybavení:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Vybavení:</h3>
                   <div className="flex flex-wrap gap-2">
-                    {details.comfort_features.map((feature: string, idx: number) => (
+                    {(details.comfort_features || details.preferred_comfort).map((feature: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                         {feature}
                       </span>
