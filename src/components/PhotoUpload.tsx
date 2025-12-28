@@ -5,8 +5,8 @@ import Image from "next/image";
 import { CameraIcon, LightbulbIcon, CheckIcon } from "@/components/Icons";
 
 interface PhotoUploadProps {
-  photos: File[];
-  onPhotosChange: (photos: File[]) => void;
+  photos: string[]; // Changed to base64 strings
+  onPhotosChange: (photos: string[]) => void;
   maxPhotos?: number;
   minPhotos?: number;
 }
@@ -22,7 +22,7 @@ export default function PhotoUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle file selection
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = async (files: FileList | null) => {
     if (!files) return;
 
     const newFiles = Array.from(files);
@@ -42,21 +42,36 @@ export default function PhotoUpload({
       alert("Můžete nahrát pouze obrázky (JPG, PNG, WEBP)");
     }
 
-    // Create previews
-    const newPreviews: string[] = [];
-    imageFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newPreviews.push(reader.result as string);
-        if (newPreviews.length === imageFiles.length) {
-          setPreviews([...previews, ...newPreviews]);
-        }
-      };
-      reader.readAsDataURL(file);
+    // Validate file sizes (max 5MB per file)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const oversizedFiles = imageFiles.filter(file => file.size > maxSize);
+    if (oversizedFiles.length > 0) {
+      alert(`Některé soubory jsou příliš velké. Maximum je 5MB na soubor.`);
+      return;
+    }
+
+    // Convert to base64
+    const base64Promises = imageFiles.map((file) => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
     });
 
-    // Update files
-    onPhotosChange([...photos, ...imageFiles]);
+    try {
+      const base64Photos = await Promise.all(base64Promises);
+      
+      // Update previews (base64 strings can be used directly)
+      setPreviews([...previews, ...base64Photos]);
+      
+      // Update photos state with base64 strings
+      onPhotosChange([...photos, ...base64Photos]);
+    } catch (error) {
+      console.error("Error converting photos:", error);
+      alert("Chyba při načítání fotografií");
+    }
   };
 
   // Handle file input change

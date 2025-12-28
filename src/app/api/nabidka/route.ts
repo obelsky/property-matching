@@ -36,8 +36,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fotky - zatím prázdné pole (upload přidáme později)
+    // Upload fotek do Supabase Storage
     const photoUrls: string[] = [];
+    
+    if (data.photos && Array.isArray(data.photos) && data.photos.length > 0) {
+      for (let i = 0; i < data.photos.length; i++) {
+        const base64Photo = data.photos[i];
+        
+        if (!base64Photo || typeof base64Photo !== 'string') continue;
+        
+        try {
+          // Extract base64 data (remove data:image/jpeg;base64, prefix)
+          const matches = base64Photo.match(/^data:image\/(\w+);base64,(.+)$/);
+          if (!matches) {
+            console.error("Invalid base64 format for photo", i);
+            continue;
+          }
+          
+          const imageType = matches[1]; // jpeg, png, webp
+          const base64Data = matches[2];
+          
+          // Convert base64 to buffer
+          const buffer = Buffer.from(base64Data, 'base64');
+          
+          // Generate unique filename
+          const timestamp = Date.now();
+          const randomStr = Math.random().toString(36).substring(2, 8);
+          const filename = `${timestamp}-${randomStr}.${imageType}`;
+          const filepath = `listings/${filename}`;
+          
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabase
+            .storage
+            .from('photos')
+            .upload(filepath, buffer, {
+              contentType: `image/${imageType}`,
+              cacheControl: '3600',
+              upsert: false
+            });
+          
+          if (uploadError) {
+            console.error(`Photo upload error for photo ${i}:`, uploadError);
+            continue; // Skip this photo but continue with others
+          }
+          
+          // Get public URL
+          const { data: { publicUrl } } = supabase
+            .storage
+            .from('photos')
+            .getPublicUrl(filepath);
+          
+          photoUrls.push(publicUrl);
+          console.log(`Photo ${i} uploaded successfully:`, publicUrl);
+          
+        } catch (error) {
+          console.error(`Error processing photo ${i}:`, error);
+          // Continue with other photos
+        }
+      }
+      
+      console.log(`Successfully uploaded ${photoUrls.length} out of ${data.photos.length} photos`);
+    }
 
     // Vygeneruj public token pro self-service přístup
     const publicToken = generatePublicToken();
