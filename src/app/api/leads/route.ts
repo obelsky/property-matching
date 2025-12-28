@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
         message: data.message || null,
         source: data.source || "unknown",
         status: "new",
+        calculator_data: data.calculator_data || null,
       })
       .select()
       .single();
