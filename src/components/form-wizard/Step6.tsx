@@ -34,8 +34,8 @@ export default function Step6({
 
   // Zkontrolovat zda financování obsahuje hypotéku
   const needsMortgage = 
-    data.financing_method === "hypoteka" || 
-    data.financing_method === "kombinace";
+    data.financing_methods?.includes("hypoteka") || 
+    data.financing_methods?.includes("kombinace");
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
