@@ -140,13 +140,13 @@ export default function Step6({
 
       {/* Poznámka */}
       <div>
-        <label htmlFor="notes" className="label-field">
+        <label htmlFor="note" className="label-field">
           Poznámka (volitelné)
         </label>
         <textarea
-          id="notes"
-          value={data.notes || ""}
-          onChange={(e) => onUpdate({ notes: e.target.value })}
+          id="note"
+          value={data.note || ""}
+          onChange={(e) => onUpdate({ note: e.target.value })}
           placeholder="Další požadavky nebo informace..."
           rows={4}
           className="input-field"
