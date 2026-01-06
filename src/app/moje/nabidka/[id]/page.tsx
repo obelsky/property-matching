@@ -54,7 +54,7 @@ export default async function MojeNabidkaPage({
   if (!data) {
     return <div className="container py-12 text-center">
       <h1 className="text-2xl font-bold text-red-600">Neplatný odkaz</h1>
-      <p className="text-gray-600 mt-4">Tento odkaz není platný nebo vypršel.</p>
+      <p className="text-zfp-text-muted mt-4">Tento odkaz není platný nebo vypršel.</p>
     </div>;
   }
 
@@ -81,7 +81,7 @@ export default async function MojeNabidkaPage({
   const details = listing.details || {};
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-4xl">
         {/* Back link */}
         <Link 
@@ -99,9 +99,9 @@ export default async function MojeNabidkaPage({
                 {propertyTypeLabels[listing.type as keyof typeof propertyTypeLabels]}
                 {details.category?.[0] && ` ${details.category[0]}`}
               </h1>
-              <p className="text-gray-600">{listing.city || details.preferred_location}</p>
+              <p className="text-zfp-text-muted">{listing.city || details.preferred_location}</p>
             </div>
-            <div className="text-right text-sm text-gray-500">
+            <div className="text-right text-sm text-zfp-text-muted">
               <div>ID</div>
               <div className="font-mono">{listing.id}</div>
             </div>
@@ -109,7 +109,7 @@ export default async function MojeNabidkaPage({
         </div>
 
         {/* Parametry */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             Parametry
           </h2>
@@ -118,26 +118,26 @@ export default async function MojeNabidkaPage({
             {/* Levý sloupec */}
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Typ:</span>
+                <span className="text-zfp-text-muted">Typ:</span>
                 <span className="font-semibold text-right">
                   {propertyTypeLabels[listing.type]}
                 </span>
               </div>
               {details.category?.[0] && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Dispozice:</span>
+                  <span className="text-zfp-text-muted">Dispozice:</span>
                   <span className="font-semibold text-right">{details.category[0]}</span>
                 </div>
               )}
               {details.preferred_location && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Lokalita:</span>
+                  <span className="text-zfp-text-muted">Lokalita:</span>
                   <span className="font-semibold text-right">{details.preferred_location}</span>
                 </div>
               )}
               {(listing.price || details.budget_max) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Cena:</span>
+                  <span className="text-zfp-text-muted">Cena:</span>
                   <span className="font-semibold text-right">
                     {(listing.price || details.budget_max).toLocaleString("cs-CZ")} Kč
                   </span>
@@ -145,7 +145,7 @@ export default async function MojeNabidkaPage({
               )}
               {(listing.area_m2 || details.area_min_m2) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Plocha:</span>
+                  <span className="text-zfp-text-muted">Plocha:</span>
                   <span className="font-semibold text-right">
                     {listing.area_m2 || details.area_min_m2} m²
                   </span>
@@ -158,7 +158,7 @@ export default async function MojeNabidkaPage({
               <h3 className="font-semibold text-zfp-text mb-2">Kontakt</h3>
               {(listing.contact_name || details.contact_name) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Jméno:</span>
+                  <span className="text-zfp-text-muted">Jméno:</span>
                   <span className="font-semibold text-right">
                     {listing.contact_name || details.contact_name}
                   </span>
@@ -166,7 +166,7 @@ export default async function MojeNabidkaPage({
               )}
               {(listing.contact_email || details.contact_email) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">E-mail:</span>
+                  <span className="text-zfp-text-muted">E-mail:</span>
                   <span className="font-semibold text-right">
                     {listing.contact_email || details.contact_email}
                   </span>
@@ -174,14 +174,14 @@ export default async function MojeNabidkaPage({
               )}
               {(listing.contact_phone || details.contact_phone) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Telefon:</span>
+                  <span className="text-zfp-text-muted">Telefon:</span>
                   <span className="font-semibold text-right">
                     {listing.contact_phone || details.contact_phone}
                   </span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-gray-600">Vytvořeno:</span>
+                <span className="text-zfp-text-muted">Vytvořeno:</span>
                 <span className="font-semibold text-right">
                   {new Date(listing.created_at).toLocaleDateString("cs-CZ")}
                 </span>
@@ -190,21 +190,21 @@ export default async function MojeNabidkaPage({
           </div>
 
           {/* Status */}
-          <div className="mt-6 p-4 bg-zfp-bg-light rounded-lg">
+          <div className="mt-6 p-4 bg-zfp-darker rounded-lg">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-semibold">Stav: </span>
-                <span className="text-gray-700">
+                <span className="text-zfp-text">
                   {statusLabels[listing.status as keyof typeof statusLabels]}
                 </span>
               </div>
               {listing.agent && (
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-zfp-text-muted">
                   Aktuálně řeší makléř {listing.agent.name}
                 </div>
               )}
               {!listing.agent && (
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-zfp-text-muted">
                   Zatím čeká na přiřazení
                 </div>
               )}
@@ -214,7 +214,7 @@ export default async function MojeNabidkaPage({
 
         {/* Fotografie */}
         {listing.photos && listing.photos.length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
             <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
               Fotografie ({listing.photos.length})
             </h2>
@@ -235,7 +235,7 @@ export default async function MojeNabidkaPage({
 
         {/* Detailní informace z formuláře */}
         {details && Object.keys(details).length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
             <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
               Detailní informace z formuláře
             </h2>
@@ -244,7 +244,7 @@ export default async function MojeNabidkaPage({
               {/* Kategorie */}
               {details.category && details.category.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Kategorie:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-2">Kategorie:</h3>
                   <div className="flex flex-wrap gap-2">
                     {details.category.map((cat: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -258,7 +258,7 @@ export default async function MojeNabidkaPage({
               {/* Umístění v domě (jen pro byty) */}
               {listing.type === 'byt' && details.floor_preference && details.floor_preference.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Umístění v domě:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-2">Umístění v domě:</h3>
                   <div className="flex flex-wrap gap-2">
                     {details.floor_preference.map((floor: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
@@ -272,10 +272,10 @@ export default async function MojeNabidkaPage({
               {/* Stav nemovitosti */}
               {(details.property_state || details.preferred_state) && (details.property_state?.length > 0 || details.preferred_state?.length > 0) && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Stav nemovitosti:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-2">Stav nemovitosti:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(details.property_state || details.preferred_state).map((state: string, idx: number) => (
-                      <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                      <span key={idx} className="px-3 py-1 bg-brand-gold/10 text-brand-gold rounded-full text-sm">
                         {state}
                       </span>
                     ))}
@@ -286,7 +286,7 @@ export default async function MojeNabidkaPage({
               {/* Typ konstrukce */}
               {(details.construction_type || details.preferred_construction) && (details.construction_type?.length > 0 || details.preferred_construction?.length > 0) && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Typ konstrukce:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-2">Typ konstrukce:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(details.construction_type || details.preferred_construction).map((type: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
@@ -300,7 +300,7 @@ export default async function MojeNabidkaPage({
               {/* Vybavení */}
               {(details.comfort_features || details.preferred_comfort) && (details.comfort_features?.length > 0 || details.preferred_comfort?.length > 0) && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Vybavení:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-2">Vybavení:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(details.comfort_features || details.preferred_comfort).map((feature: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
@@ -314,16 +314,16 @@ export default async function MojeNabidkaPage({
 
             {/* Poznámka */}
             {details.note && (
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">Poznámka od klienta:</h3>
-                <p className="text-gray-700 whitespace-pre-wrap">{details.note}</p>
+              <div className="mt-6 p-4 bg-zfp-card rounded-lg">
+                <h3 className="font-semibold text-zfp-text mb-2">Poznámka od klienta:</h3>
+                <p className="text-zfp-text whitespace-pre-wrap">{details.note}</p>
               </div>
             )}
           </div>
         )}
 
         {/* Nalezené shody */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             Našli jsme {matches.length} možných protějšků
           </h2>
@@ -338,7 +338,7 @@ export default async function MojeNabidkaPage({
                         {propertyTypeLabels[match.request?.type as keyof typeof propertyTypeLabels]}
                         {match.request?.layout_min && ` ${match.request.layout_min}+`}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-zfp-text-muted">
                         {match.request?.city}
                         {match.request?.district && `, ${match.request.district}`}
                       </p>
@@ -349,12 +349,12 @@ export default async function MojeNabidkaPage({
                   </div>
 
                   {match.request?.budget_max && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-zfp-text-muted">
                       Max. rozpočet: {match.request.budget_max.toLocaleString("cs-CZ")} Kč
                     </div>
                   )}
                   {match.request?.area_min_m2 && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-zfp-text-muted">
                       Min. plocha: {match.request.area_min_m2} m²
                     </div>
                   )}
@@ -362,18 +362,18 @@ export default async function MojeNabidkaPage({
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-600 py-8">
+            <p className="text-center text-zfp-text-muted py-8">
               Zatím nejsou žádné shody.
             </p>
           )}
         </div>
 
         {/* Upravit údaje */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             Chcete upřesnit údaje?
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-zfp-text-muted mb-4">
             Můžete doplnit nebo upřesnit informace o vaší nabídce.
           </p>
           <Link 

@@ -36,8 +36,8 @@ export default function Step5({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900 flex items-start gap-2">
+      <div className="bg-info/10 border border-info/30 rounded-lg p-4 mb-6">
+        <p className="text-sm text-info flex items-start gap-2">
           <LockIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span><strong>Soukromí:</strong> Vaše kontaktní údaje budou sdíleny pouze se zájemci, které budeme párovat s vaší nabídkou.</span>
         </p>
@@ -107,7 +107,7 @@ export default function Step5({
       </div>
 
       {/* GDPR */}
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-zfp-card p-4 rounded-lg">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
@@ -116,8 +116,8 @@ export default function Step5({
             className="mt-1 w-4 h-4 text-brand-orange focus:ring-brand-orange"
             required
           />
-          <span className="text-sm text-gray-700">
-            <strong className="text-gray-900">Souhlasím se zpracováním osobních údajů *</strong>
+          <span className="text-sm text-zfp-text">
+            <strong className="text-zfp-text">Souhlasím se zpracováním osobních údajů *</strong>
             <br />
             Beru na vědomí, že mé osobní údaje budou zpracovány pro účely vyhledání vhodné
             nemovitosti. Jsem oprávněn kdykoliv svůj souhlas odvolat. Více informací v{" "}
@@ -138,7 +138,7 @@ export default function Step5({
         <button
           type="button"
           onClick={onBack}
-          className="text-gray-600 hover:text-gray-900"
+          className="text-zfp-text-muted hover:text-zfp-text"
           disabled={isSubmitting}
         >
           ← Zpět

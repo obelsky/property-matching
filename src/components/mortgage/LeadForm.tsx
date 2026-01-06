@@ -52,17 +52,13 @@ export default function LeadForm() {
       }
     };
 
-    // Načíst data při mountu
     loadCalculatorData();
 
-    // Sledovat změny v localStorage (když uživatel mění kalkulačku)
     const handleStorageChange = () => {
       loadCalculatorData();
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
-    // Polling pro změny v stejném okně (storage event nefunguje v same-window)
     const interval = setInterval(loadCalculatorData, 1000);
 
     return () => {
@@ -112,16 +108,16 @@ export default function LeadForm() {
 
   if (submitted) {
     return (
-      <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      <div className="card-dark p-8 text-center">
+        <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-zfp-text mb-2">
+        <h3 className="text-2xl font-heading text-zfp-text mb-2">
           Děkujeme za váš zájem!
         </h3>
-        <p className="text-gray-600">
+        <p className="text-zfp-text-muted">
           Náš hypoteční specialista vás kontaktuje během 24 hodin.
         </p>
       </div>
@@ -129,16 +125,17 @@ export default function LeadForm() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-          <PhoneCallIcon className="w-6 h-6 text-white" />
+    <div className="card-dark p-8">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-14 h-14 bg-success rounded-xl flex items-center justify-center shadow-lg">
+          <PhoneCallIcon className="w-7 h-7 text-white" />
         </div>
         <div>
-          <h2 className="text-2xl font-heading font-bold text-zfp-text">
+          <h2 className="text-2xl font-heading text-zfp-text">
             Připravíme pro vás nezávaznou nabídku
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-zfp-text-muted">
             Náš hypoteční specialista vám zavolá a během jednoho hovoru získáte 
             jasnější představu, jak můžete financovat své nové bydlení.
           </p>
@@ -147,14 +144,14 @@ export default function LeadForm() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800 text-sm">{error}</p>
+          <div className="bg-error/10 border border-error/30 rounded-lg p-4">
+            <p className="text-error text-sm">{error}</p>
           </div>
         )}
 
         {/* Jméno */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="label-field">
             Jméno a příjmení *
           </label>
           <input
@@ -164,13 +161,13 @@ export default function LeadForm() {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Jan Novák"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
+            className="input-field"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="email" className="label-field">
             E-mail *
           </label>
           <input
@@ -180,13 +177,13 @@ export default function LeadForm() {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="jan.novak@email.cz"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
+            className="input-field"
           />
         </div>
 
         {/* Telefon */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="phone" className="label-field">
             Telefon *
           </label>
           <input
@@ -195,23 +192,23 @@ export default function LeadForm() {
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+420 777 123 456"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
+            className="input-field"
           />
         </div>
 
-        {/* DYNAMICKÁ SEKCE - Blue info box NEBO Purple checkbox */}
+        {/* DYNAMICKÁ SEKCE - Info box NEBO Gold checkbox */}
         {!calculatorData ? (
-          // BLUE INFO BOX - když uživatel NEpoužil kalkulačku
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          // INFO BOX - když uživatel NEpoužil kalkulačku
+          <div className="card p-4">
             <div className="flex items-start gap-3">
-              <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg className="w-6 h-6 text-info flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div className="flex-1">
-                <p className="font-semibold text-blue-900 mb-1">
+                <p className="font-medium text-zfp-text mb-1">
                   Vyzkoušeli jste naši hypoteční kalkulačku?
                 </p>
-                <p className="text-sm text-blue-800 mb-3">
+                <p className="text-sm text-zfp-text-muted mb-3">
                   Nastavte si osobní preference v kalkulačce výše a pomozte nám lépe porozumět vašim finančním možnostem.
                 </p>
                 <a
@@ -220,10 +217,10 @@ export default function LeadForm() {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-brand-gold hover:text-brand-orange transition-colors duration-300"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                   </svg>
                   Přejít na kalkulačku nahoře
                 </a>
@@ -231,76 +228,74 @@ export default function LeadForm() {
             </div>
           </div>
         ) : (
-          // PURPLE CHECKBOX - když uživatel POUŽIL kalkulačku
-          <div className="bg-gradient-to-br from-purple-50 to-white border-2 border-purple-300 rounded-xl p-6">
+          // GOLD CHECKBOX - když uživatel POUŽIL kalkulačku
+          <div className="card-accent p-6">
             <label className="flex items-start gap-3 cursor-pointer mb-4">
               <input
                 type="checkbox"
                 checked={includeCalculator}
                 onChange={(e) => setIncludeCalculator(e.target.checked)}
-                className="mt-1 w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
+                className="mt-1"
               />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <svg className="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  <svg className="w-5 h-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-medium text-zfp-text">
                     Zahrnout data z hypoteční kalkulačky
                   </span>
                 </div>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-zfp-text-muted">
                   Pomůže nám lépe porozumět vašim finančním možnostem
                 </p>
               </div>
             </label>
 
             {includeCalculator && (
-              <div className="bg-white rounded-lg border border-purple-200 p-4 mt-4 space-y-2">
-                <h4 className="font-semibold text-sm text-gray-900 mb-3">Vaše nastavení kalkulačky:</h4>
+              <div className="bg-zfp-darker rounded-lg border border-zfp-border p-4 mt-4 space-y-2">
+                <h4 className="font-medium text-sm text-brand-gold mb-3">Vaše nastavení kalkulačky:</h4>
                 
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
-                    <span className="text-gray-600">Cena nemovitosti:</span>
-                    <p className="font-semibold text-gray-900">{formatCurrency(calculatorData.propertyPrice)} Kč</p>
+                    <span className="text-zfp-text-muted">Cena nemovitosti:</span>
+                    <p className="font-medium text-zfp-text">{formatCurrency(calculatorData.propertyPrice)} Kč</p>
                   </div>
                   
                   <div>
-                    <span className="text-gray-600">Vlastní zdroje:</span>
-                    <p className="font-semibold text-purple-700">{calculatorData.downPaymentPercent}%</p>
+                    <span className="text-zfp-text-muted">Vlastní zdroje:</span>
+                    <p className="font-medium text-brand-gold">{calculatorData.downPaymentPercent}%</p>
                   </div>
                   
                   <div>
-                    <span className="text-gray-600">Výše hypotéky:</span>
-                    <p className="font-semibold text-gray-900">{formatCurrency(calculatorData.loanAmount)} Kč</p>
+                    <span className="text-zfp-text-muted">Výše hypotéky:</span>
+                    <p className="font-medium text-zfp-text">{formatCurrency(calculatorData.loanAmount)} Kč</p>
                   </div>
                   
                   <div>
-                    <span className="text-gray-600">LTV:</span>
-                    <p className="font-semibold text-gray-900">{calculatorData.ltv.toFixed(0)}%</p>
+                    <span className="text-zfp-text-muted">LTV:</span>
+                    <p className="font-medium text-zfp-text">{calculatorData.ltv.toFixed(0)}%</p>
                   </div>
                   
                   <div>
-                    <span className="text-gray-600">Doba splácení:</span>
-                    <p className="font-semibold text-gray-900">{calculatorData.years} let</p>
+                    <span className="text-zfp-text-muted">Doba splácení:</span>
+                    <p className="font-medium text-zfp-text">{calculatorData.years} let</p>
                   </div>
                   
                   <div>
-                    <span className="text-gray-600">Úroková sazba:</span>
-                    <p className="font-semibold text-gray-900">{calculatorData.interestRate.toFixed(2)}%</p>
+                    <span className="text-zfp-text-muted">Úroková sazba:</span>
+                    <p className="font-medium text-zfp-text">{calculatorData.interestRate.toFixed(2)}%</p>
                   </div>
                   
                   <div className="col-span-2">
-                    <span className="text-gray-600">Měsíční splátka:</span>
-                    <p className="font-semibold text-purple-700 text-lg">{formatCurrency(calculatorData.monthlyPayment)} Kč</p>
+                    <span className="text-zfp-text-muted">Měsíční splátka:</span>
+                    <p className="font-medium text-brand-gold text-lg">{formatCurrency(calculatorData.monthlyPayment)} Kč</p>
                   </div>
                 </div>
 
                 {calculatorData.isReverseMortgage && (
-                  <div className="bg-purple-100 rounded px-3 py-2 mt-3">
-                    <p className="text-xs text-purple-800">
-                      ✓ Zpětná hypotéka zahrnuta
-                    </p>
+                  <div className="badge badge-gold mt-3">
+                    ✓ Zpětná hypotéka zahrnuta
                   </div>
                 )}
               </div>
@@ -310,7 +305,7 @@ export default function LeadForm() {
 
         {/* Zpráva */}
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="message" className="label-field">
             Vaše zpráva (volitelné)
           </label>
           <textarea
@@ -319,23 +314,23 @@ export default function LeadForm() {
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Například: Hledám hypotéku na byt v Praze..."
             rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
+            className="input-field"
           />
         </div>
 
         {/* GDPR */}
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="card p-4">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
               required
               checked={formData.gdpr}
               onChange={(e) => setFormData({ ...formData, gdpr: e.target.checked })}
-              className="mt-1 w-5 h-5 text-brand-orange rounded"
+              className="mt-1"
             />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-zfp-text-muted">
               Souhlasím se{" "}
-              <span className="text-brand-orange font-medium">zpracováním osobních údajů</span>{" "}
+              <span className="text-brand-gold font-medium">zpracováním osobních údajů</span>{" "}
               za účelem kontaktování hypotečním specialistou ZFP Reality. 
               Tento souhlas mohu kdykoli odvolat.
             </span>
@@ -346,14 +341,14 @@ export default function LeadForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-brand-orange hover:bg-brand-orange-hover text-white font-bold py-4 px-6 rounded-lg transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary w-full !py-4 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "Odesílám..." : "Chci nezávaznou nabídku"}
         </button>
 
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-zfp-text-subtle text-center">
           Odesláním formuláře beru na vědomí{" "}
-          <a href="/zasady-ochrany-osobnich-udaju" className="text-brand-orange hover:underline">
+          <a href="/zasady-ochrany-osobnich-udaju" className="text-brand-gold hover:text-brand-orange">
             Zásady zpracování osobních údajů
           </a>
         </p>

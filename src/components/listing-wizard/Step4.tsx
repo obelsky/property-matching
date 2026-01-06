@@ -152,8 +152,8 @@ export default function Step4({
                 flex items-center p-3 border rounded-lg cursor-pointer transition-colors text-sm
                 ${
                   data.preferred_state?.includes(state)
-                    ? "border-brand-orange bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-brand-orange bg-brand-orange/10"
+                    : "border-zfp-border hover:border-zfp-border-hover"
                 }
               `}
             >
@@ -192,8 +192,8 @@ export default function Step4({
                       flex items-center p-3 border rounded-lg cursor-pointer transition-colors text-sm
                       ${
                         data.preferred_construction?.includes(construction)
-                          ? "border-brand-orange bg-orange-50"
-                          : "border-gray-300 hover:border-gray-400"
+                          ? "border-brand-orange bg-brand-orange/10"
+                          : "border-zfp-border hover:border-zfp-border-hover"
                       }
                     `}
                   >
@@ -221,8 +221,8 @@ export default function Step4({
                     flex items-center p-3 border rounded-lg cursor-pointer transition-colors text-sm
                     ${
                       data.preferred_comfort?.includes(comfort)
-                        ? "border-brand-orange bg-orange-50"
-                        : "border-gray-300 hover:border-gray-400"
+                        ? "border-brand-orange bg-brand-orange/10"
+                        : "border-zfp-border hover:border-zfp-border-hover"
                     }
                   `}
                 >
@@ -245,7 +245,7 @@ export default function Step4({
         <button
           type="button"
           onClick={onBack}
-          className="text-gray-600 hover:text-gray-900"
+          className="text-zfp-text-muted hover:text-zfp-text"
         >
           ← Zpět
         </button>

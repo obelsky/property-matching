@@ -16,22 +16,22 @@ export default function FormProgressBar({
   return (
     <div className="mb-8">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-semibold text-gray-700">
+        <h2 className="text-lg font-medium text-zfp-text">
           Krok {currentStep} z {totalSteps}: {STEP_TITLES[currentStep - 1]}
         </h2>
-        <span className="text-sm font-semibold text-brand-orange">
+        <span className="text-sm font-medium text-brand-gold">
           {progress}%
         </span>
       </div>
 
-      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+      <div className="w-full bg-zfp-card rounded-full h-3 overflow-hidden border border-zfp-border">
         <div
-          className="bg-brand-orange h-full transition-all duration-300 ease-out rounded-full"
+          className="bg-gradient-gold h-full transition-all duration-300 ease-out rounded-full"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">
+      <p className="text-xs text-zfp-text-subtle mt-2">
         Zabere cca 3 minuty, můžete přeskočit detaily
       </p>
     </div>

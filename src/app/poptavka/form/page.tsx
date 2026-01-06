@@ -84,9 +84,9 @@ export default function PoptavkaFormPage() {
   };
 
   return (
-    <div className="bg-zfp-bg-light min-h-screen py-12">
+    <div className="bg-zfp-darker min-h-screen py-12">
       <div className="container max-w-3xl">
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="card-dark p-8">
           <FormProgressBar currentStep={currentStep} totalSteps={6} />
 
           {currentStep === 1 && (

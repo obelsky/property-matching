@@ -20,15 +20,15 @@ export default function DashboardFilters() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div className="card p-4 mb-6">
       <label className="flex items-center gap-3 cursor-pointer">
         <input
           type="checkbox"
           checked={unassigned}
           onChange={handleToggle}
-          className="w-5 h-5 text-brand-orange border-gray-300 rounded focus:ring-brand-orange focus:ring-2"
+          className="w-5 h-5"
         />
-        <span className="text-sm font-semibold text-gray-700">
+        <span className="text-sm font-medium text-zfp-text-muted">
           Zobrazit jen bez makléře
         </span>
       </label>

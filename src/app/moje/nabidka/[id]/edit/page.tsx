@@ -68,7 +68,7 @@ export default function EditListingPage() {
 
   if (error) {
     return (
-      <div className="bg-zfp-bg-light min-h-screen py-12">
+      <div className="bg-zfp-darker min-h-screen py-12">
         <div className="container max-w-2xl">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
             <p className="text-red-800">{error}</p>
@@ -80,10 +80,10 @@ export default function EditListingPage() {
 
   if (!listing) {
     return (
-      <div className="bg-zfp-bg-light min-h-screen py-12">
+      <div className="bg-zfp-darker min-h-screen py-12">
         <div className="container max-w-2xl">
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-            <p className="text-gray-600">Načítání...</p>
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-6 text-center">
+            <p className="text-zfp-text-muted">Načítání...</p>
           </div>
         </div>
       </div>
@@ -91,26 +91,26 @@ export default function EditListingPage() {
   }
 
   return (
-    <div className="bg-zfp-bg-light min-h-screen py-12">
+    <div className="bg-zfp-darker min-h-screen py-12">
       <div className="container max-w-2xl">
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8">
           <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
             Upřesnit údaje nabídky
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-zfp-text-muted mb-6">
             {listing.type} {listing.layout && listing.layout} · {listing.city}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-zfp-text mb-2">
                 Co chcete upřesnit nebo doplnit?
               </label>
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={8}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
+                className="w-full px-4 py-3 border border-zfp-border rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
                 placeholder="Například: 
 - Další informace o stavu nemovitosti
 - Upřesnění ceny nebo podmínek
@@ -137,7 +137,7 @@ export default function EditListingPage() {
               <button
                 type="button"
                 onClick={() => router.push(`/moje/nabidka/${listingId}?token=${token}`)}
-                className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
               >
                 Zrušit
               </button>

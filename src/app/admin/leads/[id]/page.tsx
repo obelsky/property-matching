@@ -66,14 +66,6 @@ export default function LeadDetailPage() {
     rejected: "Odmítnutý",
   };
 
-  const statusColors: Record<string, string> = {
-    new: "bg-blue-100 text-blue-800",
-    contacted: "bg-yellow-100 text-yellow-800",
-    qualified: "bg-green-100 text-green-800",
-    converted: "bg-purple-100 text-purple-800",
-    rejected: "bg-gray-100 text-gray-800",
-  };
-
   const sourceLabels: Record<string, string> = {
     "hypotecni-kalkulacka": "Hypoteční kalkulačka",
     "kontakt-formular": "Kontaktní formulář",
@@ -82,11 +74,11 @@ export default function LeadDetailPage() {
 
   if (loading) {
     return (
-      <div className="bg-zfp-bg-light min-h-screen py-8">
+      <div className="bg-zfp-darker min-h-screen py-8">
         <div className="container max-w-7xl">
           <AdminNav />
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <p className="text-gray-600">Načítání...</p>
+          <div className="card-dark p-8 text-center">
+            <p className="text-zfp-text-muted">Načítání...</p>
           </div>
         </div>
       </div>
@@ -95,11 +87,11 @@ export default function LeadDetailPage() {
 
   if (!lead) {
     return (
-      <div className="bg-zfp-bg-light min-h-screen py-8">
+      <div className="bg-zfp-darker min-h-screen py-8">
         <div className="container max-w-7xl">
           <AdminNav />
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <p className="text-red-600">Lead nenalezen</p>
+          <div className="card-dark p-8 text-center">
+            <p className="text-error">Lead nenalezen</p>
           </div>
         </div>
       </div>
@@ -107,71 +99,69 @@ export default function LeadDetailPage() {
   }
 
   return (
-    <div className="bg-zfp-bg-light min-h-screen py-8">
+    <div className="bg-zfp-darker min-h-screen py-8">
       <div className="container max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-heading font-bold text-zfp-text">
+          <h1 className="text-3xl font-heading text-zfp-text">
             Admin Dashboard
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-zfp-text-muted mt-1">
             Detail kontaktu
           </p>
         </div>
 
-        {/* Navigation */}
         <AdminNav />
 
-        {/* Lead Detail */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-zfp-text">
-                {lead.name}
-              </h2>
-              <div className="flex items-center gap-2 mt-2">
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColors[lead.status]}`}>
-                  {statusLabels[lead.status]}
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                  {sourceLabels[lead.source]}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={() => router.push("/admin/leads")}
-              className="px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              ← Zpět na přehled
-            </button>
+        {/* Back button */}
+        <button
+          onClick={() => router.push("/admin/leads")}
+          className="mb-6 text-brand-gold hover:text-brand-orange transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Zpět na seznam
+        </button>
+
+        {/* Základní info */}
+        <div className="card-dark p-8 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-heading text-zfp-text">
+              {lead.name}
+            </h2>
+            <span className="badge badge-info">
+              {sourceLabels[lead.source] || lead.source}
+            </span>
           </div>
 
-          {/* Kontaktní informace */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-lg mb-3">Kontaktní údaje</h3>
-              <dl className="space-y-2">
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Email:</dt>
-                  <dd className="font-semibold">
-                    <a href={`mailto:${lead.email}`} className="text-brand-orange hover:underline">
+              <h3 className="font-heading text-brand-gold text-lg mb-4">Kontaktní údaje</h3>
+              <dl className="space-y-3">
+                <div>
+                  <dt className="text-sm text-zfp-text-muted">Email</dt>
+                  <dd>
+                    <a href={`mailto:${lead.email}`} className="text-brand-gold hover:text-brand-orange transition-colors">
                       {lead.email}
                     </a>
                   </dd>
                 </div>
-                {lead.phone && (
-                  <div className="flex justify-between">
-                    <dt className="text-gray-600">Telefon:</dt>
-                    <dd className="font-semibold">
-                      <a href={`tel:${lead.phone}`} className="text-brand-orange hover:underline">
+                <div>
+                  <dt className="text-sm text-zfp-text-muted">Telefon</dt>
+                  <dd>
+                    {lead.phone ? (
+                      <a href={`tel:${lead.phone}`} className="text-brand-gold hover:text-brand-orange transition-colors">
                         {lead.phone}
                       </a>
-                    </dd>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <dt className="text-gray-600">Vytvořeno:</dt>
-                  <dd className="font-semibold">
+                    ) : (
+                      <span className="text-zfp-text-subtle">—</span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-zfp-text-muted">Datum vytvoření</dt>
+                  <dd className="text-zfp-text">
                     {new Date(lead.created_at).toLocaleDateString("cs-CZ", {
                       year: "numeric",
                       month: "long",
@@ -185,13 +175,13 @@ export default function LeadDetailPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg mb-3">Zpráva od klienta</h3>
+              <h3 className="font-heading text-brand-gold text-lg mb-4">Zpráva od klienta</h3>
               {lead.message ? (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-gray-700">{lead.message}</p>
+                <div className="card p-4">
+                  <p className="text-zfp-text-muted">{lead.message}</p>
                 </div>
               ) : (
-                <p className="text-gray-400 italic">Žádná zpráva</p>
+                <p className="text-zfp-text-subtle italic">Žádná zpráva</p>
               )}
             </div>
           </div>
@@ -199,26 +189,26 @@ export default function LeadDetailPage() {
 
         {/* Hypoteční kalkulačka data */}
         {lead.calculator_data && (
-          <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg border-2 border-purple-300 p-8 mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg">
-                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          <div className="card-accent p-8 mb-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg">
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-heading font-bold text-gray-900">
+                <h2 className="text-2xl font-heading text-zfp-text">
                   Data z hypoteční kalkulačky
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-zfp-text-muted mt-1">
                   Klient nastavil osobní preference v kalkulačce
                 </p>
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-4">
               {/* Hlavní výsledek - Měsíční splátka */}
-              <div className="lg:col-span-2 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white shadow-lg">
+              <div className="lg:col-span-2 bg-gradient-gold rounded-xl p-6 text-white shadow-lg">
                 <p className="text-sm opacity-90 mb-1">Měsíční splátka</p>
                 <p className="text-4xl font-bold">
                   {Number(lead.calculator_data.monthlyPayment).toLocaleString("cs-CZ", {
@@ -229,138 +219,134 @@ export default function LeadDetailPage() {
               </div>
 
               {/* Cena nemovitosti */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Cena nemovitosti</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Cena nemovitosti</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number(lead.calculator_data.propertyPrice).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
 
               {/* Vlastní zdroje */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Vlastní zdroje</p>
-                <p className="text-xl font-bold text-purple-700">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Vlastní zdroje</p>
+                <p className="text-xl font-bold text-brand-gold">
                   {lead.calculator_data.downPaymentPercent}%
-                  <span className="text-sm text-gray-500 ml-2">
+                  <span className="text-sm text-zfp-text-subtle ml-2">
                     ({Number(lead.calculator_data.propertyPrice * lead.calculator_data.downPaymentPercent / 100).toLocaleString("cs-CZ")} Kč)
                   </span>
                 </p>
               </div>
 
               {/* Výše hypotéky */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Výše hypotéky</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Výše hypotéky</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number(lead.calculator_data.loanAmount).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
 
               {/* LTV */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">LTV ratio</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">LTV ratio</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number(lead.calculator_data.ltv).toFixed(0)}%
                 </p>
               </div>
 
               {/* Doba splácení */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Doba splácení</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Doba splácení</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {lead.calculator_data.years} let
                 </p>
               </div>
 
               {/* Úroková sazba */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Úroková sazba</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Úroková sazba</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number(lead.calculator_data.interestRate).toFixed(2)}%
                 </p>
               </div>
 
               {/* Celkový úrok */}
-              <div className="lg:col-span-2 bg-white rounded-lg border border-orange-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Celkový úrok (náklad)</p>
-                <p className="text-xl font-bold text-orange-600">
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Celkový úrok</p>
+                <p className="text-xl font-bold text-brand-orange">
                   {Number(lead.calculator_data.totalInterest).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
 
-              {/* Zpětná hypotéka badge */}
-              {lead.calculator_data.isReverseMortgage && (
-                <div className="lg:col-span-2 bg-purple-100 border border-purple-300 rounded-lg p-4">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p className="text-sm font-semibold text-purple-900">
-                      Zpětná hypotéka (0% vlastních zdrojů)
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Timestamp */}
-              <div className="lg:col-span-2 text-center pt-4 border-t border-purple-200">
-                <p className="text-xs text-gray-500">
-                  Kalkulačka použita: {new Date(lead.calculator_data.timestamp).toLocaleString("cs-CZ", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+              {/* Celková částka */}
+              <div className="card p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Celková částka</p>
+                <p className="text-xl font-bold text-zfp-text">
+                  {Number(lead.calculator_data.totalAmount || (lead.calculator_data.loanAmount + lead.calculator_data.totalInterest)).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
+
+              {/* Zpětná hypotéka */}
+              {lead.calculator_data.isReverseMortgage && (
+                <div className="lg:col-span-2">
+                  <span className="badge badge-gold">
+                    ✓ Zpětná hypotéka zahrnuta
+                  </span>
+                </div>
+              )}
             </div>
+
+            {/* Timestamp */}
+            <p className="text-xs text-zfp-text-subtle mt-4">
+              Kalkulace provedena: {new Date(lead.calculator_data.timestamp).toLocaleString("cs-CZ")}
+            </p>
           </div>
         )}
 
-        {/* Změna stavu */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h3 className="text-xl font-bold text-zfp-text mb-4">
-            Změnit stav
-          </h3>
-          
-          <div className="grid md:grid-cols-5 gap-4 mb-6">
-            {Object.entries(statusLabels).map(([value, label]) => (
-              <button
-                key={value}
-                onClick={() => setSelectedStatus(value)}
-                className={`
-                  px-4 py-3 rounded-lg font-medium transition-all
-                  ${selectedStatus === value
-                    ? statusColors[value] + " ring-2 ring-offset-2 ring-brand-orange"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }
-                `}
+        {/* Status a poznámky */}
+        <div className="card-dark p-8">
+          <h2 className="text-2xl font-heading text-zfp-text mb-6">
+            Správa leadu
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Status */}
+            <div>
+              <label className="label-field">Status</label>
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="input-field"
               >
-                {label}
-              </button>
-            ))}
+                {Object.entries(statusLabels).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Poznámky */}
+            <div className="md:col-span-2">
+              <label className="label-field">Poznámky</label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={4}
+                placeholder="Interní poznámky k leadu..."
+                className="input-field"
+              />
+            </div>
           </div>
 
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Poznámky
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent"
-              placeholder="Interní poznámky k tomuto leadu..."
-            />
+          <div className="mt-6">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="btn-primary disabled:opacity-50"
+            >
+              {saving ? "Ukládám..." : "Uložit změny"}
+            </button>
           </div>
-
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="w-full bg-brand-orange hover:bg-brand-orange-hover text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
-          >
-            {saving ? "Ukládám..." : "Uložit změny"}
-          </button>
         </div>
       </div>
     </div>

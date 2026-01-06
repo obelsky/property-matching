@@ -44,8 +44,8 @@ export default function Step1({ data, onUpdate, onNext }: Step1Props) {
                 flex items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-colors
                 ${
                   data.request_kind === option.value
-                    ? "border-brand-orange bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-brand-orange bg-brand-orange/10"
+                    : "border-zfp-border hover:border-zfp-border-hover"
                 }
               `}
             >
@@ -76,8 +76,8 @@ export default function Step1({ data, onUpdate, onNext }: Step1Props) {
                   flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-colors
                   ${
                     data.property_type === option.value
-                      ? "border-brand-orange bg-orange-50 text-brand-orange"
-                      : "border-gray-300 hover:border-gray-400 text-gray-600"
+                      ? "border-brand-orange bg-brand-orange/10 text-brand-orange"
+                      : "border-zfp-border hover:border-zfp-border-hover text-zfp-text-muted"
                   }
                 `}
               >
@@ -128,7 +128,7 @@ export default function Step1({ data, onUpdate, onNext }: Step1Props) {
           onChange={(e) => onUpdate({ radius_km: parseInt(e.target.value) })}
           className="w-full accent-brand-orange"
         />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs text-zfp-text-muted mt-1">
           <span>0 km</span>
           <span>200 km</span>
         </div>

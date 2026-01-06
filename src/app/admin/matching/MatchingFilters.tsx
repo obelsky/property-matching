@@ -43,19 +43,19 @@ export default function MatchingFilters({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div className="bg-zfp-dark rounded-lg shadow-md p-6 mb-6">
       <h3 className="text-lg font-semibold text-zfp-text mb-4">Filtry</h3>
 
       <div className="grid md:grid-cols-3 gap-4 mb-4">
         {/* Minimální shoda */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-zfp-text mb-2">
             Minimální shoda (%)
           </label>
           <select
             value={minScore}
             onChange={(e) => setMinScore(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
+            className="w-full px-3 py-2 border border-zfp-border rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
           >
             <option value="">Vše</option>
             <option value="40">40% a více</option>
@@ -69,13 +69,13 @@ export default function MatchingFilters({
 
         {/* Typ nemovitosti */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-zfp-text mb-2">
             Typ nemovitosti
           </label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
+            className="w-full px-3 py-2 border border-zfp-border rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
           >
             <option value="all">Všechny</option>
             <option value="byt">Byt</option>
@@ -86,7 +86,7 @@ export default function MatchingFilters({
 
         {/* Lokalita */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-zfp-text mb-2">
             Lokalita
           </label>
           <input
@@ -94,7 +94,7 @@ export default function MatchingFilters({
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Např. Brno, Praha..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
+            className="w-full px-3 py-2 border border-zfp-border rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange"
           />
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function MatchingFilters({
         </button>
         <button
           onClick={handleReset}
-          className="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-colors"
+          className="px-6 py-2 bg-gray-200 text-zfp-text font-semibold rounded-lg hover:bg-gray-300 transition-colors"
         >
           Reset
         </button>

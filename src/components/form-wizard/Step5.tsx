@@ -34,7 +34,7 @@ export default function Step5({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-zfp-text-muted">
         Tyto informace jsou volitelné, ale pomohou nám lépe připravit nabídky.
       </p>
 
@@ -52,8 +52,8 @@ export default function Step5({
                   flex items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-colors
                   ${
                     isChecked
-                      ? "border-brand-orange bg-orange-50"
-                      : "border-gray-300 hover:border-gray-400"
+                      ? "border-brand-orange bg-brand-orange/10"
+                      : "border-zfp-border hover:border-zfp-border-hover"
                   }
                 `}
               >
@@ -84,8 +84,8 @@ export default function Step5({
                 flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors
                 ${
                   data.timeframe === option.value
-                    ? "border-brand-orange bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-brand-orange bg-brand-orange/10"
+                    : "border-zfp-border hover:border-zfp-border-hover"
                 }
               `}
             >
@@ -108,7 +108,7 @@ export default function Step5({
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
         >
           ← Zpět
         </button>

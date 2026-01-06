@@ -101,7 +101,7 @@ export default function Step4({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-zfp-text-muted">
         Všechny sekce jsou volitelné. Upřesněte jen pokud máte konkrétní preference.
       </p>
 
@@ -116,7 +116,7 @@ export default function Step4({
       </button>
 
       {showDetails && (
-        <div className="space-y-8 pl-6 border-l-2 border-gray-200">
+        <div className="space-y-8 pl-6 border-l-2 border-zfp-border">
           {/* Stav nemovitosti */}
           <div>
             <label className="label-field">Stav nemovitosti</label>
@@ -131,8 +131,8 @@ export default function Step4({
                       flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors
                       ${
                         isChecked
-                          ? "border-brand-orange bg-orange-50"
-                          : "border-gray-300 hover:border-gray-400"
+                          ? "border-brand-orange bg-brand-orange/10"
+                          : "border-zfp-border hover:border-zfp-border-hover"
                       }
                       ${stateNezalezi && state !== "Nezáleží" ? "opacity-50" : ""}
                     `}
@@ -167,8 +167,8 @@ export default function Step4({
                         flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors
                         ${
                           isChecked
-                            ? "border-brand-orange bg-orange-50"
-                            : "border-gray-300 hover:border-gray-400"
+                            ? "border-brand-orange bg-brand-orange/10"
+                            : "border-zfp-border hover:border-zfp-border-hover"
                         }
                         ${
                           constructionNezalezi && construction !== "Nezáleží"
@@ -206,8 +206,8 @@ export default function Step4({
                       flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors
                       ${
                         isChecked
-                          ? "border-brand-orange bg-orange-50"
-                          : "border-gray-300 hover:border-gray-400"
+                          ? "border-brand-orange bg-brand-orange/10"
+                          : "border-zfp-border hover:border-zfp-border-hover"
                       }
                       ${comfortNezalezi && comfort !== "Nezáleží" ? "opacity-50" : ""}
                     `}
@@ -233,7 +233,7 @@ export default function Step4({
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
         >
           ← Zpět
         </button>

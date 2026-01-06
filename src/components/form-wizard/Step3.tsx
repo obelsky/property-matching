@@ -39,8 +39,8 @@ export default function Step3({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900 flex items-start gap-2">
+      <div className="bg-info/10 border border-info/30 rounded-lg p-4 mb-6">
+        <p className="text-sm text-info flex items-start gap-2">
           <LightbulbIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span><strong>Tip:</strong> Čím přesnější budete, tím lepší shody najdeme.
           Rozmezí ceny a plochy nám pomůže najít nejvhodnější nabídky.</span>
@@ -52,7 +52,7 @@ export default function Step3({
         <label className="label-field">Rozpočet (orientační)</label>
         <div className="grid md:grid-cols-2 gap-4 mt-2">
           <div>
-            <label htmlFor="budget_min" className="text-xs text-gray-600 mb-1 block">
+            <label htmlFor="budget_min" className="text-xs text-zfp-text-muted mb-1 block">
               Cena od (Kč)
             </label>
             <input
@@ -72,7 +72,7 @@ export default function Step3({
           </div>
 
           <div>
-            <label htmlFor="budget_max" className="text-xs text-gray-600 mb-1 block">
+            <label htmlFor="budget_max" className="text-xs text-zfp-text-muted mb-1 block">
               Cena do (Kč) <span className="text-brand-orange">*doporučeno</span>
             </label>
             <input
@@ -100,7 +100,7 @@ export default function Step3({
         </label>
         <div className="grid md:grid-cols-2 gap-4 mt-2">
           <div>
-            <label htmlFor="area_min" className="text-xs text-gray-600 mb-1 block">
+            <label htmlFor="area_min" className="text-xs text-zfp-text-muted mb-1 block">
               Plocha od (m²)
             </label>
             <input
@@ -120,7 +120,7 @@ export default function Step3({
           </div>
 
           <div>
-            <label htmlFor="area_max" className="text-xs text-gray-600 mb-1 block">
+            <label htmlFor="area_max" className="text-xs text-zfp-text-muted mb-1 block">
               Plocha do (m²)
             </label>
             <input
@@ -146,7 +146,7 @@ export default function Step3({
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
         >
           ← Zpět
         </button>

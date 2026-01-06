@@ -31,27 +31,27 @@ export default function CopyLink({ url, label = "Váš soukromý odkaz" }: CopyL
           </div>
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-          <p className="text-gray-600 leading-relaxed">
+          <h3 className="text-xl font-bold text-zfp-text mb-2">{label}</h3>
+          <p className="text-zfp-text-muted leading-relaxed">
             Uložte si tento odkaz - můžete na něm sledovat stav poptávky a případně upřesnit údaje.
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-4 shadow-sm">
+      <div className="bg-zfp-card rounded-xl border border-zfp-border p-4 mb-4 shadow-sm">
         <div className="flex gap-3">
           <input
             type="text"
             value={url}
             readOnly
-            className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-sm font-mono text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 px-4 py-3 bg-zfp-card border border-zfp-border rounded-lg text-sm font-mono text-zfp-text focus:outline-none focus:ring-2 focus:ring-purple-500"
             onClick={(e) => e.currentTarget.select()}
           />
           <button
             onClick={handleCopy}
             className={`px-6 py-3 rounded-lg font-semibold transition-all shadow-md ${
               copied
-                ? "bg-green-500 text-white hover:bg-green-600"
+                ? "bg-success/100 text-white hover:bg-green-600"
                 : "bg-brand-orange text-white hover:bg-brand-orange-hover hover:shadow-lg"
             }`}
           >

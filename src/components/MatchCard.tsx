@@ -28,10 +28,10 @@ export default function MatchCard({
   const reasonsList = formatMatchReasons(reasons);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="bg-zfp-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       {/* Fotka nebo placeholder */}
       {isListing && listing?.photos && listing.photos[0] ? (
-        <div className="relative h-48 bg-gray-200">
+        <div className="relative h-48 bg-zfp-border">
           <Image
             src={listing.photos[0]}
             alt={`${propertyTypeLabels[listing.type]} v ${listing.city}`}
@@ -41,7 +41,7 @@ export default function MatchCard({
         </div>
       ) : (
         <div className="h-48 bg-zfp-bg-light flex items-center justify-center">
-          <div className="text-center text-gray-400">
+          <div className="text-center text-zfp-text-subtle">
             <svg
               className="mx-auto h-12 w-12 mb-2"
               fill="none"
@@ -70,7 +70,7 @@ export default function MatchCard({
               {isListing && listing?.layout && ` ${listing.layout}`}
               {!isListing && request?.layout_min && ` ${request.layout_min}+`}
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-zfp-text-muted">
               {item.city}
               {item.district && `, ${item.district}`}
             </p>
@@ -83,24 +83,24 @@ export default function MatchCard({
         {/* Detaily */}
         <div className="space-y-2 mb-3">
           {isListing && listing?.area_m2 && (
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-zfp-text">
               <strong>Plocha:</strong> {listing.area_m2} m²
             </p>
           )}
           {!isListing && request?.area_min_m2 && (
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-zfp-text">
               <strong>Min. plocha:</strong> {request.area_min_m2} m²
             </p>
           )}
 
           {isListing && listing?.price && (
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-zfp-text">
               <strong>Cena:</strong>{" "}
               {listing.price.toLocaleString("cs-CZ")} Kč
             </p>
           )}
           {!isListing && request?.budget_max && (
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-zfp-text">
               <strong>Max. rozpočet:</strong>{" "}
               {request.budget_max.toLocaleString("cs-CZ")} Kč
             </p>
@@ -110,10 +110,10 @@ export default function MatchCard({
         {/* Důvody shody */}
         {reasonsList.length > 0 && (
           <div className="border-t pt-3">
-            <p className="text-xs font-semibold text-gray-600 mb-2">
+            <p className="text-xs font-semibold text-zfp-text-muted mb-2">
               Proč se hodí:
             </p>
-            <ul className="text-xs text-gray-600 space-y-1">
+            <ul className="text-xs text-zfp-text-muted space-y-1">
               {reasonsList.map((reason, idx) => (
                 <li key={idx} className="flex items-start">
                   <span className="text-brand-orange mr-2">✓</span>

@@ -16,7 +16,7 @@ export default function AdminNav() {
   ];
 
   return (
-    <nav className="bg-white rounded-lg shadow-md p-4 mb-8">
+    <nav className="card p-2 mb-8">
       <div className="flex gap-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -26,11 +26,11 @@ export default function AdminNav() {
               key={item.href}
               href={item.href}
               className={`
-                flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-colors
+                flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300
                 ${
                   isActive
-                    ? "bg-brand-orange text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? "bg-brand-orange text-white shadow-lg"
+                    : "text-zfp-text-muted hover:text-zfp-text hover:bg-zfp-card"
                 }
               `}
             >

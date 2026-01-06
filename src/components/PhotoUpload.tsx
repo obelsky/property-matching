@@ -117,7 +117,7 @@ export default function PhotoUpload({
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
           dragActive
             ? "border-brand-orange bg-orange-50"
-            : "border-gray-300 hover:border-brand-orange"
+            : "border-zfp-border hover:border-brand-orange"
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -135,14 +135,14 @@ export default function PhotoUpload({
         />
 
         <div className="space-y-2">
-          <CameraIcon className="w-16 h-16 mx-auto text-gray-400" />
-          <p className="text-lg font-semibold text-gray-700">
+          <CameraIcon className="w-16 h-16 mx-auto text-zfp-text-subtle" />
+          <p className="text-lg font-semibold text-zfp-text">
             Nahrajte fotografie
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-zfp-text-muted">
             Přetáhněte fotky sem nebo klikněte pro výběr
           </p>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zfp-text-subtle">
             Min {minPhotos}, max {maxPhotos} fotografií • JPG, PNG, WEBP
           </p>
         </div>
@@ -150,7 +150,7 @@ export default function PhotoUpload({
 
       {/* Photo counter */}
       {photos.length > 0 && (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-zfp-text-muted">
           Nahráno: <strong>{photos.length}</strong> / {maxPhotos} fotografií
           {photos.length < minPhotos && (
             <span className="text-red-600 ml-2">
@@ -166,7 +166,7 @@ export default function PhotoUpload({
           {previews.map((preview, index) => (
             <div
               key={index}
-              className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-200 group"
+              className="relative aspect-square rounded-lg overflow-hidden border-2 border-zfp-border group"
             >
               <Image
                 src={preview}
@@ -213,7 +213,7 @@ export default function PhotoUpload({
       )}
 
       {/* Helpful tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-info/10 border border-info/30 rounded-lg p-4">
         <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
           <LightbulbIcon className="w-5 h-5" />
           Tipy pro fotky:

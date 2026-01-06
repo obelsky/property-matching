@@ -131,7 +131,7 @@ export default async function MatchingPage({
   };
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
@@ -139,7 +139,7 @@ export default async function MatchingPage({
             <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
               Párování
             </h1>
-            <p className="text-gray-600">
+            <p className="text-zfp-text-muted">
               Přehled všech nalezených shod mezi nabídkami a poptávkami
             </p>
           </div>
@@ -159,16 +159,16 @@ export default async function MatchingPage({
         />
 
         {/* Statistika */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-zfp-dark rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center gap-4">
             <div>
-              <span className="text-sm text-gray-600">Nalezeno shod:</span>
+              <span className="text-sm text-zfp-text-muted">Nalezeno shod:</span>
               <span className="ml-2 text-2xl font-bold text-brand-orange">
                 {matches.length}
               </span>
             </div>
             {searchParams.minScore && (
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-zfp-text-muted">
                 (min. shoda: {searchParams.minScore}%)
               </div>
             )}
@@ -176,7 +176,7 @@ export default async function MatchingPage({
         </div>
 
         {/* Tabulka matchů */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -198,7 +198,7 @@ export default async function MatchingPage({
               <tbody>
                 {matches.length > 0 ? (
                   matches.map((match) => (
-                    <tr key={match.id} className="border-b hover:bg-gray-50">
+                    <tr key={match.id} className="border-b hover:bg-zfp-card">
                       {/* Score */}
                       <td className="py-3 px-2">
                         <span className="inline-block bg-brand-orange text-white px-3 py-1 rounded-full font-semibold text-sm">
@@ -214,19 +214,19 @@ export default async function MatchingPage({
                               {propertyTypeLabels[match.listing.type] || match.listing.type}
                               {match.listing.layout && ` ${match.listing.layout}`}
                             </div>
-                            <div className="text-gray-600">
+                            <div className="text-zfp-text-muted">
                               {match.listing.city}
                               {match.listing.district &&
                                 `, ${match.listing.district}`}
                             </div>
                             {match.listing.price && (
-                              <div className="text-gray-500 text-xs">
+                              <div className="text-zfp-text-muted text-xs">
                                 {match.listing.price.toLocaleString("cs-CZ")} Kč
                               </div>
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-zfp-text-subtle text-sm">
                             Nabídka nenalezena
                           </span>
                         )}
@@ -241,13 +241,13 @@ export default async function MatchingPage({
                               {match.request.layout_min &&
                                 ` ${match.request.layout_min}+`}
                             </div>
-                            <div className="text-gray-600">
+                            <div className="text-zfp-text-muted">
                               {match.request.city}
                               {match.request.district &&
                                 `, ${match.request.district}`}
                             </div>
                             {match.request.budget_max && (
-                              <div className="text-gray-500 text-xs">
+                              <div className="text-zfp-text-muted text-xs">
                                 Max:{" "}
                                 {match.request.budget_max.toLocaleString(
                                   "cs-CZ"
@@ -257,14 +257,14 @@ export default async function MatchingPage({
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-zfp-text-subtle text-sm">
                             Poptávka nenalezena
                           </span>
                         )}
                       </td>
 
                       {/* Datum */}
-                      <td className="py-3 px-2 text-sm text-gray-600">
+                      <td className="py-3 px-2 text-sm text-zfp-text-muted">
                         {new Date(match.created_at).toLocaleDateString(
                           "cs-CZ"
                         )}
@@ -275,7 +275,7 @@ export default async function MatchingPage({
                   <tr>
                     <td
                       colSpan={4}
-                      className="py-8 text-center text-gray-500"
+                      className="py-8 text-center text-zfp-text-muted"
                     >
                       {searchParams.minScore ||
                       searchParams.type ||

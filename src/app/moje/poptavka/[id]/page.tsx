@@ -67,7 +67,7 @@ export default async function MojePoptavkaPage({
     return (
       <div className="container py-12 text-center">
         <h1 className="text-2xl font-bold text-red-600">Neplatný odkaz</h1>
-        <p className="text-gray-600 mt-4">
+        <p className="text-zfp-text-muted mt-4">
           Tento odkaz není platný nebo vypršel.
         </p>
       </div>
@@ -91,20 +91,20 @@ export default async function MojePoptavkaPage({
   };
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-4xl">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
             Vaše poptávka
           </h1>
-          <p className="text-gray-600">
+          <p className="text-zfp-text-muted">
             Zde můžete sledovat stav vaší poptávky a nalezené shody
           </p>
         </div>
 
         {/* Váš záznam */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             {/* Typ nemovitosti */}
             {request.type === "byt" && request.layout_min && (
@@ -126,15 +126,15 @@ export default async function MojePoptavkaPage({
 
           <div className="grid md:grid-cols-2 gap-4 text-sm mb-4">
             <div>
-              <span className="text-gray-600">Lokalita:</span>
+              <span className="text-zfp-text-muted">Lokalita:</span>
               <span className="ml-2 font-semibold">{request.city}</span>
               {request.district && (
-                <span className="text-gray-500"> ({request.district})</span>
+                <span className="text-zfp-text-muted"> ({request.district})</span>
               )}
             </div>
             {request.budget_max && (
               <div>
-                <span className="text-gray-600">Max. rozpočet:</span>
+                <span className="text-zfp-text-muted">Max. rozpočet:</span>
                 <span className="ml-2 font-semibold">
                   {request.budget_max.toLocaleString("cs-CZ")} Kč
                 </span>
@@ -142,7 +142,7 @@ export default async function MojePoptavkaPage({
             )}
             {request.area_min_m2 && (
               <div>
-                <span className="text-gray-600">Min. plocha:</span>
+                <span className="text-zfp-text-muted">Min. plocha:</span>
                 <span className="ml-2 font-semibold">{request.area_min_m2} m²</span>
               </div>
             )}
@@ -150,13 +150,13 @@ export default async function MojePoptavkaPage({
 
           {/* Detailní informace z formuláře */}
           {request.details && typeof request.details === 'object' && Object.keys(request.details).length > 0 && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <h3 className="font-semibold text-sm text-gray-700 mb-3">Vaše preference:</h3>
+            <div className="mt-4 pt-4 border-t border-zfp-border">
+              <h3 className="font-semibold text-sm text-zfp-text mb-3">Vaše preference:</h3>
               <div className="grid md:grid-cols-2 gap-3 text-sm">
                 {/* Kategorie */}
                 {(request.details as any).category && Array.isArray((request.details as any).category) && (request.details as any).category.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Dispozice:</span>
+                    <span className="text-zfp-text-muted">Dispozice:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).category.map((cat: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">
@@ -170,7 +170,7 @@ export default async function MojePoptavkaPage({
                 {/* Floor preference */}
                 {(request.details as any).floor_preference && Array.isArray((request.details as any).floor_preference) && (request.details as any).floor_preference.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Patro:</span>
+                    <span className="text-zfp-text-muted">Patro:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).floor_preference.map((floor: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs">
@@ -184,10 +184,10 @@ export default async function MojePoptavkaPage({
                 {/* Preferred state */}
                 {(request.details as any).preferred_state && Array.isArray((request.details as any).preferred_state) && (request.details as any).preferred_state.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Stav:</span>
+                    <span className="text-zfp-text-muted">Stav:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).preferred_state.map((state: string, idx: number) => (
-                        <span key={idx} className="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">
+                        <span key={idx} className="px-2 py-0.5 bg-brand-gold/10 text-brand-gold rounded text-xs">
                           {state}
                         </span>
                       ))}
@@ -198,7 +198,7 @@ export default async function MojePoptavkaPage({
                 {/* Preferred construction */}
                 {(request.details as any).preferred_construction && Array.isArray((request.details as any).preferred_construction) && (request.details as any).preferred_construction.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Konstrukce:</span>
+                    <span className="text-zfp-text-muted">Konstrukce:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).preferred_construction.map((constr: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 bg-orange-100 text-orange-800 rounded text-xs">
@@ -212,7 +212,7 @@ export default async function MojePoptavkaPage({
                 {/* Preferred comfort */}
                 {(request.details as any).preferred_comfort && Array.isArray((request.details as any).preferred_comfort) && (request.details as any).preferred_comfort.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Vybavení:</span>
+                    <span className="text-zfp-text-muted">Vybavení:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).preferred_comfort.map((comfort: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded text-xs">
@@ -226,7 +226,7 @@ export default async function MojePoptavkaPage({
                 {/* Financing methods */}
                 {(request.details as any).financing_methods && Array.isArray((request.details as any).financing_methods) && (request.details as any).financing_methods.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Financování:</span>
+                    <span className="text-zfp-text-muted">Financování:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {(request.details as any).financing_methods.map((method: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded text-xs">
@@ -240,8 +240,8 @@ export default async function MojePoptavkaPage({
                 {/* Timeframe */}
                 {(request.details as any).timeframe && (
                   <div>
-                    <span className="text-gray-600">Časový horizont:</span>
-                    <p className="mt-1 text-gray-900">{formatTimeframe((request.details as any).timeframe)}</p>
+                    <span className="text-zfp-text-muted">Časový horizont:</span>
+                    <p className="mt-1 text-zfp-text">{formatTimeframe((request.details as any).timeframe)}</p>
                   </div>
                 )}
               </div>
@@ -249,8 +249,8 @@ export default async function MojePoptavkaPage({
               {/* Note */}
               {(request.details as any).note && (
                 <div className="mt-3 pt-3 border-t border-gray-100">
-                  <span className="text-gray-600 text-sm">Poznámka:</span>
-                  <p className="mt-1 text-gray-900 text-sm bg-gray-50 p-2 rounded whitespace-pre-wrap">
+                  <span className="text-zfp-text-muted text-sm">Poznámka:</span>
+                  <p className="mt-1 text-zfp-text text-sm bg-zfp-card p-2 rounded whitespace-pre-wrap">
                     {(request.details as any).note}
                   </p>
                 </div>
@@ -259,14 +259,14 @@ export default async function MojePoptavkaPage({
           )}
 
           {/* Status */}
-          <div className="mt-4 p-4 bg-zfp-bg-light rounded-lg">
+          <div className="mt-4 p-4 bg-zfp-darker rounded-lg">
             <div className="text-sm">
               <span className="font-semibold">Stav:</span>
               <span className="ml-2">
                 {statusLabels[request.status as keyof typeof statusLabels]}
               </span>
             </div>
-            <div className="text-sm mt-2 text-gray-600">
+            <div className="text-sm mt-2 text-zfp-text-muted">
               {request.agent
                 ? `Aktuálně řeší makléř ${request.agent.name}`
                 : "Zatím čeká na přiřazení"}
@@ -275,7 +275,7 @@ export default async function MojePoptavkaPage({
         </div>
 
         {/* Nalezené shody */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
             Našli jsme {matches.length} možných protějšků
           </h2>
@@ -294,7 +294,7 @@ export default async function MojePoptavkaPage({
                         }
                         {match.listing?.layout && ` ${match.listing.layout}`}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-zfp-text-muted">
                         {match.listing?.city}
                         {match.listing?.district &&
                           `, ${match.listing.district}`}
@@ -305,7 +305,7 @@ export default async function MojePoptavkaPage({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mt-2">
+                  <div className="grid grid-cols-2 gap-2 text-sm text-zfp-text-muted mt-2">
                     {match.listing?.price && (
                       <div>
                         Cena: {match.listing.price.toLocaleString("cs-CZ")} Kč
@@ -319,7 +319,7 @@ export default async function MojePoptavkaPage({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-zfp-text-muted text-center py-8">
               Zatím jsme nenašli žádné vhodné nabídky.
             </p>
           )}
@@ -338,7 +338,7 @@ export default async function MojePoptavkaPage({
         />
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-zfp-text-muted">
           <p>Tento odkaz je soukromý. Nesdílejte ho s nikým dalším.</p>
           <Link
             href="/"

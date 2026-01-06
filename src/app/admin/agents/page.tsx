@@ -32,7 +32,7 @@ export default async function AgentsPage() {
   const agents = await getAgents();
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
@@ -40,7 +40,7 @@ export default async function AgentsPage() {
             <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
               Makléři
             </h1>
-            <p className="text-gray-600">
+            <p className="text-zfp-text-muted">
               Správa makléřů pro přiřazení k nabídkám a poptávkám
             </p>
           </div>
@@ -53,7 +53,7 @@ export default async function AgentsPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Formulář pro přidání */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="bg-zfp-dark rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
                 Přidat makléře
               </h2>
@@ -63,7 +63,7 @@ export default async function AgentsPage() {
 
           {/* Seznam makléřů */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="bg-zfp-dark rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-heading font-bold text-zfp-text mb-6">
                 Seznam makléřů ({agents.length})
               </h2>
@@ -73,17 +73,17 @@ export default async function AgentsPage() {
                   {agents.map((agent) => (
                     <div
                       key={agent.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                      className="border border-zfp-border rounded-lg p-4 hover:bg-zfp-card transition-colors"
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <h3 className="font-semibold text-lg text-zfp-text mb-2">
                             {agent.name}
                           </h3>
-                          <div className="space-y-1 text-sm text-gray-600">
+                          <div className="space-y-1 text-sm text-zfp-text-muted">
                             {agent.email && (
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-400">✉</span>
+                                <span className="text-zfp-text-subtle">✉</span>
                                 <a
                                   href={`mailto:${agent.email}`}
                                   className="text-brand-orange hover:underline"
@@ -94,7 +94,7 @@ export default async function AgentsPage() {
                             )}
                             {agent.phone && (
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-400">📞</span>
+                                <span className="text-zfp-text-subtle">📞</span>
                                 <a
                                   href={`tel:${agent.phone}`}
                                   className="text-brand-orange hover:underline"
@@ -103,7 +103,7 @@ export default async function AgentsPage() {
                                 </a>
                               </div>
                             )}
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mt-2">
+                            <div className="flex items-center gap-2 text-xs text-zfp-text-muted mt-2">
                               <span>📅</span>
                               Vytvořeno:{" "}
                               {new Date(agent.created_at).toLocaleDateString(
@@ -117,7 +117,7 @@ export default async function AgentsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-zfp-text-muted">
                   <p className="text-lg mb-2">Zatím nejsou žádní makléři</p>
                   <p className="text-sm">
                     Použijte formulář vlevo pro přidání prvního makléře

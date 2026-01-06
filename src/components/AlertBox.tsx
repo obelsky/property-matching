@@ -28,7 +28,7 @@ export default function AlertBox({
         </div>
         <div className="flex-1 min-w-0">
           <h3 className={`font-semibold ${textColor} mb-1`}>{label}</h3>
-          <p className="text-sm text-gray-600 mb-2">{description}</p>
+          <p className="text-sm text-zfp-text-muted mb-2">{description}</p>
           <Link
             href={href}
             className="text-sm font-semibold text-brand-orange hover:text-brand-orange-hover"

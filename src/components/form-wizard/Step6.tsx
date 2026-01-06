@@ -40,7 +40,7 @@ export default function Step6({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Success message */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+      <div className="bg-success/10 border border-green-200 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <CheckIcon className="w-5 h-5 text-green-600 flex-shrink-0" />
           <div>
@@ -82,7 +82,7 @@ export default function Step6({
           className="input-field"
           required
         />
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-zfp-text-muted mt-1">
           Na tento email vám pošleme soukromý odkaz pro sledování poptávky
         </p>
       </div>
@@ -113,10 +113,10 @@ export default function Step6({
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-gray-900 text-lg mb-2">
+              <h3 className="font-bold text-zfp-text text-lg mb-2">
                 💡 Potřebujete hypotéku?
               </h3>
-              <p className="text-sm text-gray-700 mb-4">
+              <p className="text-sm text-zfp-text mb-4">
                 Vyzkoušejte naši hypoteční kalkulačku a zjistěte, jakou výši hypotéky
                 můžete získat a jaká bude vaše měsíční splátka.
               </p>
@@ -130,7 +130,7 @@ export default function Step6({
                 </svg>
                 Spočítat hypotéku
               </Link>
-              <p className="text-xs text-gray-500 mt-3">
+              <p className="text-xs text-zfp-text-muted mt-3">
                 Kalkulačka se otevře v nové záložce. Můžete se k ní vrátit kdykoli.
               </p>
             </div>
@@ -154,14 +154,14 @@ export default function Step6({
       </div>
 
       {/* GDPR */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <div className="bg-zfp-card border border-zfp-border rounded-lg p-4">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
             required
             className="mt-1 w-5 h-5 text-brand-orange rounded"
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-zfp-text">
             Souhlasím se{" "}
             <span className="text-brand-orange font-medium">zpracováním osobních údajů</span>{" "}
             za účelem kontaktování hypotečním specialistou ZFP Reality. Jsem oprávněn kdykoli svůj souhlas odvolat.

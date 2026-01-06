@@ -33,8 +33,8 @@ export default function Step3({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-900 flex items-start gap-2">
+      <div className="bg-info/10 border border-info/30 rounded-lg p-4 mb-6">
+        <p className="text-sm text-info flex items-start gap-2">
           <LightbulbIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span><strong>Tip:</strong> Čím přesnější budete, tím lepší kupce/nájemce najdeme.
           Cena a plocha jsou klíčové pro párování s poptávkami.</span>
@@ -59,7 +59,7 @@ export default function Step3({
           min="0"
           step="100000"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-zfp-text-muted mt-1">
           {data.request_kind === "buy" ? "Prodejní cena v Kč" : "Nájem za měsíc v Kč"}
         </p>
       </div>
@@ -69,7 +69,7 @@ export default function Step3({
         <label className="label-field">Plocha (m²)</label>
         <div className="grid md:grid-cols-2 gap-4 mt-2">
           <div>
-            <label htmlFor="area_min" className="text-xs text-gray-600 mb-1 block">
+            <label htmlFor="area_min" className="text-xs text-zfp-text-muted mb-1 block">
               Podlahová plocha
             </label>
             <input
@@ -90,7 +90,7 @@ export default function Step3({
 
           {data.property_type === "dum" && (
             <div>
-              <label htmlFor="area_max" className="text-xs text-gray-600 mb-1 block">
+              <label htmlFor="area_max" className="text-xs text-zfp-text-muted mb-1 block">
                 Plocha pozemku (m²)
               </label>
               <input
@@ -117,7 +117,7 @@ export default function Step3({
         <button
           type="button"
           onClick={onBack}
-          className="text-gray-600 hover:text-gray-900"
+          className="text-zfp-text-muted hover:text-zfp-text"
         >
           ← Zpět
         </button>

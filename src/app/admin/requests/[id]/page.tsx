@@ -101,9 +101,9 @@ export default async function AdminRequestDetailPage({
 
   if (!data) {
     return (
-      <div className="bg-zfp-bg-light py-12">
+      <div className="bg-zfp-darker py-12">
         <div className="container max-w-2xl text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-8">
             <h1 className="text-2xl font-heading font-bold text-zfp-text mb-4">
               Poptávka nenalezena
             </h1>
@@ -130,7 +130,7 @@ export default async function AdminRequestDetailPage({
   const missingFields = getMissingFields(request);
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-5xl">
         {/* Breadcrumbs */}
         <div className="mb-6">
@@ -160,7 +160,7 @@ export default async function AdminRequestDetailPage({
         )}
 
         {/* Detail poptávky */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
@@ -181,14 +181,14 @@ export default async function AdminRequestDetailPage({
                   propertyTypeLabels[request.type as keyof typeof propertyTypeLabels]
                 )}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-zfp-text-muted">
                 {request.city}
                 {request.district && `, ${request.district}`}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">ID</p>
-              <p className="text-xs text-gray-400 font-mono">{request.id}</p>
+              <p className="text-sm text-zfp-text-muted">ID</p>
+              <p className="text-xs text-zfp-text-subtle font-mono">{request.id}</p>
             </div>
           </div>
 
@@ -197,7 +197,7 @@ export default async function AdminRequestDetailPage({
               <h3 className="font-semibold text-lg mb-3">Parametry</h3>
               <dl className="space-y-2">
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Typ:</dt>
+                  <dt className="text-zfp-text-muted">Typ:</dt>
                   <dd className="font-semibold">
                     {
                       propertyTypeLabels[
@@ -208,12 +208,12 @@ export default async function AdminRequestDetailPage({
                 </div>
                 {request.layout_min && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Min. dispozice:</dt>
+                    <dt className="text-zfp-text-muted">Min. dispozice:</dt>
                     <dd className="font-semibold">{request.layout_min}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Lokalita:</dt>
+                  <dt className="text-zfp-text-muted">Lokalita:</dt>
                   <dd className="font-semibold">
                     {request.city}
                     {request.district && ` (${request.district})`}
@@ -221,7 +221,7 @@ export default async function AdminRequestDetailPage({
                 </div>
                 {request.budget_max && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Max. rozpočet:</dt>
+                    <dt className="text-zfp-text-muted">Max. rozpočet:</dt>
                     <dd className="font-semibold">
                       {request.budget_max.toLocaleString("cs-CZ")} Kč
                     </dd>
@@ -229,7 +229,7 @@ export default async function AdminRequestDetailPage({
                 )}
                 {request.area_min_m2 && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Min. plocha:</dt>
+                    <dt className="text-zfp-text-muted">Min. plocha:</dt>
                     <dd className="font-semibold">{request.area_min_m2} m²</dd>
                   </div>
                 )}
@@ -240,17 +240,17 @@ export default async function AdminRequestDetailPage({
               <h3 className="font-semibold text-lg mb-3">Kontakt</h3>
               <dl className="space-y-2">
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">E-mail:</dt>
+                  <dt className="text-zfp-text-muted">E-mail:</dt>
                   <dd className="font-semibold">{request.contact_email}</dd>
                 </div>
                 {request.contact_phone && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Telefon:</dt>
+                    <dt className="text-zfp-text-muted">Telefon:</dt>
                     <dd className="font-semibold">{request.contact_phone}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Vytvořeno:</dt>
+                  <dt className="text-zfp-text-muted">Vytvořeno:</dt>
                   <dd className="font-semibold">
                     {new Date(request.created_at).toLocaleDateString("cs-CZ")}
                   </dd>
@@ -262,7 +262,7 @@ export default async function AdminRequestDetailPage({
 
         {/* Detailní informace z formuláře */}
         {request.details && typeof request.details === 'object' && Object.keys(request.details).length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
               Detailní informace z formuláře
             </h2>
@@ -270,7 +270,7 @@ export default async function AdminRequestDetailPage({
               {/* Kategorie */}
               {(request.details as any).category && Array.isArray((request.details as any).category) && (request.details as any).category.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Kategorie:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Kategorie:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).category.map((cat: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -284,7 +284,7 @@ export default async function AdminRequestDetailPage({
               {/* Floor preference (pro byty) */}
               {(request.details as any).floor_preference && Array.isArray((request.details as any).floor_preference) && (request.details as any).floor_preference.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preference patra:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Preference patra:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).floor_preference.map((floor: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
@@ -298,7 +298,7 @@ export default async function AdminRequestDetailPage({
               {/* Preferred state */}
               {(request.details as any).preferred_state && Array.isArray((request.details as any).preferred_state) && (request.details as any).preferred_state.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferovaný stav:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Preferovaný stav:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).preferred_state.map((state: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
@@ -312,7 +312,7 @@ export default async function AdminRequestDetailPage({
               {/* Preferred construction */}
               {(request.details as any).preferred_construction && Array.isArray((request.details as any).preferred_construction) && (request.details as any).preferred_construction.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferovaná konstrukce:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Preferovaná konstrukce:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).preferred_construction.map((constr: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
@@ -326,7 +326,7 @@ export default async function AdminRequestDetailPage({
               {/* Preferred comfort */}
               {(request.details as any).preferred_comfort && Array.isArray((request.details as any).preferred_comfort) && (request.details as any).preferred_comfort.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Preferované vybavení:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Preferované vybavení:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).preferred_comfort.map((comfort: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
@@ -340,7 +340,7 @@ export default async function AdminRequestDetailPage({
               {/* Financing methods */}
               {(request.details as any).financing_methods && Array.isArray((request.details as any).financing_methods) && (request.details as any).financing_methods.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Způsob financování:</h3>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Způsob financování:</h3>
                   <div className="flex flex-wrap gap-2">
                     {(request.details as any).financing_methods.map((method: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
@@ -354,16 +354,16 @@ export default async function AdminRequestDetailPage({
               {/* Timeframe */}
               {(request.details as any).timeframe && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Časový horizont:</h3>
-                  <p className="text-gray-900">{formatTimeframe((request.details as any).timeframe)}</p>
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Časový horizont:</h3>
+                  <p className="text-zfp-text">{formatTimeframe((request.details as any).timeframe)}</p>
                 </div>
               )}
 
               {/* Budget range (z details) */}
               {((request.details as any).budget_min || (request.details as any).budget_max) && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Rozpočet:</h3>
-                  <p className="text-gray-900">
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Rozpočet:</h3>
+                  <p className="text-zfp-text">
                     {(request.details as any).budget_min && `Od ${Number((request.details as any).budget_min).toLocaleString("cs-CZ")} Kč`}
                     {(request.details as any).budget_min && (request.details as any).budget_max && " - "}
                     {(request.details as any).budget_max && `Do ${Number((request.details as any).budget_max).toLocaleString("cs-CZ")} Kč`}
@@ -374,8 +374,8 @@ export default async function AdminRequestDetailPage({
               {/* Area range (z details) */}
               {((request.details as any).area_min_m2 || (request.details as any).area_max_m2) && (
                 <div>
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Plocha:</h3>
-                  <p className="text-gray-900">
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Plocha:</h3>
+                  <p className="text-zfp-text">
                     {(request.details as any).area_min_m2 && `Od ${(request.details as any).area_min_m2} m²`}
                     {(request.details as any).area_min_m2 && (request.details as any).area_max_m2 && " - "}
                     {(request.details as any).area_max_m2 && `Do ${(request.details as any).area_max_m2} m²`}
@@ -397,8 +397,8 @@ export default async function AdminRequestDetailPage({
               {/* Note */}
               {(request.details as any).note && (
                 <div className="md:col-span-2">
-                  <h3 className="font-semibold text-sm text-gray-700 mb-2">Poznámka od klienta:</h3>
-                  <p className="text-gray-900 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">
+                  <h3 className="font-semibold text-sm text-zfp-text mb-2">Poznámka od klienta:</h3>
+                  <p className="text-zfp-text bg-zfp-card p-3 rounded-lg whitespace-pre-wrap">
                     {(request.details as any).note}
                   </p>
                 </div>
@@ -417,10 +417,10 @@ export default async function AdminRequestDetailPage({
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-heading font-bold text-gray-900">
+                <h2 className="text-2xl font-heading font-bold text-zfp-text">
                   📊 Data z hypoteční kalkulačky
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-zfp-text-muted mt-1">
                   Klient nastavil osobní preference v kalkulačce
                 </p>
               </div>
@@ -439,59 +439,59 @@ export default async function AdminRequestDetailPage({
               </div>
 
               {/* Cena nemovitosti */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Cena nemovitosti</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Cena nemovitosti</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number((request.details as any).calculator_data.propertyPrice).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
 
               {/* Vlastní zdroje */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Vlastní zdroje</p>
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Vlastní zdroje</p>
                 <p className="text-xl font-bold text-purple-700">
                   {(request.details as any).calculator_data.downPaymentPercent}%
-                  <span className="text-sm text-gray-500 ml-2">
+                  <span className="text-sm text-zfp-text-muted ml-2">
                     ({Number((request.details as any).calculator_data.propertyPrice * (request.details as any).calculator_data.downPaymentPercent / 100).toLocaleString("cs-CZ")} Kč)
                   </span>
                 </p>
               </div>
 
               {/* Výše hypotéky */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Výše hypotéky</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Výše hypotéky</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number((request.details as any).calculator_data.loanAmount).toLocaleString("cs-CZ")} Kč
                 </p>
               </div>
 
               {/* LTV */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">LTV ratio</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">LTV ratio</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number((request.details as any).calculator_data.ltv).toFixed(0)}%
                 </p>
               </div>
 
               {/* Doba splácení */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Doba splácení</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Doba splácení</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {(request.details as any).calculator_data.years} let
                 </p>
               </div>
 
               {/* Úroková sazba */}
-              <div className="bg-white rounded-lg border border-purple-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Úroková sazba</p>
-                <p className="text-xl font-bold text-gray-900">
+              <div className="bg-zfp-dark rounded-lg border border-purple-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Úroková sazba</p>
+                <p className="text-xl font-bold text-zfp-text">
                   {Number((request.details as any).calculator_data.interestRate).toFixed(2)}%
                 </p>
               </div>
 
               {/* Celkový úrok */}
-              <div className="md:col-span-2 bg-white rounded-lg border border-orange-200 p-4">
-                <p className="text-sm text-gray-600 mb-1">Celkový úrok (náklad)</p>
+              <div className="md:col-span-2 bg-zfp-dark rounded-lg border border-orange-200 p-4">
+                <p className="text-sm text-zfp-text-muted mb-1">Celkový úrok (náklad)</p>
                 <p className="text-xl font-bold text-orange-600">
                   {Number((request.details as any).calculator_data.totalInterest).toLocaleString("cs-CZ")} Kč
                 </p>
@@ -513,7 +513,7 @@ export default async function AdminRequestDetailPage({
 
               {/* Timestamp */}
               <div className="md:col-span-3 text-center pt-4 border-t border-purple-200">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-zfp-text-muted">
                   Kalkulačka použita: {new Date((request.details as any).calculator_data.timestamp).toLocaleString("cs-CZ", {
                     year: "numeric",
                     month: "long",
@@ -528,7 +528,7 @@ export default async function AdminRequestDetailPage({
         )}
 
         {/* Status a Makléř */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
             Správa poptávky
           </h2>
@@ -551,7 +551,7 @@ export default async function AdminRequestDetailPage({
                 <h3 className="font-semibold text-yellow-900 mb-2">
                   Změny od zadavatele
                 </h3>
-                <div className="bg-white rounded p-4 text-sm">
+                <div className="bg-zfp-dark rounded p-4 text-sm">
                   <pre className="whitespace-pre-wrap font-mono text-xs">
                     {request.public_note}
                   </pre>
@@ -565,7 +565,7 @@ export default async function AdminRequestDetailPage({
         )}
 
         {/* Matches */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
             Nalezené shody ({matches.length})
           </h2>
@@ -575,7 +575,7 @@ export default async function AdminRequestDetailPage({
               {matches.map((match: any) => (
                 <div
                   key={match.id}
-                  className="border rounded-lg p-4 hover:bg-gray-50"
+                  className="border rounded-lg p-4 hover:bg-zfp-card"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
@@ -594,7 +594,7 @@ export default async function AdminRequestDetailPage({
                             ` ${match.listing.layout}`}
                         </Link>
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-zfp-text-muted">
                         {match.listing.city}
                         {match.listing.district &&
                           `, ${match.listing.district}`}
@@ -608,7 +608,7 @@ export default async function AdminRequestDetailPage({
                   <dl className="grid grid-cols-2 gap-4 text-sm mb-3">
                     {match.listing.price && (
                       <div>
-                        <dt className="text-gray-500">Cena:</dt>
+                        <dt className="text-zfp-text-muted">Cena:</dt>
                         <dd className="font-semibold">
                           {match.listing.price.toLocaleString("cs-CZ")} Kč
                         </dd>
@@ -616,14 +616,14 @@ export default async function AdminRequestDetailPage({
                     )}
                     {match.listing.area_m2 && (
                       <div>
-                        <dt className="text-gray-500">Plocha:</dt>
+                        <dt className="text-zfp-text-muted">Plocha:</dt>
                         <dd className="font-semibold">
                           {match.listing.area_m2} m²
                         </dd>
                       </div>
                     )}
                     <div>
-                      <dt className="text-gray-500">Kontakt:</dt>
+                      <dt className="text-zfp-text-muted">Kontakt:</dt>
                       <dd className="font-semibold">
                         {match.listing.contact_email}
                       </dd>
@@ -631,8 +631,8 @@ export default async function AdminRequestDetailPage({
                   </dl>
 
                   {match.reasons && (
-                    <div className="bg-zfp-bg-light rounded p-4">
-                      <p className="text-sm font-semibold text-gray-700 mb-3">
+                    <div className="bg-zfp-darker rounded p-4">
+                      <p className="text-sm font-semibold text-zfp-text mb-3">
                         Důvody shody:
                       </p>
                       <ul className="space-y-1 text-sm">
@@ -644,7 +644,7 @@ export default async function AdminRequestDetailPage({
                               text.startsWith("✓") ? "text-green-700" :
                               text.startsWith("⚠") ? "text-orange-600" :
                               text.startsWith("✗") ? "text-red-600" :
-                              "text-gray-600"
+                              "text-zfp-text-muted"
                             }>
                               {text}
                             </li>
@@ -653,10 +653,10 @@ export default async function AdminRequestDetailPage({
                       
                       {/* Technické detaily v rozbalovači */}
                       <details className="mt-4">
-                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
+                        <summary className="text-xs text-zfp-text-muted cursor-pointer hover:text-zfp-text">
                           Technické detaily (JSON)
                         </summary>
-                        <pre className="text-xs text-gray-700 overflow-x-auto mt-2 bg-white p-2 rounded">
+                        <pre className="text-xs text-zfp-text overflow-x-auto mt-2 bg-zfp-dark p-2 rounded">
                           {JSON.stringify(match.reasons, null, 2)}
                         </pre>
                       </details>
@@ -666,7 +666,7 @@ export default async function AdminRequestDetailPage({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-zfp-text-muted text-center py-8">
               Zatím nejsou žádné shody.
             </p>
           )}

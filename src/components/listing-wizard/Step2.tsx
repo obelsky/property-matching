@@ -113,8 +113,8 @@ export default function Step2({
                 flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors
                 ${
                   data.category?.includes(option)
-                    ? "border-brand-orange bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
+                    ? "border-brand-orange bg-brand-orange/10"
+                    : "border-zfp-border hover:border-zfp-border-hover"
                 }
               `}
             >
@@ -136,7 +136,7 @@ export default function Step2({
           <button
             type="button"
             onClick={() => setShowFloorPreference(!showFloorPreference)}
-            className="flex items-center gap-2 text-gray-700 hover:text-brand-orange transition-colors"
+            className="flex items-center gap-2 text-zfp-text hover:text-brand-orange transition-colors"
           >
             <span className="text-lg">{showFloorPreference ? "▼" : "▶"}</span>
             <span className="font-semibold">
@@ -156,8 +156,8 @@ export default function Step2({
                       flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors
                       ${
                         isChecked
-                          ? "border-brand-orange bg-orange-50"
-                          : "border-gray-300 hover:border-gray-400"
+                          ? "border-brand-orange bg-brand-orange/10"
+                          : "border-zfp-border hover:border-zfp-border-hover"
                       }
                       ${nezalezi && option !== "Nezáleží" ? "opacity-50" : ""}
                     `}
@@ -183,7 +183,7 @@ export default function Step2({
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
         >
           ← Zpět
         </button>

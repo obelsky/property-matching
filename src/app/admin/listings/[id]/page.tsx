@@ -90,9 +90,9 @@ export default async function AdminListingDetailPage({
 
   if (!data) {
     return (
-      <div className="bg-zfp-bg-light py-12">
+      <div className="bg-zfp-darker py-12">
         <div className="container max-w-2xl text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-8">
             <h1 className="text-2xl font-heading font-bold text-zfp-text mb-4">
               Nabídka nenalezena
             </h1>
@@ -119,7 +119,7 @@ export default async function AdminListingDetailPage({
   const missingFields = getMissingFields(listing);
 
   return (
-    <div className="bg-zfp-bg-light py-12">
+    <div className="bg-zfp-darker py-12">
       <div className="container max-w-5xl">
         {/* Breadcrumbs */}
         <div className="mb-6">
@@ -149,7 +149,7 @@ export default async function AdminListingDetailPage({
         )}
 
         {/* Detail nabídky */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-heading font-bold text-zfp-text mb-2">
@@ -160,14 +160,14 @@ export default async function AdminListingDetailPage({
                 }
                 {listing.layout && ` ${listing.layout}`}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-zfp-text-muted">
                 {listing.city}
                 {listing.district && `, ${listing.district}`}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">ID</p>
-              <p className="text-xs text-gray-400 font-mono">{listing.id}</p>
+              <p className="text-sm text-zfp-text-muted">ID</p>
+              <p className="text-xs text-zfp-text-subtle font-mono">{listing.id}</p>
             </div>
           </div>
 
@@ -177,7 +177,7 @@ export default async function AdminListingDetailPage({
               <h3 className="font-semibold text-lg mb-3">Fotografie</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {listing.photos.map((photo: string, idx: number) => (
-                  <div key={idx} className="relative h-48 bg-gray-100 rounded-lg overflow-hidden">
+                  <div key={idx} className="relative h-48 bg-zfp-card rounded-lg overflow-hidden">
                     <Image
                       src={photo}
                       alt={`Foto ${idx + 1}`}
@@ -196,7 +196,7 @@ export default async function AdminListingDetailPage({
               <h3 className="font-semibold text-lg mb-3">Parametry</h3>
               <dl className="space-y-2">
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Typ:</dt>
+                  <dt className="text-zfp-text-muted">Typ:</dt>
                   <dd className="font-semibold">
                     {
                       propertyTypeLabels[
@@ -207,12 +207,12 @@ export default async function AdminListingDetailPage({
                 </div>
                 {listing.layout && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Dispozice:</dt>
+                    <dt className="text-zfp-text-muted">Dispozice:</dt>
                     <dd className="font-semibold">{listing.layout}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Lokalita:</dt>
+                  <dt className="text-zfp-text-muted">Lokalita:</dt>
                   <dd className="font-semibold">
                     {listing.city}
                     {listing.district && `, ${listing.district}`}
@@ -220,7 +220,7 @@ export default async function AdminListingDetailPage({
                 </div>
                 {listing.price && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Cena:</dt>
+                    <dt className="text-zfp-text-muted">Cena:</dt>
                     <dd className="font-semibold">
                       {listing.price.toLocaleString("cs-CZ")} Kč
                     </dd>
@@ -228,7 +228,7 @@ export default async function AdminListingDetailPage({
                 )}
                 {listing.area_m2 && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Plocha:</dt>
+                    <dt className="text-zfp-text-muted">Plocha:</dt>
                     <dd className="font-semibold">{listing.area_m2} m²</dd>
                   </div>
                 )}
@@ -240,22 +240,22 @@ export default async function AdminListingDetailPage({
               <dl className="space-y-2">
                 {listing.contact_name && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Jméno:</dt>
+                    <dt className="text-zfp-text-muted">Jméno:</dt>
                     <dd className="font-semibold">{listing.contact_name}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">E-mail:</dt>
+                  <dt className="text-zfp-text-muted">E-mail:</dt>
                   <dd className="font-semibold">{listing.contact_email}</dd>
                 </div>
                 {listing.contact_phone && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-600">Telefon:</dt>
+                    <dt className="text-zfp-text-muted">Telefon:</dt>
                     <dd className="font-semibold">{listing.contact_phone}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-gray-600">Vytvořeno:</dt>
+                  <dt className="text-zfp-text-muted">Vytvořeno:</dt>
                   <dd className="font-semibold">
                     {new Date(listing.created_at).toLocaleDateString("cs-CZ")}
                   </dd>
@@ -267,7 +267,7 @@ export default async function AdminListingDetailPage({
 
         {/* Detailní informace z formuláře */}
         {listing.details && Object.keys(listing.details).length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
               Detailní informace z formuláře
             </h2>
@@ -276,7 +276,7 @@ export default async function AdminListingDetailPage({
               {/* Kategorie (dispozice) */}
               {listing.details.category && listing.details.category.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Kategorie / Dispozice:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-3">Kategorie / Dispozice:</h3>
                   <div className="flex flex-wrap gap-2">
                     {listing.details.category.map((cat: string, idx: number) => (
                       <span key={idx} className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
@@ -290,7 +290,7 @@ export default async function AdminListingDetailPage({
               {/* Umístění v domě (jen pro byty) */}
               {listing.type === 'byt' && listing.details.floor_preference && listing.details.floor_preference.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Umístění v domě:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-3">Umístění v domě:</h3>
                   <div className="flex flex-wrap gap-2">
                     {listing.details.floor_preference.map((floor: string, idx: number) => (
                       <span key={idx} className="px-3 py-1.5 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
@@ -304,7 +304,7 @@ export default async function AdminListingDetailPage({
               {/* Stav nemovitosti */}
               {listing.details.preferred_state && listing.details.preferred_state.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Stav nemovitosti:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-3">Stav nemovitosti:</h3>
                   <div className="flex flex-wrap gap-2">
                     {listing.details.preferred_state.map((state: string, idx: number) => (
                       <span key={idx} className="px-3 py-1.5 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
@@ -318,7 +318,7 @@ export default async function AdminListingDetailPage({
               {/* Typ konstrukce */}
               {listing.details.preferred_construction && listing.details.preferred_construction.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Typ konstrukce:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-3">Typ konstrukce:</h3>
                   <div className="flex flex-wrap gap-2">
                     {listing.details.preferred_construction.map((type: string, idx: number) => (
                       <span key={idx} className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
@@ -332,7 +332,7 @@ export default async function AdminListingDetailPage({
               {/* Vybavení */}
               {listing.details.preferred_comfort && listing.details.preferred_comfort.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Vybavení:</h3>
+                  <h3 className="font-semibold text-zfp-text mb-3">Vybavení:</h3>
                   <div className="flex flex-wrap gap-2">
                     {listing.details.preferred_comfort.map((feature: string, idx: number) => (
                       <span key={idx} className="px-3 py-1.5 bg-green-100 text-green-800 rounded-full text-sm font-medium">
@@ -346,9 +346,9 @@ export default async function AdminListingDetailPage({
               {/* Poznámka */}
               {listing.details.note && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Poznámka od klienta:</h3>
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-gray-700 whitespace-pre-wrap">{listing.details.note}</p>
+                  <h3 className="font-semibold text-zfp-text mb-3">Poznámka od klienta:</h3>
+                  <div className="p-4 bg-zfp-card rounded-lg">
+                    <p className="text-zfp-text whitespace-pre-wrap">{listing.details.note}</p>
                   </div>
                 </div>
               )}
@@ -365,7 +365,7 @@ export default async function AdminListingDetailPage({
                 <h3 className="font-semibold text-yellow-900 mb-2">
                   Změny od zadavatele
                 </h3>
-                <div className="bg-white rounded p-4 text-sm">
+                <div className="bg-zfp-dark rounded p-4 text-sm">
                   <pre className="whitespace-pre-wrap font-mono text-xs">
                     {listing.public_note}
                   </pre>
@@ -379,7 +379,7 @@ export default async function AdminListingDetailPage({
         )}
 
         {/* Status a Makléř */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
             Správa nabídky
           </h2>
@@ -394,7 +394,7 @@ export default async function AdminListingDetailPage({
         </div>
 
         {/* Matches */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-zfp-dark rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-heading font-bold text-zfp-text mb-6">
             Nalezené shody ({matches.length})
           </h2>
@@ -404,7 +404,7 @@ export default async function AdminListingDetailPage({
               {matches.map((match: any) => (
                 <div
                   key={match.id}
-                  className="border rounded-lg p-4 hover:bg-gray-50"
+                  className="border rounded-lg p-4 hover:bg-zfp-card"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
@@ -418,7 +418,7 @@ export default async function AdminListingDetailPage({
                         {match.request.layout_min &&
                           ` ${match.request.layout_min}+`}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-zfp-text-muted">
                         {match.request.city}
                         {match.request.district &&
                           `, ${match.request.district}`}
@@ -432,7 +432,7 @@ export default async function AdminListingDetailPage({
                   <dl className="grid grid-cols-2 gap-4 text-sm mb-3">
                     {match.request.budget_max && (
                       <div>
-                        <dt className="text-gray-500">Max. rozpočet:</dt>
+                        <dt className="text-zfp-text-muted">Max. rozpočet:</dt>
                         <dd className="font-semibold">
                           {match.request.budget_max.toLocaleString("cs-CZ")} Kč
                         </dd>
@@ -440,14 +440,14 @@ export default async function AdminListingDetailPage({
                     )}
                     {match.request.area_min_m2 && (
                       <div>
-                        <dt className="text-gray-500">Min. plocha:</dt>
+                        <dt className="text-zfp-text-muted">Min. plocha:</dt>
                         <dd className="font-semibold">
                           {match.request.area_min_m2} m²
                         </dd>
                       </div>
                     )}
                     <div>
-                      <dt className="text-gray-500">Kontakt:</dt>
+                      <dt className="text-zfp-text-muted">Kontakt:</dt>
                       <dd className="font-semibold">
                         {match.request.contact_email}
                       </dd>
@@ -455,8 +455,8 @@ export default async function AdminListingDetailPage({
                   </dl>
 
                   {match.reasons && (
-                    <div className="bg-zfp-bg-light rounded p-4">
-                      <p className="text-sm font-semibold text-gray-700 mb-3">
+                    <div className="bg-zfp-darker rounded p-4">
+                      <p className="text-sm font-semibold text-zfp-text mb-3">
                         Důvody shody:
                       </p>
                       <ul className="space-y-1 text-sm">
@@ -468,7 +468,7 @@ export default async function AdminListingDetailPage({
                               text.startsWith("✓") ? "text-green-700" :
                               text.startsWith("⚠") ? "text-orange-600" :
                               text.startsWith("✗") ? "text-red-600" :
-                              "text-gray-600"
+                              "text-zfp-text-muted"
                             }>
                               {text}
                             </li>
@@ -477,10 +477,10 @@ export default async function AdminListingDetailPage({
                       
                       {/* Technické detaily v rozbalovači */}
                       <details className="mt-4">
-                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
+                        <summary className="text-xs text-zfp-text-muted cursor-pointer hover:text-zfp-text">
                           Technické detaily (JSON)
                         </summary>
-                        <pre className="text-xs text-gray-700 overflow-x-auto mt-2 bg-white p-2 rounded">
+                        <pre className="text-xs text-zfp-text overflow-x-auto mt-2 bg-zfp-dark p-2 rounded">
                           {JSON.stringify(match.reasons, null, 2)}
                         </pre>
                       </details>
@@ -490,7 +490,7 @@ export default async function AdminListingDetailPage({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-zfp-text-muted text-center py-8">
               Zatím nejsou žádné shody.
             </p>
           )}

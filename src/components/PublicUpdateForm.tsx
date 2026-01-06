@@ -67,14 +67,14 @@ export default function PublicUpdateForm({
   const isListing = type === "listing";
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+    <div className="bg-zfp-card rounded-xl shadow-lg p-6 mb-6">
       <h2 className="text-xl font-heading font-bold text-zfp-text mb-4">
         Chcete upřesnit údaje?
       </h2>
 
       {!isOpen ? (
         <div>
-          <p className="text-gray-600 mb-4">
+          <p className="text-zfp-text-muted mb-4">
             Můžete doplnit nebo upřesnit informace o vaší{" "}
             {isListing ? "nabídce" : "poptávce"}.
           </p>
@@ -88,7 +88,7 @@ export default function PublicUpdateForm({
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+            <div className="bg-success/10 border border-green-200 text-green-700 px-4 py-3 rounded">
               ✓ Údaje byly úspěšně uloženy! Makléř je zkontroluje.
             </div>
           )}
@@ -174,13 +174,13 @@ export default function PublicUpdateForm({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border border-zfp-border rounded-lg hover:bg-zfp-card transition-colors"
             >
               Zrušit
             </button>
           </div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-zfp-text-muted">
             💡 Vaše změny budou zkontrolovány makléřem před uložením.
           </p>
         </form>

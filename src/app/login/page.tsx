@@ -9,30 +9,30 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="bg-zfp-bg-light min-h-screen flex items-center justify-center py-12 px-4">
+    <div className="bg-zfp-darker min-h-screen flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="card-dark p-8">
           {/* Logo a nadpis */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto bg-brand-orange rounded-full flex items-center justify-center mb-4">
+            <div className="w-16 h-16 mx-auto bg-gradient-gold rounded-xl flex items-center justify-center mb-4 shadow-lg">
               <svg
                 className="w-8 h-8 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                strokeWidth={1.5}
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-heading font-bold text-zfp-text mb-2">
+            <h1 className="text-2xl font-heading text-zfp-text mb-2">
               Přihlášení do Dashboard
             </h1>
-            <p className="text-gray-600 text-sm">
+            <p className="text-zfp-text-muted text-sm">
               Zadejte administrátorské heslo pro přístup
             </p>
           </div>
@@ -61,7 +61,7 @@ export default async function LoginPage() {
 
           {/* Info text */}
           <div className="mt-6 text-center">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-zfp-text-subtle">
               Heslo je uloženo v environment variables
             </p>
           </div>
@@ -71,7 +71,7 @@ export default async function LoginPage() {
         <div className="text-center mt-6">
           <a
             href="/"
-            className="text-sm text-brand-orange hover:text-brand-orange-hover"
+            className="text-sm text-brand-gold hover:text-brand-orange transition-colors duration-300"
           >
             ← Zpět na hlavní stránku
           </a>
